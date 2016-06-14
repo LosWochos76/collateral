@@ -2,6 +2,7 @@
 #define	GRAPH_H
 
 #include <list>
+#include <string>
 
 class Graph {
 public:

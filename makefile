@@ -18,7 +18,7 @@ TEST_SRCS := ArrayList.cpp BFS.cpp Graph.cpp GraphAL.cpp GraphAM.cpp Map.cpp Str
     ArrayListTest.cpp GraphALTest.cpp MapTest.cpp StringTest.cpp UnitTest.cpp tests.cpp
 TEST_OBJS := $(addprefix test/,$(patsubst %.cpp,%.o,$(TEST_SRCS)))
 TEST_SRCS := $(addprefix src/,$(TEST_SRCS))
-CC := g++
+CC := g++ -std=c++11
 
 all: release
 
