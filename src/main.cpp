@@ -12,7 +12,7 @@
 using namespace std;
 
 int main() {
-    GraphAM g(8);
+    GraphAL g(8);
     g.addEdge(1, 2);
     g.addEdge(1, 3);
     g.addEdge(2, 4);
@@ -22,6 +22,6 @@ int main() {
     g.addEdge(5, 8);
     
     BFS bfs(&g);
-    bfs.search(1);
-    cout << bfs.getColor(8) << endl;
+    bfs.explore(1);
+    cout << bfs.hasPath(8) << endl;
 }

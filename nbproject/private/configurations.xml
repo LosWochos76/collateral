@@ -2,8 +2,6 @@
 <configurationDescriptor version="95">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <df root="." name="0">
-      <df name="release">
-      </df>
       <df name="src">
         <in>ArrayList.cpp</in>
         <in>ArrayList.h</in>
@@ -31,8 +29,6 @@
         <in>UnitTest.h</in>
         <in>main.cpp</in>
         <in>tests.cpp</in>
-      </df>
-      <df name="test">
       </df>
     </df>
   </logicalFolder>
