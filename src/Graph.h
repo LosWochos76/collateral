@@ -4,6 +4,10 @@
 #include <list>
 #include <string>
 
+const int WHITE = 0;
+const int GRAY = 1;
+const int BLACK= 2;
+
 class Graph {
 public:
     virtual int nodeCount() = 0;

@@ -10,7 +10,7 @@ else
     endif
 endif
 
-SRCS := ArrayList.cpp BFS.cpp Graph.cpp GraphAL.cpp GraphAM.cpp Map.cpp String.cpp main.cpp
+SRCS := ArrayList.cpp BFS.cpp DFS.cpp Graph.cpp GraphAL.cpp GraphAM.cpp Map.cpp String.cpp main.cpp
 RELEASE_SRCS := $(addprefix src/,$(SRCS))
 RELEASE_OBJS := $(addprefix release/,$(patsubst %.cpp,%.o,$(SRCS)))
 DEBUG_OBJS := $(addprefix debug/,$(patsubst %.cpp,%.o,$(SRCS)))
@@ -23,7 +23,7 @@ CC := g++ -std=c++11
 all: release
 
 release: $(RELEASE_OBJS)
-	$(CC) $(RELEASE_OBJS) -o release/$(TARGET)
+	$(CC) -static-libgcc -static-libstdc++ $(RELEASE_OBJS) -o release/$(TARGET)
 
 release/%.o: src/%.cpp | release_prepare
 	$(CC) -c $< -o $@
@@ -32,7 +32,7 @@ release_prepare:
 	-mkdir -p release
 	
 debug: $(DEBUG_OBJS)
-	$(CC) $(DEBUG_OBJS) -o debug/$(TARGET)
+	$(CC) -static-libgcc -static-libstdc++ $(DEBUG_OBJS) -o debug/$(TARGET)
 
 debug_prepare:
 	mkdir -p debug
@@ -43,7 +43,7 @@ debug/%.o: src/%.cpp | debug_prepare
 test: test_compile | run_tests
 
 test_compile: $(TEST_OBJS)
-	$(CC) $(TEST_OBJS) -o test/$(TARGET)
+	$(CC) -static-libgcc -static-libstdc++ $(TEST_OBJS) -o test/$(TARGET)
 
 test_prepare: 
 	mkdir -p test

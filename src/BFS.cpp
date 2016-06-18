@@ -59,10 +59,14 @@ bool BFS::hasPath(int node) {
 
 std::list<int> BFS::getPath(int end_node) {
     std::list<int> nodes;
-    while (end_node != start_node) {
-        nodes.push_front(end_node);
-        end_node = getParent(end_node);
+    
+    if (hasPath(end_node)) {
+        while (end_node != start_node) {
+            nodes.push_front(end_node);
+            end_node = getParent(end_node);
+        }
+        
+        nodes.push_front(start_node);
     }
-    nodes.push_front(start_node);
     return nodes;
 }

@@ -4,10 +4,6 @@
 #include "Graph.h"
 #include <unordered_map>
 
-const int WHITE = 0;
-const int GRAY = 1;
-const int BLACK= 2;
-
 class BFS {
 public:
     BFS(Graph* g);

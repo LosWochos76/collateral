@@ -1,7 +1,7 @@
 #include <iostream>
 #include "GraphAL.h"
 #include "GraphAM.h"
-#include "BFS.h"
+#include "DFS.h"
 
 using namespace std;
 
@@ -15,7 +15,15 @@ int main() {
     g.addEdge(3, 7);
     g.addEdge(5, 8);
     
-    BFS bfs(&g);
-    bfs.explore(1);
-    cout << bfs.hasPath(8) << endl;
+    DFS dfs(&g);
+    dfs.explore();
+
+    cout << "Number of components: " << dfs.getNoOfComponents() << endl;
+    cout << "Graph has cycles: " << dfs.isCyclic() << endl;
+    
+    list<int> order = dfs.getTopologicOrder();
+    while (!order.empty()) {
+        cout << order.front() << " -> ";
+        order.pop_front();
+    }
 }

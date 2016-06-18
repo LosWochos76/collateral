@@ -4,8 +4,6 @@
     <df root="." name="0">
       <df name="debug">
       </df>
-      <df name="release">
-      </df>
       <df name="src">
         <in>ArrayList.cpp</in>
         <in>ArrayList.h</in>
@@ -13,6 +11,8 @@
         <in>ArrayListTest.h</in>
         <in>BFS.cpp</in>
         <in>BFS.h</in>
+        <in>DFS.cpp</in>
+        <in>DFS.h</in>
         <in>Graph.cpp</in>
         <in>Graph.h</in>
         <in>GraphAL.cpp</in>
@@ -33,8 +33,6 @@
         <in>UnitTest.h</in>
         <in>main.cpp</in>
         <in>tests.cpp</in>
-      </df>
-      <df name="test">
       </df>
     </df>
   </logicalFolder>
@@ -123,7 +121,7 @@
         </runcommandpicklist>
         <runcommand>"${OUTPUT_PATH}"</runcommand>
         <rundir>.</rundir>
-        <buildfirst>false</buildfirst>
+        <buildfirst>true</buildfirst>
         <terminal-type>0</terminal-type>
         <remove-instrumentation>0</remove-instrumentation>
         <environment>

@@ -2,6 +2,10 @@
 <configurationDescriptor version="95">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <df root="." name="0">
+      <df name="src">
+        <in>DFS.cpp</in>
+        <in>DFS.h</in>
+      </df>
     </df>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -32,6 +36,10 @@
           <executablePath>release/AlgorithmsInCpp</executablePath>
         </makeTool>
       </makefileType>
+      <item path="src/DFS.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/DFS.h" ex="false" tool="3" flavor2="0">
+      </item>
     </conf>
     <conf name="Debug" type="0">
       <toolsSet>
@@ -49,6 +57,10 @@
           <executablePath>debug/AlgorithmsInCpp</executablePath>
         </makeTool>
       </makefileType>
+      <item path="src/DFS.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/DFS.h" ex="false" tool="3" flavor2="0">
+      </item>
     </conf>
     <conf name="Test" type="0">
       <toolsSet>
@@ -66,6 +78,10 @@
           <executablePath>debug/AlgorithmsInCpp</executablePath>
         </makeTool>
       </makefileType>
+      <item path="src/DFS.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/DFS.h" ex="false" tool="3" flavor2="0">
+      </item>
     </conf>
   </confs>
 </configurationDescriptor>
