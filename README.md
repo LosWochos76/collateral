@@ -19,7 +19,7 @@ git clone https://github.com/LosWochos76/GrundlagenDerProgrammierungInC
 ```
 ## Bearbeitung der Aufgaben
 
-Für die Bearbeitung der Aufgaben kann z.B. eine lokale Entwicklungsumgebung installiert werden.
+Für die Bearbeitung der Aufgaben kann (muss aber nicht) eine lokale Entwicklungsumgebung installiert werden.
 Unter Windows bietet sich dafür z.B. das [Visual Studio Community](https://visualstudio.microsoft.com/de/vs/community/) an.
 Unter OS X bietet sich [XCODE](https://apps.apple.com/de/app/xcode/id497799835?mt=12) an.
 
