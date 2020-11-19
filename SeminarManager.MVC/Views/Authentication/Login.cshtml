@@ -1,0 +1,24 @@
+@{
+    Layout = "Layout";
+    ViewData["Title"] = "Login";
+}
+@using SeminarManager.Model;
+@model LoginModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<form method="POST" asp-controller="Authentication" asp-action="CheckCredentials">
+    <div asp-validation-summary="ModelOnly"></div>
+
+    <div class="form-group">
+        <label asp-for="Email">EMail:</label>
+        <input class="form-control" asp-for="Email" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Password">Password:</label>
+        <input class="form-control" type="password" asp-for="Password" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <input class="btn btn-primary" type="submit" value="Ok" />
+</form>

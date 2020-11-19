@@ -1,0 +1,39 @@
+@{
+    Layout = "Layout";
+    ViewData["Title"] = "Add/Edit Person";
+}
+@using SeminarManager.Model;
+@model Person
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<form method="POST" asp-controller="Person" asp-action="Save">
+    <div asp-validation-summary="ModelOnly"></div>
+
+    <input type="hidden" asp-for="ID" />
+    <div class="form-group">
+        <label asp-for="Firstname">Firstname:</label>
+        <input class="form-control" asp-for="Firstname" />
+        <span asp-validation-for="Firstname" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Lastname">Lastname:</label>
+        <input class="form-control" asp-for="Lastname" />
+        <span asp-validation-for="Lastname" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="EMail">EMail:</label>
+        <input class="form-control" asp-for="EMail" />
+        <span asp-validation-for="EMail" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="IsAdmin">Admin:</label>
+        <input class="form-control" asp-for="IsAdmin" />
+        <span asp-validation-for="IsAdmin" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Password">Password:</label>
+        <input class="form-control" type="password" asp-for="Password" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <input class="btn btn-primary" type="submit" value="Ok" />
+</form>
