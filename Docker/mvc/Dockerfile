@@ -2,8 +2,8 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
 WORKDIR /app
 
 # Copy csproj and restore as distinct layers
-ADD SeminarManager.Model SeminarManager.Model
-ADD SeminarManager.MVC SeminarManager.MVC
+COPY SeminarManager.Model SeminarManager.Model
+COPY SeminarManager.MVC SeminarManager.MVC
 RUN dotnet restore ./SeminarManager.MVC/SeminarManager.MVC.csproj
 
 # Copy everything else and build

@@ -18,6 +18,9 @@ services:
       - PGADMIN_DEFAULT_PASSWORD=secret
 
   mvc:
-    image: stuckenholz/seminarmanagermvc:1.0
+    image: stuckenholz/seminarmanagermvc
     ports:
       - 8088:80
+
+volumes:
+  
