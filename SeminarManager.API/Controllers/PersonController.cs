@@ -7,9 +7,9 @@ namespace SeminarManager.API.Controllers
 {
     public class PersonController : Controller
     {
-        private IPersonRepository repository;
+        private IRepository repository;
 
-        public PersonController(IPersonRepository repository)
+        public PersonController(IRepository repository)
         {
             this.repository = repository;
         }
@@ -18,7 +18,7 @@ namespace SeminarManager.API.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] Person obj)
         {
-            repository.Save(obj);
+            repository.Persons.Save(obj);
             return Json(new OperationResult());
         }
 
@@ -26,7 +26,7 @@ namespace SeminarManager.API.Controllers
         [HttpGet]
         public IActionResult Read()
         {
-            var objects = repository.All();
+            var objects = repository.Persons.All();
             return Json(objects);
         }
 
@@ -34,7 +34,7 @@ namespace SeminarManager.API.Controllers
         [HttpGet]
         public IActionResult Read(int id)
         {
-            var obj = repository.ById(id);
+            var obj = repository.Persons.ById(id);
 
             if (obj == null)
                 return Json(new OperationResult("Object not found!"));
@@ -46,11 +46,11 @@ namespace SeminarManager.API.Controllers
         [HttpPut]
         public IActionResult Update([FromRoute] int id, [FromForm] Person obj)
         {
-            if (repository.ById(id) == null)
+            if (repository.Persons.ById(id) == null)
                 return Json(new OperationResult("Object not found!"));
 
             obj.ID = id;
-            repository.Save(obj);
+            repository.Persons.Save(obj);
             return Json(new OperationResult());
         }
 
@@ -62,7 +62,7 @@ namespace SeminarManager.API.Controllers
             if (id == user.ID)
                 return Json(new OperationResult("Cannot delete current user!"));
 
-            repository.Delete(id);
+            repository.Persons.Delete(id);
             return Json(new OperationResult());
         }
     }

@@ -5,13 +5,7 @@ namespace SeminarManager.Model
     public class MemorySeminarRepository : ISeminarRepository
     {
         private List<Seminar> objects = new List<Seminar>();
-
-        public MemorySeminarRepository()
-        {
-            Save(new Seminar() { Name = "Objectoriented programming", Extent = "2L2E" });
-            Save(new Seminar() { Name = "Energy informatics", Extent = "2L" });
-        }
-
+        
         public List<Seminar> All(int from = 0, int max = 1000)
         {
             return objects;
@@ -37,14 +31,6 @@ namespace SeminarManager.Model
                 return null;
         }
 
-        public int Count
-        {
-            get
-            {
-                return objects.Count;
-            }
-        }
-
         public void Delete(int id)
         {
             var pos = PosOf(id);
@@ -56,7 +42,7 @@ namespace SeminarManager.Model
         {
             if (obj.ID == 0)
             {
-                obj.ID = Count + 1;
+                obj.ID = objects.Count + 1;
                 objects.Add(obj);
             }
             else

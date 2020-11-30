@@ -1,16 +1,12 @@
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace SeminarManager.Model
 {
     public class MemoryPersonRepository : IPersonRepository
     {
         private List<Person> objects = new List<Person>();
-
-        public MemoryPersonRepository()
-        {
-            Save(new Person() { Firstname = "Alex", Lastname = "Stuckenholz", IsAdmin = true, EMail = "alexander.stuckenholz@hshl.de", Password = "test" });
-            Save(new Person() { Firstname = "Anne", Lastname = "Meier", IsAdmin = false });
-        }
 
         public List<Person> All(int from = 0, int max = 1000)
         {
@@ -37,14 +33,6 @@ namespace SeminarManager.Model
                 return null;
         }
 
-        public int Count
-        {
-            get
-            {
-                return objects.Count;
-            }
-        }
-
         public void Delete(int id)
         {
             var pos = PosOf(id);
@@ -56,7 +44,7 @@ namespace SeminarManager.Model
         {
             if (obj.ID == 0)
             {
-                obj.ID = Count + 1;
+                obj.ID = objects.Count + 1;
                 objects.Add(obj);
             }
             else

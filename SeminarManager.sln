@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeminarManager.Model", "Sem
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeminarManager.API", "SeminarManager.API\SeminarManager.API.csproj", "{E0A33CF0-DD12-426B-9C2F-497214C4053C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeminarManager.SQL", "SeminarManager.SQL\SeminarManager.SQL.csproj", "{C26DA092-F65B-451E-A217-2803F7DD4850}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{E0A33CF0-DD12-426B-9C2F-497214C4053C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0A33CF0-DD12-426B-9C2F-497214C4053C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0A33CF0-DD12-426B-9C2F-497214C4053C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C26DA092-F65B-451E-A217-2803F7DD4850}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C26DA092-F65B-451E-A217-2803F7DD4850}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C26DA092-F65B-451E-A217-2803F7DD4850}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C26DA092-F65B-451E-A217-2803F7DD4850}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

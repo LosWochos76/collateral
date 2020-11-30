@@ -9,9 +9,9 @@ namespace src.Controllers
     public class SeminarController : Controller
     {
         private ILogger<SeminarController> logger;
-        private ISeminarRepository repository;
+        private IRepository repository;
 
-        public SeminarController(ILogger<SeminarController> logger, ISeminarRepository repository)
+        public SeminarController(ILogger<SeminarController> logger, IRepository repository)
         {
             this.logger = logger;
             this.repository = repository;
@@ -20,7 +20,7 @@ namespace src.Controllers
         public IActionResult Index() 
         {
             logger.LogInformation("Index method called");
-            var objects = repository.All();
+            var objects = repository.Seminars.All();
             return View(objects);
         }
 
@@ -32,7 +32,7 @@ namespace src.Controllers
 
         public IActionResult Edit(int id)
         {
-            var obj = repository.ById(id);
+            var obj = repository.Seminars.ById(id);
 
             if (obj != null)
                 return View("Edit", obj);
@@ -45,17 +45,17 @@ namespace src.Controllers
             if (!ModelState.IsValid)
                 return View("Edit", obj);
 
-            repository.Save(obj);
+            repository.Seminars.Save(obj);
             return Redirect("Index");
         }
 
         public IActionResult Delete(int id)
         {
-            var obj = repository.ById(id);
+            var obj = repository.Seminars.ById(id);
 
             if (obj != null)
             {
-                repository.Delete(id);
+                repository.Seminars.Delete(id);
                 return Redirect("/Seminar/Index");
             }
             else

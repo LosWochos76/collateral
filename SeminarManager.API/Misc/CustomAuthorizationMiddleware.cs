@@ -14,9 +14,9 @@ namespace SeminarManager.API.Misc
     {
         private RequestDelegate next;
         private IConfiguration configurtion;
-        private IPersonRepository repository;
+        private IRepository repository;
 
-        public CustomAuthorizationMiddleware(RequestDelegate next, IConfiguration configurtion, IPersonRepository repository)
+        public CustomAuthorizationMiddleware(RequestDelegate next, IConfiguration configurtion, IRepository repository)
         {
             this.next = next;
             this.configurtion = configurtion;
@@ -74,7 +74,7 @@ namespace SeminarManager.API.Misc
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
                 int user_id = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
-                var user = repository.ById(user_id);
+                var user = repository.Persons.ById(user_id);
                 return user;
             }
             catch

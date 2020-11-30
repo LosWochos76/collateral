@@ -34,4 +34,3 @@ services:
       - web3
     ports: 
       - 80:80
-      - 443:443

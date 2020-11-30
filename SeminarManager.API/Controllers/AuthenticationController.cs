@@ -13,9 +13,9 @@ namespace SeminarManager.API.Controllers
     public class AuthenticationController : Controller
     {
         private IConfiguration configuration;
-        private IPersonRepository repository;
+        private IRepository repository;
 
-        public AuthenticationController(IConfiguration configuration, IPersonRepository repository)
+        public AuthenticationController(IConfiguration configuration, IRepository repository)
         {
             this.configuration = configuration;
             this.repository = repository;
@@ -23,7 +23,7 @@ namespace SeminarManager.API.Controllers
 
         public IActionResult Index(LoginModel model)
         {
-            var user = repository.FindAdminByEmailAndPassword(model);
+            var user = repository.Persons.FindAdminByEmailAndPassword(model);
             if (user == null)
                 return Json(new OperationResult("Username or password is incorrect"));
 

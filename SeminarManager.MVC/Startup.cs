@@ -8,6 +8,7 @@ using SeminarManager.Model;
 using Microsoft.AspNetCore.DataProtection;
 using StackExchange.Redis;
 using System.IO;
+using SeminarManager.SQL;
 
 namespace SeminarManager.MVC
 {
@@ -37,8 +38,7 @@ namespace SeminarManager.MVC
             services.AddSession();
 
             services.AddControllersWithViews();
-            services.AddSingleton<IPersonRepository, MemoryPersonRepository>();
-            services.AddSingleton<ISeminarRepository, MemorySeminarRepository>();
+            services.AddSingleton<IRepository, SqlRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

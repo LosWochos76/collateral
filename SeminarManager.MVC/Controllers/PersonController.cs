@@ -1,5 +1,3 @@
-using System;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SeminarManager.Model;
@@ -9,9 +7,9 @@ namespace SeminarManager.MVC.Controllers
     public class PersonController : Controller
     {
         private ILogger<PersonController> logger;
-        private IPersonRepository repository;
+        private IRepository repository;
 
-        public PersonController(ILogger<PersonController> logger, IPersonRepository repository) 
+        public PersonController(ILogger<PersonController> logger, IRepository repository) 
         {
             this.logger = logger;
             this.repository = repository;
@@ -20,7 +18,7 @@ namespace SeminarManager.MVC.Controllers
         public IActionResult Index() 
         {
             logger.LogInformation("Index method called");
-            var objects = repository.All();
+            var objects = repository.Persons.All();
             return View(objects);
         }
 
@@ -32,7 +30,7 @@ namespace SeminarManager.MVC.Controllers
 
         public IActionResult Edit(int id)
         {
-            var obj = repository.ById(id);
+            var obj = repository.Persons.ById(id);
 
             if (obj != null)
                 return View("Edit", obj);
@@ -45,17 +43,17 @@ namespace SeminarManager.MVC.Controllers
             if (!ModelState.IsValid)
                 return View("Edit", obj);
 
-            repository.Save(obj);
+            repository.Persons.Save(obj);
             return Redirect("/Person/Index");
         }
 
         public IActionResult Delete(int id)
         {
-            var obj = repository.ById(id);
+            var obj = repository.Persons.ById(id);
 
             if (obj != null)
             {
-                repository.Delete(id);
+                repository.Persons.Delete(id);
                 return Redirect("/Person/Index");
             } 
             else

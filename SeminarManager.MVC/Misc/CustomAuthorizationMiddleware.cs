@@ -10,9 +10,9 @@ namespace SeminarManager.MVC.Misc
     public class CustomAuthorizationMiddleware
     {
         private RequestDelegate next;
-        private IPersonRepository repository;
+        private IRepository repository;
 
-        public CustomAuthorizationMiddleware(RequestDelegate next, IPersonRepository repository)
+        public CustomAuthorizationMiddleware(RequestDelegate next, IRepository repository)
         {
             this.next = next;
             this.repository = repository;
@@ -25,7 +25,7 @@ namespace SeminarManager.MVC.Misc
                 if (context.Session.GetInt32("user_id").HasValue)
                 {
                     var user_id = context.Session.GetInt32("user_id").Value;
-                    var user = repository.ById(user_id);
+                    var user = repository.Persons.ById(user_id);
                     context.Items["user"] = user;
                 } 
                 else

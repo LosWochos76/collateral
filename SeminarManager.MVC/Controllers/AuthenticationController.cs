@@ -1,18 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SeminarManager.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SeminarManager.MVC.Controllers
 {
     public class AuthenticationController : Controller
     {
-        private IPersonRepository repository;
+        private IRepository repository;
 
-        public AuthenticationController(IPersonRepository repository)
+        public AuthenticationController(IRepository repository)
         {
             this.repository = repository;
         }
@@ -24,7 +20,7 @@ namespace SeminarManager.MVC.Controllers
 
         public IActionResult CheckCredentials([FromForm] LoginModel login)
         {
-            var user = repository.FindAdminByEmailAndPassword(login);
+            var user = repository.Persons.FindAdminByEmailAndPassword(login);
             if (user == null)
             {
                 ModelState.AddModelError("", "User not found!");
