@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.DataProtection;
 using StackExchange.Redis;
 using System.IO;
 using SeminarManager.SQL;
+using SeminarManager.EF;
 
 namespace SeminarManager.MVC
 {
@@ -38,7 +39,9 @@ namespace SeminarManager.MVC
             services.AddSession();
 
             services.AddControllersWithViews();
-            services.AddSingleton<IRepository, SqlRepository>();
+            services.AddSingleton<IRepository, MemoryRepository>();
+            //services.AddSingleton<IRepository, SqlRepository>();
+            //services.AddSingleton<IRepository, EfRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
