@@ -39,9 +39,9 @@ namespace SeminarManager.MVC
             services.AddSession();
 
             services.AddControllersWithViews();
-            services.AddSingleton<IRepository, MemoryRepository>();
+            //services.AddSingleton<IRepository, MemoryRepository>();
             //services.AddSingleton<IRepository, SqlRepository>();
-            //services.AddSingleton<IRepository, EfRepository>();
+            services.AddSingleton<IRepository, EfRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

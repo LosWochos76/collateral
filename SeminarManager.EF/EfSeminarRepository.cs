@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using SeminarManager.Model;
 
 namespace SeminarManager.EF
@@ -14,22 +15,26 @@ namespace SeminarManager.EF
 
         public List<Seminar> All(int from = 0, int max = 1000)
         {
-            throw new System.NotImplementedException();
+             return context.Seminars.Skip(from).Take(max).ToList();
         }
 
         public Seminar ById(int id)
         {
-            throw new System.NotImplementedException();
+            return (from obj in context.Seminars where obj.ID == id select obj).FirstOrDefault();
         }
 
         public void Delete(int id)
         {
-            throw new System.NotImplementedException();
+            var obj = new Person() { ID =id };
+            context.Persons.Attach(obj);
+            context.Entry(obj).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+            context.SaveChanges();
         }
 
         public void Save(Seminar obj)
         {
-            throw new System.NotImplementedException();
+            context.Add(obj);
+            context.SaveChanges();
         }
     }
 }
