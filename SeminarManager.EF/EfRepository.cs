@@ -17,6 +17,18 @@ namespace SeminarManager.EF
 
             person_repository = new EfPersonRepository(context);
             seminar_repository = new EfSeminarRepository(context);
+
+            if (person_repository.All().Count == 0)
+            {
+                person_repository.Save(new Person()
+                {
+                    Firstname = "Alexander",
+                    Lastname = "Stuckenholz",
+                    EMail = "alexander.stuckenholz@hshl.de",
+                    IsAdmin = true,
+                    Password = "test"
+                });
+            }
         }
 
         private string GetFromEnvironmentOrDefault(string key, string def)

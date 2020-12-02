@@ -16,7 +16,6 @@ namespace SeminarManager.MVC
     {
         public void ConfigureServices(IServiceCollection services)
         {
-
             var redis_connection_string = Helper.GetFromEnvironmentOrDefault("REDIS_CONNECTION_STRING", "");
             if (redis_connection_string == string.Empty) 
             {
