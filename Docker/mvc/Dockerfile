@@ -4,7 +4,9 @@ WORKDIR /app
 # Copy csproj and restore as distinct layers
 COPY SeminarManager.Model SeminarManager.Model
 COPY SeminarManager.MVC SeminarManager.MVC
-RUN dotnet restore ./SeminarManager.MVC/SeminarManager.MVC.csproj
+COPY SeminarManager.SQL SeminarManager.SQL
+COPY SeminarManager.EF SeminarManager.EF
+RUN dotnet restore
 
 # Copy everything else and build
 RUN dotnet publish -c Release -o out ./SeminarManager.MVC/SeminarManager.MVC.csproj
