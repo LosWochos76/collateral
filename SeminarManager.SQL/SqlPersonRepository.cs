@@ -29,7 +29,7 @@ namespace SeminarManager.SQL
 
         private void CreateTable() 
         {
-            string sql = "create table seminarmanager.persons (" +
+            string sql = "create table sql_persons (" +
                 "id serial primary key, " +
                 "firstname varchar(100) not null, " +
                 "lastname varchar(100) not null, " +
@@ -45,10 +45,7 @@ namespace SeminarManager.SQL
 
         private bool TableExists() 
         {
-            var sql = "SELECT EXISTS (" +
-                "SELECT FROM pg_tables WHERE " +
-                "schemaname = 'seminarmanager' and tablename = 'persons')";
-
+            var sql = "SELECT EXISTS (SELECT FROM pg_tables WHERE tablename = 'sql_persons')";
             using (var cmd = new NpgsqlCommand(sql, connection))
             {
                 return Convert.ToBoolean(cmd.ExecuteScalar());
@@ -70,7 +67,7 @@ namespace SeminarManager.SQL
         public List<Person> All(int from = 0, int max = 1000)
         {
             string sql = "SELECT id,firstname,lastname," + 
-                "email,password_hash,is_admin FROM seminarmanager.persons " + 
+                "email,password_hash,is_admin FROM sql_persons " + 
                 "limit :max offset :from";
 
             var result = new List<Person>();
@@ -95,7 +92,7 @@ namespace SeminarManager.SQL
         public Person ById(int id)
         {
             string sql = "SELECT id,firstname,lastname," + 
-                "email,password_hash,is_admin FROM seminarmanager.persons where id=:id";
+                "email,password_hash,is_admin FROM sql_persons where id=:id";
 
             using (var cmd = new NpgsqlCommand(sql, connection))
             {
@@ -115,7 +112,7 @@ namespace SeminarManager.SQL
 
         public void Delete(int id)
         {
-            string sql = "delete FROM seminarmanager.persons where id=:id";
+            string sql = "delete FROM sql_persons where id=:id";
 
             using (var cmd = new NpgsqlCommand(sql, connection))
             {
@@ -127,7 +124,7 @@ namespace SeminarManager.SQL
         public Person FindAdminByEmailAndPassword(LoginModel login)
         {
             string sql = "SELECT id,firstname,lastname," + 
-                "email,password_hash,is_admin FROM seminarmanager.persons where email=:email";
+                "email,password_hash,is_admin FROM sql_persons where email=:email";
 
             using (var cmd = new NpgsqlCommand(sql, connection))
             {
@@ -149,11 +146,18 @@ namespace SeminarManager.SQL
 
         public void Save(Person obj)
         {
-            obj.Password = obj.IsAdmin ? simpleHash.Compute(obj.Password) : string.Empty;
+            if (obj.ID == 0)
+                SaveNew(obj);
+            else
+                Update(obj);
+        }
 
-            string sql = "insert into seminarmanager.persons " +
-                "(firstname,lastname,email,password_hash,is_admin) values " +
-                "(:firstname,:lastname,:email,:password_hash,:is_admin) RETURNING id";
+        private void SaveNew(Person obj)
+        {
+            obj.Password = obj.IsAdmin ? simpleHash.Compute(obj.Password) : string.Empty;
+            string sql = "insert into sql_persons " +
+                    "(firstname,lastname,email,password_hash,is_admin) values " +
+                    "(:firstname,:lastname,:email,:password_hash,:is_admin) RETURNING id";
 
             using (var cmd = new NpgsqlCommand(sql, connection)) 
             {
@@ -163,6 +167,25 @@ namespace SeminarManager.SQL
                 cmd.Parameters.AddWithValue(":password_hash", obj.Password);
                 cmd.Parameters.AddWithValue(":is_admin", obj.IsAdmin);
                 obj.ID = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+        }
+
+        private void Update(Person obj)
+        {
+            obj.Password = obj.IsAdmin ? simpleHash.Compute(obj.Password) : string.Empty;
+            string sql = "update sql_persons set " +
+                    "firstname=:firstname,lastname=:lastname,password_hash=:password_hash," +
+                    "is_admin=:is_admin where id=:id";
+
+            using (var cmd = new NpgsqlCommand(sql, connection)) 
+            {
+                cmd.Parameters.AddWithValue(":id", obj.ID);
+                cmd.Parameters.AddWithValue(":firstname", obj.Firstname);
+                cmd.Parameters.AddWithValue(":lastname", obj.Lastname);
+                cmd.Parameters.AddWithValue(":email", obj.EMail);
+                cmd.Parameters.AddWithValue(":password_hash", obj.Password);
+                cmd.Parameters.AddWithValue(":is_admin", obj.IsAdmin);
+                cmd.ExecuteNonQuery();
             }
         }
     }

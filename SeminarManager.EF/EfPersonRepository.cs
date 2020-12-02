@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using SeminarManager.Model;
 using System.Linq;
 using SimpleHashing.Net;
+using Microsoft.EntityFrameworkCore;
 
 namespace SeminarManager.EF
 {
@@ -17,17 +18,18 @@ namespace SeminarManager.EF
 
         public List<Person> All(int from = 0, int max = 1000)
         {
-            return context.Persons.Skip(from).Take(max).ToList();
+            return context.Persons.AsNoTracking().Skip(from).Take(max).ToList();
         }
 
         public Person ById(int id)
         {
-            return (from obj in context.Persons where obj.ID == id select obj).FirstOrDefault();
+            return (from obj in context.Persons where obj.ID == id select obj)
+                .AsNoTracking().FirstOrDefault();
         }
 
         public void Delete(int id)
         {
-            var obj = new Person() { ID =id};
+            var obj = new Person() { ID = id};
             context.Persons.Attach(obj);
             context.Entry(obj).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
             context.SaveChanges();
@@ -35,7 +37,9 @@ namespace SeminarManager.EF
 
         public Person FindAdminByEmailAndPassword(LoginModel login)
         {
-            var list = (from obj in context.Persons where obj.EMail.Equals(login.Email) select obj).ToList();
+            var list = (from obj in context.Persons 
+                where obj.EMail.Equals(login.Email) select obj).AsNoTracking().ToList();
+
             foreach (var obj in list)
                 if (simpleHash.Verify(login.Password, obj.Password))
                     return obj;
@@ -46,8 +50,18 @@ namespace SeminarManager.EF
         public void Save(Person obj)
         {
             obj.Password = obj.IsAdmin ? simpleHash.Compute(obj.Password) : string.Empty;
-            context.Add(obj);
-            context.SaveChanges();
+
+            if (obj.ID == 0) 
+            {
+                context.Add(obj);
+                context.SaveChanges();
+            }
+            else
+            {
+                context.Persons.Attach(obj).State = EntityState.Modified;
+                context.SaveChanges();
+                context.Entry(obj).State = EntityState.Detached;
+            }
         }
     }
 }
