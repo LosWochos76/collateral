@@ -13,19 +13,10 @@ namespace SeminarManager.EF
         public SeminarManagerContext()
         {
             connection_string = string.Format("Host={0};Username={1};Password={2};Database={3}",
-                GetFromEnvironmentOrDefault("POSTGRESQL_HOST", "localhost"),
-                GetFromEnvironmentOrDefault("POSTGRESQL_USER", "postgres"),
-                GetFromEnvironmentOrDefault("POSTGRESQL_PASSWORD", "secret"),
-                GetFromEnvironmentOrDefault("POSTGRESQL_DATABASE", "postgres"));
-        }
-
-        private string GetFromEnvironmentOrDefault(string key, string def)
-        {
-            string var = Environment.GetEnvironmentVariable(key);
-            if (var == null || var == string.Empty)
-                return def;
-            else
-                return var;
+                Helper.GetFromEnvironmentOrDefault("POSTGRESQL_HOST", "localhost"),
+                Helper.GetFromEnvironmentOrDefault("POSTGRESQL_USER", "postgres"),
+                Helper.GetFromEnvironmentOrDefault("POSTGRESQL_PASSWORD", "secret"),
+                Helper.GetFromEnvironmentOrDefault("POSTGRESQL_DATABASE", "postgres"));
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -7,7 +7,6 @@ using Microsoft.Extensions.Hosting;
 using SeminarManager.Model;
 using Microsoft.AspNetCore.DataProtection;
 using StackExchange.Redis;
-using System.IO;
 using SeminarManager.SQL;
 using SeminarManager.EF;
 
@@ -17,8 +16,13 @@ namespace SeminarManager.MVC
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            var redis_connection_string = Environment.GetEnvironmentVariable("REDIS_CONNECTION_STRING");
-            if (redis_connection_string != null && redis_connection_string != string.Empty) 
+
+            var redis_connection_string = Helper.GetFromEnvironmentOrDefault("REDIS_CONNECTION_STRING", "");
+            if (redis_connection_string == string.Empty) 
+            {
+                services.AddDistributedMemoryCache();
+            }
+            else 
             {
                 var redis = ConnectionMultiplexer.Connect(redis_connection_string);
                 services.AddDataProtection()
@@ -31,17 +35,20 @@ namespace SeminarManager.MVC
                     o.InstanceName = "seminarmanager";
                 });
             }
-            else 
-            {
-                services.AddDistributedMemoryCache();
-            }
 
             services.AddSession();
-
             services.AddControllersWithViews();
-            //services.AddSingleton<IRepository, MemoryRepository>();
-            //services.AddSingleton<IRepository, SqlRepository>();
-            services.AddSingleton<IRepository, EfRepository>();
+
+            var persistence_method = Helper.GetFromEnvironmentOrDefault("PERSISTENCE_METHOD", "memory");
+
+            if (persistence_method.Equals("memory"))
+                services.AddSingleton<IRepository, MemoryRepository>();
+            
+            if (persistence_method.Equals("sql"))
+                services.AddSingleton<IRepository, SqlRepository>();
+
+            if (persistence_method.Equals("ef"))
+                services.AddSingleton<IRepository, EfRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

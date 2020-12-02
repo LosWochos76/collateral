@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SeminarManager.EF;
 using SeminarManager.Model;
+using SeminarManager.SQL;
 
 namespace SeminarManager.API
 {
@@ -12,7 +14,17 @@ namespace SeminarManager.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddSingleton<IRepository, MemoryRepository>();
+            
+            var persistence_method = Helper.GetFromEnvironmentOrDefault("PERSISTENCE_METHOD", "memory");
+
+            if (persistence_method.Equals("memory"))
+                services.AddSingleton<IRepository, MemoryRepository>();
+            
+            if (persistence_method.Equals("sql"))
+                services.AddSingleton<IRepository, SqlRepository>();
+
+            if (persistence_method.Equals("ef"))
+                services.AddSingleton<IRepository, EfRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

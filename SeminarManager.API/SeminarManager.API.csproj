@@ -10,6 +10,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SeminarManager.Model\SeminarManager.Model.csproj" />
+    <ProjectReference Include="..\SeminarManager.SQL\SeminarManager.SQL.csproj" />
+    <ProjectReference Include="..\SeminarManager.EF\SeminarManager.EF.csproj" />
   </ItemGroup>
 
 </Project>
