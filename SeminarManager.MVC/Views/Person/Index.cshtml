@@ -30,7 +30,10 @@
                 <td>@Model[i].Lastname</td>
                 <td>
                     <a asp-controller="Person" asp-action="Edit" asp-route-id="@Model[i].ID">Edit</a>
+                    @if (Context.Items["user"] != null && Model[i].ID != ((Person)Context.Items["user"]).ID)
+                    {
                     <a asp-controller="Person" asp-action="Delete" asp-route-id="@Model[i].ID">Delete</a>
+                    }
                 </td>
             </tr>
         }

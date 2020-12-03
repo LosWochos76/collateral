@@ -50,7 +50,6 @@ namespace SeminarManager.MVC.Controllers
         public IActionResult Delete(int id)
         {
             var obj = repository.Persons.ById(id);
-
             if (obj != null)
             {
                 repository.Persons.Delete(id);
