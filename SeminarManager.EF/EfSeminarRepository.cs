@@ -27,10 +27,12 @@ namespace SeminarManager.EF
 
         public void Delete(int id)
         {
-            var obj = new Person() { ID =id };
-            context.Persons.Attach(obj);
-            context.Entry(obj).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
-            context.SaveChanges();
+            var obj = context.Seminars.Find(id);
+            if (obj != null) 
+            {
+                context.Seminars.Remove(obj);
+                context.SaveChanges();
+            }
         }
 
         public void Save(Seminar obj)
