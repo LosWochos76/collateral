@@ -5,6 +5,11 @@ namespace SeminarManager.Model
 {
     public class Person : Entity, IValidatableObject
     {
+        public Person() 
+        {
+            Teaching = new List<Seminar>();
+        }
+
         [Required]
         public string Firstname { get; set; }
 
@@ -32,5 +37,7 @@ namespace SeminarManager.Model
                 yield return new ValidationResult("Firstname and Lastname can not be equal!");
             }
         }
+
+        public List<Seminar> Teaching { get; set; }
     }
 }

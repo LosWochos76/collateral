@@ -38,16 +38,12 @@ namespace SeminarManager.EF
         public void Save(Seminar obj)
         {
             if (obj.ID == 0) 
-            {
                 context.Add(obj);
-                context.SaveChanges();
-            }
             else
-            {
                 context.Seminars.Attach(obj).State = EntityState.Modified;
-                context.SaveChanges();
-                context.Entry(obj).State = EntityState.Detached;
-            }
+
+            context.SaveChanges();
+            context.Entry(obj).State = EntityState.Detached;
         }
     }
 }

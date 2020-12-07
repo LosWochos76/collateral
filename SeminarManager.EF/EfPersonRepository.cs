@@ -54,16 +54,12 @@ namespace SeminarManager.EF
             obj.Password = obj.IsAdmin ? simpleHash.Compute(obj.Password) : string.Empty;
 
             if (obj.ID == 0) 
-            {
                 context.Add(obj);
-                context.SaveChanges();
-            }
             else
-            {
                 context.Persons.Attach(obj).State = EntityState.Modified;
-                context.SaveChanges();
-                context.Entry(obj).State = EntityState.Detached;
-            }
+
+            context.SaveChanges();
+            context.Entry(obj).State = EntityState.Detached;
         }
     }
 }

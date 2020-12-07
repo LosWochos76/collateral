@@ -42,7 +42,7 @@ namespace SeminarManager.MVC
 
             if (persistence_method.Equals("memory"))
                 services.AddSingleton<IRepository, MemoryRepository>();
-            
+
             if (persistence_method.Equals("sql"))
                 services.AddSingleton<IRepository, SqlRepository>();
 

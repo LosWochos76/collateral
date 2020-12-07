@@ -1,5 +1,6 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Server.IIS.Core;
 using Microsoft.Extensions.Logging;
 using SeminarManager.Model;
@@ -27,12 +28,15 @@ namespace src.Controllers
         public IActionResult Add()
         {
             var obj = new Seminar();
+            ViewBag.Persons = repository.Persons.All();
+
             return View("Edit", obj);
         }
 
         public IActionResult Edit(int id)
         {
             var obj = repository.Seminars.ById(id);
+            ViewBag.Persons = repository.Persons.All();
 
             if (obj != null)
                 return View("Edit", obj);
@@ -43,7 +47,10 @@ namespace src.Controllers
         public IActionResult Save([FromForm] Seminar obj)
         {
             if (!ModelState.IsValid)
+            {
+                ViewBag.Persons = repository.Persons.All();
                 return View("Edit", obj);
+            }
 
             repository.Seminars.Save(obj);
             return Redirect("Index");
