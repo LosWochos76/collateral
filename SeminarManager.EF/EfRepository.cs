@@ -8,6 +8,7 @@ namespace SeminarManager.EF
     {
         private EfPersonRepository person_repository;
         private EfSeminarRepository seminar_repository;
+        private EfAttendeeRepository attendee_repository;
         private SeminarManagerContext context;
 
         public EfRepository()
@@ -17,6 +18,7 @@ namespace SeminarManager.EF
 
             person_repository = new EfPersonRepository(context);
             seminar_repository = new EfSeminarRepository(context);
+            attendee_repository = new EfAttendeeRepository(context);
 
             if (person_repository.All().Count == 0)
             {
@@ -31,15 +33,6 @@ namespace SeminarManager.EF
             }
         }
 
-        private string GetFromEnvironmentOrDefault(string key, string def)
-        {
-            string var = Environment.GetEnvironmentVariable(key);
-            if (var == null || var == string.Empty)
-                return def;
-            else
-                return var;
-        }
-
         public IPersonRepository Persons
         {
             get { return person_repository; }
@@ -48,6 +41,11 @@ namespace SeminarManager.EF
         public ISeminarRepository Seminars
         {
             get { return seminar_repository; }
+        }
+
+        public IAttendeeRepository Attendees
+        {
+            get { return attendee_repository; }
         }
     }
 }

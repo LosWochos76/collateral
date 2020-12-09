@@ -9,6 +9,7 @@ namespace SeminarManager.EF
         private string connection_string;
         public DbSet<Person> Persons { get; set; }
         public DbSet<Seminar> Seminars { get; set; }
+        public DbSet<Attendee> Attendees { get; set; }
 
         public SeminarManagerContext()
         {
@@ -29,7 +30,24 @@ namespace SeminarManager.EF
             base.OnModelCreating(modelBuilder);
             
             modelBuilder.Entity<Person>();
-            modelBuilder.Entity<Seminar>();
+
+            modelBuilder.Entity<Seminar>()
+                .HasOne<Person>()
+                .WithMany()
+                .HasForeignKey(s => s.TeacherID);
+
+            modelBuilder.Entity<Attendee>()
+                .HasKey(a => new { a.PersonID, a.SeminarID });
+
+            modelBuilder.Entity<Attendee>()
+                .HasOne<Person>()
+                .WithMany()
+                .HasForeignKey(a => a.PersonID);
+
+            modelBuilder.Entity<Attendee>()
+                .HasOne<Seminar>()
+                .WithMany()
+                .HasForeignKey(a => a.SeminarID);
         }
     } 
 }

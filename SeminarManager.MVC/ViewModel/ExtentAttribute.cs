@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace SeminarManager.Model
+namespace SeminarManager.MVC.ViewModel
 {
     public class ExtentAttribute : ValidationAttribute
     {
@@ -13,7 +13,7 @@ namespace SeminarManager.Model
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var seminar = (Seminar)validationContext.ObjectInstance;
+            var seminar = (SeminarViewModel)validationContext.ObjectInstance;
             var extent = seminar.Extent;
 
             if (extent == null)

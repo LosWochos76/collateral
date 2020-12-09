@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SeminarManager.Model;
+using SeminarManager.MVC.ViewModel;
 
 namespace SeminarManager.MVC.Controllers
 {
@@ -18,9 +19,10 @@ namespace SeminarManager.MVC.Controllers
             return View();
         }
 
-        public IActionResult CheckCredentials([FromForm] LoginModel login)
+        public IActionResult CheckCredentials([FromForm] Login login)
         {
-            var user = repository.Persons.FindAdminByEmailAndPassword(login);
+            var user = repository.Persons.FindAdminByEmailAndPassword(login.Email, login.Password);
+            
             if (user == null)
             {
                 ModelState.AddModelError("", "User not found!");

@@ -4,5 +4,6 @@ namespace SeminarManager.Model
     {
         IPersonRepository Persons { get; }
         ISeminarRepository Seminars { get; }
+        IAttendeeRepository Attendees { get; }
     }
 }

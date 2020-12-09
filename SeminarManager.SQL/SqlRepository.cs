@@ -9,6 +9,7 @@ namespace SeminarManager.SQL
         private NpgsqlConnection connection;
         private SqlPersonRepository person_repository;
         private SqlSeminarRepository seminar_repository;
+        private SqlAttendeeRepository attendee_repository;
 
         public SqlRepository() 
         {
@@ -23,6 +24,7 @@ namespace SeminarManager.SQL
 
             person_repository = new SqlPersonRepository(connection);
             seminar_repository = new SqlSeminarRepository(connection);
+            attendee_repository = new SqlAttendeeRepository(connection);
         }
 
         public IPersonRepository Persons 
@@ -33,6 +35,11 @@ namespace SeminarManager.SQL
         public ISeminarRepository Seminars 
         {
             get { return seminar_repository; }
+        }
+
+        public IAttendeeRepository Attendees 
+        {
+            get { return attendee_repository; }
         }
 
         public void Dispose()

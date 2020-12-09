@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SeminarManager.Model;
+using SeminarManager.MVC.ViewModel;
 
 namespace SeminarManager.MVC.Controllers
 {
@@ -24,13 +25,14 @@ namespace SeminarManager.MVC.Controllers
 
         public IActionResult Add() 
         {
-            var obj = new Person();
+            var obj = new PersonViewModel();
             return View("Edit", obj);
         }
 
         public IActionResult Edit(int id)
         {
-            var obj = repository.Persons.ById(id);
+            var person = repository.Persons.ById(id);
+            var obj = PersonViewModel.Convert(person);
 
             if (obj != null)
                 return View("Edit", obj);
@@ -38,12 +40,13 @@ namespace SeminarManager.MVC.Controllers
                 return NotFound();
         }
 
-        public IActionResult Save([FromForm] Person obj)
+        public IActionResult Save([FromForm] PersonViewModel obj)
         {
             if (!ModelState.IsValid)
                 return View("Edit", obj);
 
-            repository.Persons.Save(obj);
+            var person = PersonViewModel.Convert(obj);
+            repository.Persons.Save(person);
             return Redirect("/Person/Index");
         }
 

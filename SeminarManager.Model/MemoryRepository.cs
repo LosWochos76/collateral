@@ -1,34 +1,54 @@
+using System.Collections.Generic;
+
 namespace SeminarManager.Model
 {
     public class MemoryRepository : IRepository
     {
         private MemoryPersonRepository person_repository;
         private MemorySeminarRepository seminar_repository;
+        private MemoryAttendeeRepository attendee_repository;
 
         public MemoryRepository() 
         {
             person_repository = new MemoryPersonRepository();
             seminar_repository = new MemorySeminarRepository();
+            attendee_repository = new MemoryAttendeeRepository();
 
-            person_repository.Save(new Person() { 
+            CreateDummyData();
+        }
+
+        private void CreateDummyData() 
+        {
+            var p1 = new Person() { 
                 Firstname = "Alex", 
                 Lastname = "Stuckenholz", 
                 IsAdmin = true, 
                 EMail = "alexander.stuckenholz@hshl.de", 
-                Password = "test" });
+                Password = "test" };
 
-            person_repository.Save(new Person() { 
+            var p2 = new Person() { 
                 Firstname = "Anne", 
                 Lastname = "Meier", 
-                IsAdmin = false });
+                IsAdmin = false };
 
-            seminar_repository.Save(new Seminar() { 
+            person_repository.Save(p1);
+            person_repository.Save(p2);
+
+            var s1 = new Seminar() { 
                 Name = "Objectoriented programming", 
-                Extent = "2L2E" });
+                Extent = "2L2E",
+                TeacherID = p1.ID };
 
-            seminar_repository.Save(new Seminar() { 
+            var s2 = new Seminar() { 
                 Name = "Energy informatics", 
-                Extent = "2L" });
+                Extent = "2L",
+                TeacherID = p1.ID };
+
+            seminar_repository.Save(s1);
+            seminar_repository.Save(s2);
+
+            attendee_repository.Save(s1, new List<int>() { p2.ID });
+            attendee_repository.Save(s2, new List<int>() { p2.ID });
         }
 
         public IPersonRepository Persons 
@@ -39,6 +59,11 @@ namespace SeminarManager.Model
         public ISeminarRepository Seminars
         {
             get { return seminar_repository; }
+        }
+
+        public IAttendeeRepository Attendees
+        {
+            get { return attendee_repository; }
         }
     }
 }

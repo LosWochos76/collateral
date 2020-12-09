@@ -1,9 +1,7 @@
-using System;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Server.IIS.Core;
 using Microsoft.Extensions.Logging;
 using SeminarManager.Model;
+using SeminarManager.MVC.ViewModel;
 
 namespace src.Controllers
 {
@@ -27,7 +25,7 @@ namespace src.Controllers
 
         public IActionResult Add()
         {
-            var obj = new Seminar();
+            var obj = new SeminarViewModel();
             ViewBag.Persons = repository.Persons.All();
 
             return View("Edit", obj);
@@ -35,7 +33,9 @@ namespace src.Controllers
 
         public IActionResult Edit(int id)
         {
-            var obj = repository.Seminars.ById(id);
+            var seminar = repository.Seminars.ById(id);
+            var obj = SeminarViewModel.Convert(seminar);
+            obj.Attendees = repository.Attendees.Get(seminar);
             ViewBag.Persons = repository.Persons.All();
 
             if (obj != null)
@@ -44,15 +44,24 @@ namespace src.Controllers
                 return NotFound();
         }
 
-        public IActionResult Save([FromForm] Seminar obj)
+        public IActionResult Save([FromForm] SeminarViewModel obj)
         {
+            if (obj.Teacher == 0) 
+                ModelState.AddModelError("TeacherID", "You need to select a teacher for this seminar!");
+            
+            if (obj.Attendees.Count == 0)
+                ModelState.AddModelError("Attendees", "Your need to add at least one attendee to this seminar!");
+
             if (!ModelState.IsValid)
             {
                 ViewBag.Persons = repository.Persons.All();
                 return View("Edit", obj);
             }
 
-            repository.Seminars.Save(obj);
+            var seminar = SeminarViewModel.Convert(obj);
+            repository.Seminars.Save(seminar);
+            repository.Attendees.Save(seminar, obj.Attendees);
+
             return Redirect("Index");
         }
 

@@ -2,8 +2,8 @@
     Layout = "Layout";
     ViewData["Title"] = "Login";
 }
-@using SeminarManager.Model;
-@model LoginModel
+@using SeminarManager.MVC.ViewModel;
+@model Login
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 <form method="POST" asp-controller="Authentication" asp-action="CheckCredentials">

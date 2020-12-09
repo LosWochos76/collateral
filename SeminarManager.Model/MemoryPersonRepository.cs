@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
+using System.Linq;
 
 namespace SeminarManager.Model
 {
@@ -54,15 +55,11 @@ namespace SeminarManager.Model
             }
         }
 
-        public Person FindAdminByEmailAndPassword(LoginModel login)
+        public Person FindAdminByEmailAndPassword(string email, string password)
         {
-            foreach (var obj in objects)
-            {
-                if (obj.IsAdmin && obj.EMail.Equals(login.Email) && obj.Password.Equals(login.Password))
-                    return obj;
-            }
-
-            return null;
+            return (from obj in objects 
+                where obj.IsAdmin && obj.EMail.Equals(email) && obj.Password.Equals(password) 
+                select obj).SingleOrDefault();
         }
     }
 }

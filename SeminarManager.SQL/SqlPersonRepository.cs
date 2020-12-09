@@ -6,24 +6,27 @@ using SimpleHashing.Net;
 
 namespace SeminarManager.SQL
 {
-    public class SqlPersonRepository : IPersonRepository
+    public class SqlPersonRepository : SqlRepositoryBase, IPersonRepository
     {
         private ISimpleHash simpleHash = new SimpleHash();
-        private NpgsqlConnection connection;
 
-        public SqlPersonRepository(NpgsqlConnection connection)
+        public SqlPersonRepository(NpgsqlConnection connection) : base(connection)
         {
-            this.connection = connection;
-
-            if (!TableExists()) 
+            if (!TableExists("sql_persons")) 
             {
                 CreateTable();
+
                 Save(new Person() { 
                     Firstname="Alexander", 
                     Lastname="Stuckenholz", 
                     IsAdmin=true, 
                     EMail="alexander.stuckenholz@hshl.de",
                     Password="test"});
+                
+                Save(new Person() { 
+                    Firstname="Michaela", 
+                    Lastname="Meier", 
+                    EMail="michaela.meier@stud.hshl.de"});
             }
         }
 
@@ -43,15 +46,6 @@ namespace SeminarManager.SQL
             }
         }
 
-        private bool TableExists() 
-        {
-            var sql = "SELECT EXISTS (SELECT FROM pg_tables WHERE tablename = 'sql_persons')";
-            using (var cmd = new NpgsqlCommand(sql, connection))
-            {
-                return Convert.ToBoolean(cmd.ExecuteScalar());
-            }
-        }
-
         private Person FromReader(NpgsqlDataReader reader)
         {
             var obj = new Person();
@@ -67,7 +61,7 @@ namespace SeminarManager.SQL
         public List<Person> All(int from = 0, int max = 1000)
         {
             string sql = "SELECT id,firstname,lastname," + 
-                "email,password_hash,is_admin FROM sql_persons " + 
+                "email,password_hash,is_admin FROM sql_persons order by lastname, firstname " + 
                 "limit :max offset :from";
 
             var result = new List<Person>();
@@ -112,30 +106,24 @@ namespace SeminarManager.SQL
 
         public void Delete(int id)
         {
-            string sql = "delete FROM sql_persons where id=:id";
-
-            using (var cmd = new NpgsqlCommand(sql, connection))
-            {
-                cmd.Parameters.AddWithValue(":id", id);
-                cmd.ExecuteNonQuery();
-            }
+            Delete("sql_persons", id);
         }
 
-        public Person FindAdminByEmailAndPassword(LoginModel login)
+        public Person FindAdminByEmailAndPassword(string email, string password)
         {
             string sql = "SELECT id,firstname,lastname," + 
-                "email,password_hash,is_admin FROM sql_persons where email=:email";
+                "email,password_hash,is_admin FROM sql_persons where email=:email order by lastname,firstname";
 
             using (var cmd = new NpgsqlCommand(sql, connection))
             {
-                cmd.Parameters.AddWithValue(":email", login.Email);
+                cmd.Parameters.AddWithValue(":email", email);
 
                 using (NpgsqlDataReader reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
                         var obj = FromReader(reader);
-                        if (simpleHash.Verify(login.Password, obj.Password))
+                        if (simpleHash.Verify(password, obj.Password))
                             return obj;
                     }
                 }

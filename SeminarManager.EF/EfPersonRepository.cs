@@ -18,7 +18,9 @@ namespace SeminarManager.EF
 
         public List<Person> All(int from = 0, int max = 1000)
         {
-            return context.Persons.AsNoTracking().Skip(from).Take(max).ToList();
+            return context.Persons
+                .OrderBy(p => p.Lastname).ThenByDescending(p => p.Firstname)
+                .AsNoTracking().Skip(from).Take(max).ToList();
         }
 
         public Person ById(int id)
@@ -37,13 +39,13 @@ namespace SeminarManager.EF
             }
         }
 
-        public Person FindAdminByEmailAndPassword(LoginModel login)
+        public Person FindAdminByEmailAndPassword(string email, string password)
         {
             var list = (from obj in context.Persons 
-                where obj.EMail.Equals(login.Email) select obj).AsNoTracking().ToList();
+                where obj.EMail.Equals(email) select obj).AsNoTracking().ToList();
 
             foreach (var obj in list)
-                if (simpleHash.Verify(login.Password, obj.Password))
+                if (simpleHash.Verify(password, obj.Password))
                     return obj;
             
             return null;

@@ -21,9 +21,9 @@ namespace SeminarManager.API.Controllers
             this.repository = repository;
         }
 
-        public IActionResult Index(LoginModel model)
+        public IActionResult Index(string email, string password)
         {
-            var user = repository.Persons.FindAdminByEmailAndPassword(model);
+            var user = repository.Persons.FindAdminByEmailAndPassword(email, password);
             if (user == null)
                 return Json(new OperationResult("Username or password is incorrect"));
 

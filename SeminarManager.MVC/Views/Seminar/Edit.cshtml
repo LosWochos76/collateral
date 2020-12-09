@@ -2,8 +2,8 @@
     Layout = "Layout";
     ViewData["Title"] = "Add/Edit Seminar";
 }
-@using SeminarManager.Model;
-@model Seminar
+@using SeminarManager.MVC.ViewModel;
+@model SeminarViewModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 <form method="POST" asp-controller="Seminar" asp-action="Save" id="seminar_form">
@@ -20,17 +20,17 @@
         <span asp-validation-for="Extent" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="TeacherID">Teacher:</label>
-        <span class="teacher-id"></span>
+        <label asp-for="Teacher">Teacher:</label>
+        <span class="teacher"></span>
         <script>
-            var teacher = new SelectPure(".teacher-id", {
+            var teacher = new SelectPure(".teacher", {
             options: [
             @foreach (var obj in ViewBag.Persons) {
                 <text>{ label: "@obj", value: "@obj.ID", },</text>
             }
             ],
-            @if (Model.TeacherID != 0) {
-            <text>value: "@Model.TeacherID",</text>
+            @if (Model.Teacher != 0) {
+            <text>value: "@Model.Teacher",</text>
             }
             icon: "fa fa-times",
             autocomplete: true,
@@ -51,23 +51,25 @@
         });
 
         $('#seminar_form').submit(function(e) {
-            $('<input>').attr({type: 'hidden', name: 'TeacherID', value: teacher.value() }).appendTo($('#seminar_form'));  
+            var value = teacher.value();
+            value = value == null ? 0 : value;
+            $('<input>').attr({type: 'hidden', name: 'Teacher', value: value }).appendTo($('#seminar_form'));  
         });
         </script>
-        <span asp-validation-for="TeacherID" class="text-danger"></span>
+        <span asp-validation-for="Teacher" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="AttendeeIDs">Attendees:</label>
-        <span class="attendee-ids"></span>
+        <label asp-for="Attendees">Attendees:</label>
+        <span class="attendees"></span>
         <script>
-            var attendees = new SelectPure(".attendee-ids", {
+            var attendees = new SelectPure(".attendees", {
             options: [
             @foreach (var obj in ViewBag.Persons) {
                 <text>{ label: "@obj", value: "@obj.ID", },</text>
             }
             ],
             value: [
-            @foreach (var id in @Model.AttendeeIDs) {
+            @foreach (var id in Model.Attendees) {
                 <text>"@id", </text>
             }
             ],
@@ -92,16 +94,16 @@
 
         $('#seminar_form').submit(function() {
             var value_as_string = attendees.value().toString();
-            if (value_as_string != "") { 
+            if (value_as_string != "") {
                 var values = value_as_string.split(',');
                 for (var i=0; i<values.length; i++) {
-                    $('<input>').attr({type: 'hidden', name: 'AttendeeIDs[' + i + ']', 
+                    $('<input>').attr({type: 'hidden', name: 'Attendees[' + i + ']', 
                         value: values[i] }).appendTo($('#seminar_form'));
                 }
             }
         });
         </script>
-        <span asp-validation-for="AttendeeIDs" class="text-danger"></span>
+        <span asp-validation-for="Attendees" class="text-danger"></span>
     </div>
     <input class="btn btn-primary" type="submit" value="Ok" />
 </form>

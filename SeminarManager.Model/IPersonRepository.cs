@@ -8,6 +8,6 @@ namespace SeminarManager.Model
             Person ById(int id);
             void Save(Person obj);
             void Delete(int id);
-            Person FindAdminByEmailAndPassword(LoginModel login);
+            Person FindAdminByEmailAndPassword(string uemail, string password);
       }
 }
