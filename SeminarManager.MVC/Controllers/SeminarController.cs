@@ -35,7 +35,7 @@ namespace src.Controllers
         {
             var seminar = repository.Seminars.ById(id);
             var obj = SeminarViewModel.Convert(seminar);
-            obj.Attendees = repository.Attendees.Get(seminar);
+            obj.Attendees = repository.Attendees.Get(seminar.ID);
             ViewBag.Persons = repository.Persons.All();
 
             if (obj != null)
@@ -60,7 +60,7 @@ namespace src.Controllers
 
             var seminar = SeminarViewModel.Convert(obj);
             repository.Seminars.Save(seminar);
-            repository.Attendees.Save(seminar, obj.Attendees);
+            repository.Attendees.Save(seminar.ID, obj.Attendees);
 
             return Redirect("Index");
         }

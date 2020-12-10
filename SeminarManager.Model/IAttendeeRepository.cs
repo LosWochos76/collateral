@@ -4,7 +4,7 @@ namespace SeminarManager.Model
 {
     public interface IAttendeeRepository
     {
-        void Save(Seminar seminar, List<int> attendees);
-        List<int> Get(Seminar seminar);
+        void Save(int seminar_id, List<int> attendees);
+        List<int> Get(int seminar_id);
     }
 }

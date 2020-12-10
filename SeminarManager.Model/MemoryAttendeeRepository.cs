@@ -7,16 +7,16 @@ namespace SeminarManager.Model
     {
         private List<Attendee> objects = new List<Attendee>();
 
-        public List<int> Get(Seminar seminar)
+        public List<int> Get(int seminar_id)
         {
-            return (from obj in objects where obj.SeminarID == seminar.ID select obj.PersonID).ToList();
+            return (from obj in objects where obj.SeminarID == seminar_id select obj.PersonID).ToList();
         }
 
-        public void Save(Seminar seminar, List<int> attendees)
+        public void Save(int seminar_id, List<int> attendees)
         {
-            objects.RemoveAll(obj => obj.SeminarID == seminar.ID);
+            objects.RemoveAll(obj => obj.SeminarID == seminar_id);
             foreach (int id in attendees) 
-                objects.Add(new Attendee() { SeminarID=seminar.ID, PersonID=id });
+                objects.Add(new Attendee() { SeminarID = seminar_id, PersonID=id });
         }
     }
 }

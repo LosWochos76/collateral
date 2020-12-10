@@ -11,8 +11,8 @@ namespace SeminarManager.SQL
             if (!TableExists("sql_attendees")) 
             {
                 CreateTable();
-                Save(new Seminar(){ ID=1 }, new List<int>() { 2 });
-                Save(new Seminar(){ ID=2 }, new List<int>() { 2 });
+                Save(1, new List<int>() { 2 });
+                Save(2, new List<int>() { 2 });
             }
         }
 
@@ -30,14 +30,14 @@ namespace SeminarManager.SQL
             }
         }
         
-        public List<int> Get(Seminar seminar)
+        public List<int> Get(int seminar_id)
         {
             var result = new List<int>();
 
             string sql = "SELECT person_id FROM sql_attendees where seminar_id=:seminar_id";
             using (var cmd = new NpgsqlCommand(sql, connection))
             {
-                cmd.Parameters.AddWithValue(":seminar_id", seminar.ID);
+                cmd.Parameters.AddWithValue(":seminar_id", seminar_id);
                 using (NpgsqlDataReader reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
@@ -48,11 +48,11 @@ namespace SeminarManager.SQL
             return result;
         }
 
-        public void Save(Seminar seminar, List<int> attendees)
+        public void Save(int seminar_id, List<int> attendees)
         {
-            RemoveAll(seminar.ID);
+            RemoveAll(seminar_id);
             foreach (int person_id in attendees)
-                InsertSingle(seminar.ID, person_id);
+                InsertSingle(seminar_id, person_id);
         }
 
         private void RemoveAll(int seminar_id)

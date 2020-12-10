@@ -47,8 +47,8 @@ namespace SeminarManager.Model
             seminar_repository.Save(s1);
             seminar_repository.Save(s2);
 
-            attendee_repository.Save(s1, new List<int>() { p2.ID });
-            attendee_repository.Save(s2, new List<int>() { p2.ID });
+            attendee_repository.Save(s1.ID, new List<int>() { p2.ID });
+            attendee_repository.Save(s2.ID, new List<int>() { p2.ID });
         }
 
         public IPersonRepository Persons 

@@ -50,7 +50,7 @@
             }
         });
 
-        $('#seminar_form').submit(function(e) {
+        $('#seminar_form').submit(function() {
             var value = teacher.value();
             value = value == null ? 0 : value;
             $('<input>').attr({type: 'hidden', name: 'Teacher', value: value }).appendTo($('#seminar_form'));  
