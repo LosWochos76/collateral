@@ -8,9 +8,10 @@ namespace OOP
     {
         static void Main(string[] args)
         {
-            var b1 = Bigint.FromString("1000000000000000000000000000000");
-            var b2 = Bigint.FromString("2000000000000000000000000000000");
-            var b3 = b1.Add(b2);
+            var spiel = new TicTacToe();
+            spiel.Zufallsfeld();
+            spiel.Ausgeben();
+            Console.WriteLine(spiel.Gewonnen('X'));
         }
     }
 }

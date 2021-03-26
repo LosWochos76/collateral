@@ -65,6 +65,7 @@
     <Compile Include="Seminar.cs" />
     <Compile Include="Student.cs" />
     <Compile Include="Verzeichnis.cs" />
+    <Compile Include="TicTacToe.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
