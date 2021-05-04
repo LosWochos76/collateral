@@ -11,7 +11,7 @@ class Spielfeld
 
     public void Initialisieren()
     {
-        feld = new char[3,3];
+        feld = new char[3, 3];
         for (int x = 0; x < 3; x++)
             for (int y = 0; y < 3; y++)
                 Setzen(x, y, ' ');
@@ -85,13 +85,13 @@ class Spielfeld
         return feld[y, x] != ' ';
     }
 
-    public bool NichtsMehrFrei() 
+    public bool IstEinFeldFrei() 
     {
         for (int i = 0; i < 3; i++)
             for (int j = 0; j < 3; j++)
                 if (feld[i, j] == ' ')
-                    return false;
+                    return true;
 
-        return true;
+        return false;
     }
 }

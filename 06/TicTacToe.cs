@@ -10,13 +10,13 @@ class TicTacToe
     public TicTacToe(Spieler spieler1, Spieler spieler2)
     {
         this.spieler1 = spieler1;
-        spieler1.Symbol = 'X';
+        spieler1.Spielstein = 'X';
 
         this.spieler2 = spieler2;
-        spieler2.Symbol = 'O';
+        spieler2.Spielstein = 'O';
     }
 
-    private void NaechsterSpieler()
+    private void WechsleSpieler()
     {
         aktueller_spieler = aktueller_spieler == spieler1 ? spieler2 : spieler1; 
     }
@@ -27,21 +27,21 @@ class TicTacToe
 
         do
         {
-            NaechsterSpieler();
+            WechsleSpieler();
 
-            Console.WriteLine("Spieler " + aktueller_spieler.Symbol + " ist an der Reihe:");
+            Console.WriteLine("Spieler " + aktueller_spieler.Spielstein + " ist an der Reihe:");
             aktueller_spieler.Ziehe(feld);
             feld.Ausgeben();
 
-            if (feld.HatGewonnen(aktueller_spieler.Symbol)) 
+            if (feld.HatGewonnen(aktueller_spieler.Spielstein)) 
             {
-                Console.WriteLine("Spieler " + aktueller_spieler.Symbol + " hat gewonnen!");
+                Console.WriteLine("Spieler " + aktueller_spieler.Spielstein + " hat gewonnen!");
                 break;
             }
         } 
-        while (!feld.NichtsMehrFrei());
+        while (feld.IstEinFeldFrei());
 
-        if (!feld.HatGewonnen() && feld.NichtsMehrFrei())
+        if (!feld.HatGewonnen() && !feld.IstEinFeldFrei())
             Console.WriteLine("Unentschieden!");
     }
 }

@@ -17,7 +17,7 @@ namespace _06
         // Das TicTacToe-Spiel testen
         static void TicTacToeTesten()
         {
-            var s1 = new MenschlicherSpieler();
+            var s1 = new ComputerSpieler();
             var s2 = new ComputerSpieler();
             var spiel = new TicTacToe(s1, s2);
             spiel.StarteSpiel();

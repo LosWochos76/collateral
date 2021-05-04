@@ -3,11 +3,11 @@ using System;
 class ComputerSpieler : Spieler
 {
     private Random rnd = new Random();
-    public char Symbol { get; set; }
+    public char Spielstein { get; set; }
 
     public void Ziehe(Spielfeld feld)
     {
-        if (feld.NichtsMehrFrei())
+        if (!feld.IstEinFeldFrei())
             return;
 
         while (true)
@@ -15,9 +15,9 @@ class ComputerSpieler : Spieler
             int x = rnd.Next(0, 3);
             int y = rnd.Next(0, 3);
 
-            if (!feld.IstBelegt(x,y))
+            if (!feld.IstBelegt(x, y))
             {
-                feld.Setzen(x, y, Symbol);
+                feld.Setzen(x, y, Spielstein);
                 return;
             }
         };

@@ -2,7 +2,7 @@ using System;
 
 class MenschlicherSpieler : Spieler
 {
-    public char Symbol { get; set; }
+    public char Spielstein { get; set; }
 
     private int KoordinateAbfragen(char achse)
     {
@@ -36,6 +36,6 @@ class MenschlicherSpieler : Spieler
                 break;
         }
 
-        feld.Setzen(x, y, Symbol);
+        feld.Setzen(x, y, Spielstein);
     }
 }

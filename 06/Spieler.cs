@@ -1,5 +1,5 @@
 interface Spieler
 {
-    char Symbol { get; set; }
+    char Spielstein { get; set; }
     void Ziehe(Spielfeld feld);
 }
