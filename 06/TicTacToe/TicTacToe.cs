@@ -3,18 +3,9 @@ using System;
 class TicTacToe
 {
     private Spielfeld feld;
-    private Spieler spieler1;
-    private Spieler spieler2;
+    private Spieler spieler1 = new Spieler('X');
+    private Spieler spieler2 = new Spieler('O');
     private Spieler aktueller_spieler;
-
-    public TicTacToe(Spieler spieler1, Spieler spieler2)
-    {
-        this.spieler1 = spieler1;
-        spieler1.Spielstein = 'X';
-
-        this.spieler2 = spieler2;
-        spieler2.Spielstein = 'O';
-    }
 
     private void WechsleSpieler()
     {

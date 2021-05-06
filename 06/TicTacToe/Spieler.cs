@@ -1,9 +1,14 @@
 using System;
 
-class ComputerSpieler : Spieler
+class Spieler
 {
     private Random rnd = new Random();
     public char Spielstein { get; set; }
+
+    public Spieler(char spielstein)
+    {
+        Spielstein = spielstein;
+    }
 
     public void Ziehe(Spielfeld feld)
     {
