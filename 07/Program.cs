@@ -6,8 +6,13 @@ class Program
     {
         var p = new Person("Ingrid", "Müller");
         p.Wohnadresse = new Adresse("Im Rosenhang 12", 59063, "Hamm");
+        p.Ausgeben();
 
         var s = new Student("Demir", "Öztürk", 12345);
         s.Wohnadresse = new Adresse("Schlehenstraße 26", 59063, "Hamm");
+        s.Ausgeben();
+
+        p = s;
+        p.Ausgeben();
     }
 }

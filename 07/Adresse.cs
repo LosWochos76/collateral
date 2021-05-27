@@ -1,3 +1,5 @@
+using System;
+
 class Adresse
 {
     public string Strasse { get; set; }
@@ -9,5 +11,11 @@ class Adresse
         this.Strasse = strasse;
         this.PLZ = plz;
         this.Ort = ort;
+    }
+
+    public void Ausgeben()
+    {
+        Console.WriteLine(Strasse);
+        Console.WriteLine(PLZ + " " + Ort);
     }
 }

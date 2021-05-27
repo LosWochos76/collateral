@@ -2,31 +2,21 @@ using System;
 
 class Person
 {
-    protected string vorname;
-    protected string nachname;
-
-    public string Vorname
-    {
-        get { return vorname; }
-        set { vorname = value; }
-    }
-
-    public string Nachname
-    {
-        get { return nachname; }
-        set { nachname = value; }
-    }
+    public string Vorname { get; set; }
+    public string Nachname { get; set; }
+    public Adresse Wohnadresse { get; set; }
 
     public Person(string vorname, string nachname)
     {
-        this.Vorname = vorname;
-        this.Nachname = nachname;
+        Vorname = vorname;
+        Nachname = nachname;
     }
-
-    public Adresse Wohnadresse { get; set; }
 
     public void Ausgeben()
     {
-        Console.WriteLine(vorname + " " + nachname);
+        Console.WriteLine(Vorname + " " + Nachname);
+
+        if (Wohnadresse != null)
+            Wohnadresse.Ausgeben();
     }
 }

@@ -2,7 +2,9 @@ using System;
 
 class MenschlicherSpieler : Spieler
 {
-    public char Spielstein { get; set; }
+    public MenschlicherSpieler(char spielstein) : base(spielstein)
+    {
+    }
 
     private int KoordinateAbfragen(char achse)
     {
@@ -18,7 +20,7 @@ class MenschlicherSpieler : Spieler
         return wert;
     }
 
-    public void Ziehe(Spielfeld feld)
+    public override void Ziehe(Spielfeld feld)
     {
         feld.Ausgeben();
 

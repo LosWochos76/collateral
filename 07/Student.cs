@@ -9,8 +9,9 @@ class Student : Person
         this.Matrikelnummer = matrikelnummer;
     }
 
-    public void Ausgeben()
+    public new void Ausgeben()
     {
-        Console.WriteLine(vorname + " " + nachname + ", " + Matrikelnummer);
+        base.Ausgeben();
+        Console.WriteLine("Matrikelnummer: " + Matrikelnummer);
     }
 }
