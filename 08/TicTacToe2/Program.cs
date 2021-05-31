@@ -2,7 +2,7 @@
 
 class Program
 {
-    static Spieler WaehleSpieler(char spielstein)
+    static ISpieler WaehleSpieler(char spielstein)
     {
         int code;
 
@@ -22,6 +22,7 @@ class Program
 
     static void Main(string[] args)
     {
+        // Diese Variante des TicTacToe-Spiels nutz Polymporphie mit Hilfe der Schnittstelle ISpieler
         TicTacToe ttt = new TicTacToe();
         ttt.Spieler1 = WaehleSpieler('X');
         ttt.Spieler2 = WaehleSpieler('O');
