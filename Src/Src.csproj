@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Graphs\" />
+    <None Remove="Misc\" />
+    <None Remove="Search\" />
+    <None Remove="Sort\" />
+    <None Remove="Tree\" />
+    <None Remove="HashMap\" />
+    <None Remove="List\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Graphs\" />
+    <Folder Include="Graphs\" />
+    <Folder Include="Misc\" />
+    <Folder Include="Search\" />
+    <Folder Include="Sort\" />
+    <Folder Include="Tree\" />
+    <Folder Include="HashMap\" />
+    <Folder Include="List\" />
+  </ItemGroup>
+</Project>
