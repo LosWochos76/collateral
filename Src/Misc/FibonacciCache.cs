@@ -9,9 +9,10 @@ namespace AUD.Misc
         public FibonacciCache(int count)
         {
             fibonacciCache = new GenericHashMap<int, int>(count);
-            for (int i=0; i<count; i++)
+            for (int i = 0; i < count; i++)
             {
-                fibonacciCache.Insert(i, Fibonacci.GetFibonacci(i));
+                var fib = Fibonacci.GetFibonacci(i);
+                fibonacciCache.Insert(i, fib);
             }
         }
 
@@ -20,7 +21,8 @@ namespace AUD.Misc
             int index = 0;
             while (true)
             {
-                if (fibonacciCache.GetValue(index) > value)
+                var fib = fibonacciCache.GetValue(index);
+                if (fib > value)
                     return index;
 
                 index++;

@@ -1,34 +1,30 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace AUD.List
 {
-    public class GenericLinkedList<T> where T : IComparable
+    public class GenericLinkedList<T> : IEnumerable<T> where T : IComparable
     {
-        private GenericListNode<T> head = null;
-        private GenericListNode<T> tail = null;
-        private int count = 0;
-
-        public int Count
-        {
-            get { return count; }
-        }
+        public GenericListNode<T> Head { get; private set; }
+        public GenericListNode<T> Tail { get; private set; }
+        public int Count { get; private set; }
 
         public void PushFront(T value)
         {
             var element = new GenericListNode<T>(value);
             
-            if (head == null)
+            if (Head == null)
             {
-                head = element;
-                tail = element;
-                count = 1;
+                Head = element;
+                Tail = element;
+                Count = 1;
             }
             else
             {
-                element.next = head;
-                head = element;
-                count++;
+                element.next = Head;
+                Head = element;
+                Count++;
             }
         }
 
@@ -36,31 +32,31 @@ namespace AUD.List
         {
             var element = new GenericListNode<T>(value);
 
-            if (tail == null)
+            if (Tail == null)
             {
-                head = element;
-                tail = element;
-                count = 1;
+                Head = element;
+                Tail = element;
+                Count = 1;
             }
             else
             {
-                tail.next = element;
-                tail = element;
-                count++;
+                Tail.next = element;
+                Tail = element;
+                Count++;
             }
         }
 
 		public T PopFront()
 		{
-            T value = head.value;
-            head = head.next;
-            count--;
+            T value = Head.value;
+            Head = Head.next;
+            Count--;
             return value;
 		}
 
         public bool Contains(T value)
         {
-            GenericListNode<T> node = head;
+            GenericListNode<T> node = Head;
             while (node != null)
             {
                 if (node.value.CompareTo(value) == 0)
@@ -74,8 +70,8 @@ namespace AUD.List
 
         private GenericListNode<T> FindNodeToInsert(T value)
         {
-            GenericListNode<T> currentElement = head.next;
-            GenericListNode<T> lastElement = head;
+            GenericListNode<T> currentElement = Head.next;
+            GenericListNode<T> lastElement = Head;
 
             do
             {
@@ -84,20 +80,22 @@ namespace AUD.List
 
                 lastElement = currentElement;
                 currentElement = currentElement.next;
-            } while (currentElement != null);
+            }
+            while (currentElement != null);
 
             return null;
         }
 
         public void InsertSorted(T value)
         {
-	        if (count == 0)
+	        if (Count == 0)
 		        PushFront(value);
-	        else if (head.value.CompareTo(value) > 0)
+	        else if (Head.value.CompareTo(value) > 0)
 		        PushFront(value);
-	        else if (tail.value.CompareTo(value) < 0)
+	        else if (Tail.value.CompareTo(value) < 0)
 		        PushBack(value);
-	        else {
+	        else
+            {
                 var elementToInsertAfter = FindNodeToInsert(value);
                 var newElement = new GenericListNode<T>(value);
                 newElement.next = elementToInsertAfter.next;
@@ -109,11 +107,11 @@ namespace AUD.List
         {
             get
             {
-                if (count < 2)
+                if (Count < 2)
                     return true;
 
-                GenericListNode<T> last = head;
-                GenericListNode<T> current = head.next;
+                GenericListNode<T> last = Head;
+                GenericListNode<T> current = Head.next;
 
                 while (current != null)
                 {
@@ -130,23 +128,24 @@ namespace AUD.List
 
         public void RemoveAll(T value)
         {
-            while (head != null && head.value.CompareTo(value) == 0)
+            while (Head != null && Head.value.CompareTo(value) == 0)
             {
-                head = head.next;
-                count--;
+                Head = Head.next;
+                Count--;
             }
 
-            if (count == 0)
+            if (Count == 0)
                 return;
 
-            GenericListNode<T> last = head;
-            GenericListNode<T> current = head.next;
+            GenericListNode<T> last = Head;
+            GenericListNode<T> current = Head.next;
+
             while (current != null)
             {
                 if (current.value.CompareTo(value) == 0)
                 {
                     last.next = current.next;
-                    count--;
+                    Count--;
                 }
 
                 last = current;
@@ -157,7 +156,7 @@ namespace AUD.List
         public List<T> AsList()
         {
             var result = new List<T>();
-            GenericListNode<T> current = head;
+            GenericListNode<T> current = Head;
 
             while (current != null)
             {
@@ -166,6 +165,16 @@ namespace AUD.List
             }
 
             return result;
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return new GenericLinkedListEnumertor<T>(this);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

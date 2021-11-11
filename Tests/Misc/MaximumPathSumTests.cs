@@ -1,5 +1,4 @@
-﻿using AUD.Misc;
-using Xunit;
+﻿using Xunit;
 
 namespace AUD.Tests
 {
@@ -8,6 +7,7 @@ namespace AUD.Tests
         [Fact]
         public void calculateSumTest()
         {
+            // Dieser Test muss gelingen, wenn die Methode korrekt implementiert ist:
             //var maxPathSum = new MaximumPathSum();
             //Assert.Equal(1074, maxPathSum.calculateSum());
         }

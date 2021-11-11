@@ -9,7 +9,7 @@ namespace AUD.Search
 
         public FibonacciSearch(int[] data, int count) : base(data)
         {
-            this.cache = new FibonacciCache(count);
+            cache = new FibonacciCache(count);
         }
 
         public bool Contains(int search_value)

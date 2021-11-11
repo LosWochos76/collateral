@@ -9,11 +9,12 @@ namespace AUD.Tests
         public void QuickSort_random_data()
         {
             var list = new QuickSort(1000);
-            list.FillWithRandomNumbers(1000);
 
+            list.FillWithRandomNumbers(1000);
             Assert.False(list.IsSorted());
+
             list.Sort();
-            Assert.False(list.IsSorted());
+            Assert.True(list.IsSorted());
         }
     }
 }

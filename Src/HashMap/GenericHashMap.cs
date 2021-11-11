@@ -6,7 +6,7 @@ namespace AUD.HashMap
 {
     public class GenericHashMap<K, V> where K : IComparable
     {
-        int size;
+        private int size;
         private LinkedList<GenericTuple<K, V>>[] items;
 
         public GenericHashMap(int size)
@@ -27,9 +27,7 @@ namespace AUD.HashMap
         public bool ContainsKey(int key)
         {
             int pos = key.GetHashCode() % size;
-            if (items[pos] == null)
-                return false;
-            else
+            if (items[pos] != null)
             {
                 foreach (var t in items[pos])
                 {
@@ -45,9 +43,7 @@ namespace AUD.HashMap
         {
             int pos = key.GetHashCode() % size;
 
-            if (items[pos] == null)
-                throw new Exception("Key not found!");
-            else
+            if (items[pos] != null)
             {
                 foreach (var t in items[pos])
                 {
@@ -56,7 +52,7 @@ namespace AUD.HashMap
                 }
             }
 
-            throw new Exception("Key not found!");
+            throw new Exception($"Key '{key}' not found!");
         }
     }
 }

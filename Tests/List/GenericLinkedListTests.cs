@@ -37,5 +37,26 @@ namespace AUD.Tests
             Assert.Equal(1, list.Count);
             Assert.Equal(1, list.PopFront());
         }
+
+        [Fact]
+        public void GenericLinkedList_IEnumerable()
+        {
+            var list = new GenericLinkedList<int>();
+            list.PushBack(1);
+            list.PushBack(2);
+            list.PushBack(3);
+            list.PushBack(4);
+
+            var e = list.GetEnumerator();
+            Assert.True(e.MoveNext());
+            Assert.Equal(1, e.Current);
+            Assert.True(e.MoveNext());
+            Assert.Equal(2, e.Current);
+            Assert.True(e.MoveNext());
+            Assert.Equal(3, e.Current);
+            Assert.True(e.MoveNext());
+            Assert.Equal(4, e.Current);
+            Assert.False(e.MoveNext());
+        }
     }
 }
