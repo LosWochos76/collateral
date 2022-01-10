@@ -17,5 +17,8 @@ public class Main {
         System.out.println("3. Summe=" + summe3);
 
         Tuple<Integer, Integer> t1 = new Tuple<Integer, Integer>(5, 7);
+
+        Ausgebbar b = new Bruch(1,3);
+        b.ausgeben();
     }
 }

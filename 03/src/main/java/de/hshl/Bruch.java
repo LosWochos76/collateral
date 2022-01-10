@@ -1,6 +1,6 @@
 package de.hshl;
 
-public class Bruch {
+public class Bruch implements Ausgebbar {
     private int zaehler;
     private int nenner;
 
@@ -28,10 +28,6 @@ public class Bruch {
         return (double)zaehler / nenner;
     }
 
-    public void ausgeben() {
-        System.out.println(zaehler + "/" + nenner);
-    }
-
     public Bruch bildeKehrwert() {
         return new Bruch(nenner, zaehler);
     }
@@ -51,5 +47,9 @@ public class Bruch {
         
         Bruch b = (Bruch)obj;
         return b.zaehler == zaehler && b.nenner == nenner;
+    }
+
+    public void ausgeben() {
+        System.out.println(zaehler + "/" + nenner);
     }
 }
