@@ -15,4 +15,9 @@ public class Dozent extends Person {
 		super(vorname, nachname);
 		setLehrgebiet(lehrgebiet);
 	}
+	
+	@Override
+	public String toString() {
+		return getVorname() + " " + getNachname() + " - " + getLehrgebiet();
+	}
 }

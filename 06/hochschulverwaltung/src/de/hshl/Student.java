@@ -16,6 +16,7 @@ public class Student extends Person {
 		setMatrikelnummer(matrikelnummer);
 	}
 	
+	@Override
 	public String toString() {
 		return getVorname() + " " + getNachname() + " - " + getMatrikelnummer();
 	}
