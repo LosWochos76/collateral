@@ -7,6 +7,7 @@ import javafx.scene.input.KeyCode;
 public class Spielfeld {
 	private GraphicsContext gc;
 	private Schlange schlange;
+	private int points = 0;
 	private long last_tick = 0;
 	private Box apple;
 	
@@ -26,6 +27,7 @@ public class Spielfeld {
 		if (schlange.eats(apple)) {
 			schlange.increaseLenght();
 			apple = Box.randomBox();
+			points++;
 		}
 		
 		schlange.paint(gc);

@@ -1,6 +1,6 @@
 package de.hshl;
 
-public  abstract class Spieler {
+public abstract class Spieler {
 	protected char spielstein;
 
     public Spieler(char spielstein) {

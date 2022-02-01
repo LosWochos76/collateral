@@ -50,8 +50,8 @@ public class Schlange {
 		}
 	}
 	
-	public boolean eats(Box b) {
-		return getHead().equals(b);
+	public boolean eats(Box apple) {
+		return getHead().equals(apple);
 	}
 	
 	public void increaseLenght() {

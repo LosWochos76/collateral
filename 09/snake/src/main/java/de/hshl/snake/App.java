@@ -19,13 +19,8 @@ public class App extends Application {
         var root = new Pane();
         var canvas = new Canvas(640, 480);
         var gc = canvas.getGraphicsContext2D();
-        
         root.getChildren().add(canvas);
         var scene = new Scene(root, 640, 480, Color.WHITESMOKE);
-        
-        scene.setOnKeyPressed(e -> {
-        	feld.keyPressed(e.getCode());
-        });
 
         stage.setTitle("Lines");
         stage.setScene(scene);
@@ -33,6 +28,10 @@ public class App extends Application {
         stage.show();
         
         feld = new Spielfeld(gc);
+        
+        scene.setOnKeyPressed(e -> {
+        	feld.keyPressed(e.getCode());
+        });
         
         AnimationTimer timer = new AnimationTimer() {
             @Override
@@ -48,6 +47,7 @@ public class App extends Application {
             	}
             }
         };
+        
         timer.start();
     }
 
