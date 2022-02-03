@@ -1,8 +1,8 @@
-package de.hshl.iterator;
+package de.hshl;
 
 import java.util.Iterator;
 
-public class LinkedList<T> implements Iterable {
+public class LinkedList<T> {
    private ListNode<T> head;
 
    public ListNode<T> getHead() {
@@ -15,7 +15,7 @@ public class LinkedList<T> implements Iterable {
       head = node;
    }
 
-   public T pop() {
+   public T pop()  {
       if (head == null)
          throw new RuntimeException("List is empty!");
 
@@ -26,10 +26,5 @@ public class LinkedList<T> implements Iterable {
    
    public boolean hasMore() {
       return head != null;
-   }
-
-   @Override
-   public Iterator<T> iterator() {
-      return new LinkedListIterator(this);
    }
 }
