@@ -48,12 +48,65 @@
             }
         }
 
+        public static void Rechteck()
+        {
+            int zeile = 0;
+            while (zeile < 10)
+            {
+                int spalte = 0;
+                while (spalte < 10)
+                {
+                    Console.Write("*");
+                    spalte++;
+                }
+
+                Console.WriteLine();
+                zeile++;
+            }
+        }
+
+        public static void Tannenbaum() 
+        {
+            int hoehe = 4;
+
+            int zeile = 0;
+            while (zeile < hoehe)
+            {
+                int leerzeichen = 0;
+                while (leerzeichen < hoehe - zeile - 1)
+                {
+                    Console.Write(" ");
+                    leerzeichen++;
+                }
+
+                int sterne = 0;
+                while (sterne < zeile * 2 + 1)
+                {
+                    Console.Write("*");
+                    sterne++;
+                }
+
+                Console.WriteLine();
+                zeile++;
+            }
+
+            int l = 0;
+            while (l < hoehe - 1)
+            {
+                 Console.Write(" ");
+                 l++;
+            }
+            Console.WriteLine("*");
+        }
+
         public static void Main(string[] args)
         {
             // Kommentarzeichen löschen, um den jeweiligen Code auszuprobieren:
             //Uhrzeit();
             //Summe3oder5Teilbar();
-            Zinseszins();
+            //Zinseszins();
+            Rechteck();
+            //Tannenbaum();
         }
     }
 }
