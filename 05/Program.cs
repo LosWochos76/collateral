@@ -48,15 +48,38 @@
             }
         }
 
+        public static void ZahlEinlesen()
+        {
+            int zahl = 0;
+            bool zahl_durch_3_oder_5_teilbar = false;
+
+            do
+            {
+                Console.Write("Bitte Zahl eingeben: ");
+                zahl = Convert.ToInt32(Console.ReadLine());
+                zahl_durch_3_oder_5_teilbar = zahl % 3 == 0 || zahl % 5 == 0;
+            }
+            while (!zahl_durch_3_oder_5_teilbar);
+        }
+
         public static void Rechteck()
         {
+            Console.Clear();
+
             int zeile = 0;
             while (zeile < 10)
             {
                 int spalte = 0;
                 while (spalte < 10)
                 {
-                    Console.Write("*");
+                    if (zeile == 0 || zeile == 9)
+                        Console.Write("*");
+                    else
+                        if (spalte == 0 || spalte == 9)
+                        Console.Write("*");
+                    else
+                        Console.Write(" ");
+
                     spalte++;
                 }
 
@@ -65,7 +88,7 @@
             }
         }
 
-        public static void Tannenbaum() 
+        public static void Tannenbaum()
         {
             int hoehe = 4;
 
@@ -93,8 +116,8 @@
             int l = 0;
             while (l < hoehe - 1)
             {
-                 Console.Write(" ");
-                 l++;
+                Console.Write(" ");
+                l++;
             }
             Console.WriteLine("*");
         }
@@ -105,8 +128,9 @@
             //Uhrzeit();
             //Summe3oder5Teilbar();
             //Zinseszins();
-            Rechteck();
+            //Rechteck();
             //Tannenbaum();
+            ZahlEinlesen();
         }
     }
 }
