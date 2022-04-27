@@ -2,8 +2,8 @@
 
 namespace AUD.List
 {
-	public class ArrayList
-	{
+    public class ArrayList
+    {
         protected int[] data;
 
         public ArrayList(int count)
@@ -16,17 +16,23 @@ namespace AUD.List
             this.data = data;
         }
 
-        public int[] Data { get { return data; } }
+        public int[] Data 
+        { 
+            get 
+            { 
+                return data; 
+            } 
+        }
 
-		public void Swap(int pos1, int pos2)
-		{
-			if (pos1 == pos2)
-				return;
+        public void Swap(int pos1, int pos2)
+        {
+            if (pos1 == pos2)
+                return;
 
-			int tmp = data[pos1];
+            int tmp = data[pos1];
             data[pos1] = data[pos2];
             data[pos2] = tmp;
-		}
+        }
 
         public void FillWithRandomNumbers(int max_value)
         {
@@ -35,15 +41,15 @@ namespace AUD.List
                 data[i] = rnd.Next(max_value);
         }
 
-		public override string ToString()
-		{
-			return "[" + String.Join(", ", data) + "]";
-		}
+        public override string ToString()
+        {
+            return "[" + String.Join(", ", data) + "]";
+        }
 
-		public void Print()
-		{
-			Console.WriteLine(ToString());
-		}
+        public void Print()
+        {
+            Console.WriteLine(ToString());
+        }
 
         public bool IsSorted()
         {
