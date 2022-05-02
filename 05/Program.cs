@@ -62,35 +62,27 @@
             while (!zahl_durch_3_oder_5_teilbar);
         }
 
-        public static void Rechteck()
+        public static void Kleines1mal1()
         {
             Console.Clear();
 
-            int zeile = 0;
-            while (zeile < 10)
+            int i = 1;
+            while (i <= 10)
             {
-                int spalte = 0;
-                while (spalte < 10)
+                int j = 1;
+                while (j <= 10)
                 {
-                    if (zeile == 0 || zeile == 9)
-                        Console.Write("*");
-                    else
-                        if (spalte == 0 || spalte == 9)
-                        Console.Write("*");
-                    else
-                        Console.Write(" ");
-
-                    spalte++;
+                    Console.WriteLine("{0} * {1} = {2}", i, j, i * j);
+                    j++;
                 }
 
-                Console.WriteLine();
-                zeile++;
+                i++;
             }
         }
 
         public static void Tannenbaum()
         {
-            int hoehe = 4;
+            int hoehe = 5;
 
             int zeile = 0;
             while (zeile < hoehe)
@@ -122,15 +114,33 @@
             Console.WriteLine("*");
         }
 
+        public static void BreakAndContinue() 
+        {
+            int i = 0;
+            while (true) 
+            {
+                i++;
+
+                if (i % 2 != 0)
+                    continue;
+
+                if (i > 100)
+                    break;
+
+                Console.WriteLine(i);
+            }
+        }
+
         public static void Main(string[] args)
         {
             // Kommentarzeichen löschen, um den jeweiligen Code auszuprobieren:
             //Uhrzeit();
             //Summe3oder5Teilbar();
             //Zinseszins();
-            //Rechteck();
+            //ZahlEinlesen();
+            //Kleines1mal1();
             //Tannenbaum();
-            ZahlEinlesen();
+            BreakAndContinue();
         }
     }
 }
