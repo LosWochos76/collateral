@@ -31,8 +31,31 @@
         while (guthaben > 0);
     }
 
+    public static void MonteCarloSimulation()
+    {
+        Random rnd = new Random();
+        int count = 10000000;
+        int i = 0;
+        int count_in = 0;
+
+        while (i < count)
+        {
+            double x = rnd.NextDouble() * 2 - 1;
+            double y = rnd.NextDouble() * 2 - 1;
+            double len = Math.Sqrt(x*x+y*y);
+            if (len <= 1)
+                count_in++;
+
+            i++;
+        }
+
+        double pi = 4*(double)count_in/count;
+        Console.WriteLine(pi);
+    }
+
     public static void Main()
     {
-        Wuerfelspiel();
+        //Wuerfelspiel();
+        MonteCarloSimulation();
     }
 }
