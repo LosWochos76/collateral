@@ -53,9 +53,45 @@
         Console.WriteLine(pi);
     }
 
+    public static void FakultaetMitWhile(long n)
+    {
+        if (n == 0)
+        {
+            Console.WriteLine(1);
+            return;
+        }
+
+        long result = 1;
+        long i = 1;
+    
+        while (i <= n)
+        {
+            result = result * i;
+            i++;
+        }
+
+        Console.WriteLine(result);
+    }
+
+    public static void FakultaetMitFor(long n)
+    {
+        if (n == 0)
+        {
+            Console.WriteLine(1);
+            return;
+        }
+
+        long result = 1;
+        for (long i=1; i<=n; i++)
+            result = result * i;
+
+        Console.WriteLine(result);
+    }
+
     public static void Main()
     {
         //Wuerfelspiel();
-        MonteCarloSimulation();
+        //MonteCarloSimulation();
+        FakultaetMitFor(20);
     }
 }
