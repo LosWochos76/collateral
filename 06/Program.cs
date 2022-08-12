@@ -88,10 +88,27 @@
         Console.WriteLine(result);
     }
 
+    public static void VollkommeneZahlen()
+    {
+        for (int zahl=1; zahl<=10000; zahl++)
+        {
+            int summe = 0;
+            for (int teiler=1; teiler<zahl; teiler++)
+            {
+                if (zahl % teiler == 0)
+                    summe += teiler;
+            }
+
+            if (summe == zahl)
+                Console.WriteLine(zahl);
+        }
+    }
+
     public static void Main()
     {
         //Wuerfelspiel();
         //MonteCarloSimulation();
-        FakultaetMitFor(20);
+        //FakultaetMitFor(20);
+        VollkommeneZahlen();
     }
 }
