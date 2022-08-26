@@ -18,7 +18,7 @@
 
     public static void Main(string[] args)
     {
-        //FibonacciTest();
+        FibonacciTest();
         //RechteckTest();
     }
 }
