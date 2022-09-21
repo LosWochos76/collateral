@@ -2,13 +2,6 @@
 {
     public static void Main(string[] args)
     {
-        //MethodenVonStringAuslesen();
-
-        //(double, string, int) t = (17.4, "Hallo", 42);
-        //Console.WriteLine(t);
-        var t = (Bool: true, Value: 41);
-        Console.WriteLine(t.Bool);
-
     }
 
     public static void MethodenVonStringAuslesen()
@@ -44,5 +37,31 @@
         }
     }
 
+    public static (int min, int max) MinMax(int[] zahlen)
+    {
+        int min = zahlen[0];
+        int max = zahlen[0];
 
-}
+        for (int i=1; i<zahlen.Length; i++)
+        {
+            if (min > zahlen[i])
+                min = zahlen[i];
+            
+            if (max < zahlen[i])
+                max = zahlen[i];
+        }
+
+        return (min, max);
+    }
+
+    public static int[] Zufallszahlen(int anzahl)
+    {
+        Random rnd = new Random();
+        int[] zahlen = new int[anzahl];
+
+        for (int i=0; i<zahlen.Length; i++)
+            zahlen[i] = rnd.Next(0, 1000);
+
+        return zahlen;
+    }
+}   
