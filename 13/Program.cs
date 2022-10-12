@@ -13,7 +13,7 @@ public class Program
         WriteSmiley();
         Console.WriteLine();*/
 
-        Console.WriteLine(IsValidPngFile("Wikipedia-logo-fixed.png"));
+        //Console.WriteLine(IsValidPngFile("Wikipedia-logo-fixed.png"));
     }
 
     public static void FindFiles(string path, string ending) 
