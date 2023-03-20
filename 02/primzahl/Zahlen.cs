@@ -1,5 +1,5 @@
 ﻿using System;
-namespace primzahl;
+namespace Primzahl;
 
 public class Zahlen
 {
