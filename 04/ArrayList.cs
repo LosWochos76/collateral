@@ -2,8 +2,7 @@ using System.Collections;
 
 public class ArrayList<T> : ICollection<T>, IList<T>
 {
-    private int size;
-    private int count = 0;
+    private int size, count;
     private T[] data;
 
     public ArrayList(int size)
@@ -21,7 +20,8 @@ public class ArrayList<T> : ICollection<T>, IList<T>
         get { return count; }
     }
 
-    public bool IsReadOnly {
+    public bool IsReadOnly 
+    {
         get 
         { 
             return false; 
