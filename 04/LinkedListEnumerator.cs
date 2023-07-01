@@ -2,7 +2,7 @@ using System.Collections;
 
 public partial class LinkedList<T> : ICollection<T>
 {
-    class LinkedListEnumerator<T> : IEnumerator<T>
+    private class LinkedListEnumerator<T> : IEnumerator<T>
     {
         private LinkedList<T> list;
         private NodeElement<T> current;
