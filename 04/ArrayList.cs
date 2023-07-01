@@ -1,6 +1,6 @@
 using System.Collections;
 
-public class ArrayList<T> : ICollection<T>, IList<T>
+public partial class ArrayList<T> : ICollection<T>, IList<T>
 {
     private int size, count;
     private T[] data;
@@ -49,15 +49,16 @@ public class ArrayList<T> : ICollection<T>, IList<T>
 
     public void Add(T item)
     {
-        if (count == size)
-            DoubleTheSize();
-
+        EnsureSize(count + 1);
         data[count] = item;
         count++;
     }
 
-    private void DoubleTheSize()
+    private void EnsureSize(int new_size)
     {
+        if (new_size <= size)
+            return;
+
         T[] new_data = new T[size * 2];
         Array.Copy(data, new_data, size);
         data = new_data;

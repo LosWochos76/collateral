@@ -1,49 +1,52 @@
 using System.Collections;
 
-public class ArrayListEnumerator<T> : IEnumerator<T>
+public partial class ArrayList<T> : ICollection<T>, IList<T>
 {
-    private int current = -1;
-    private ArrayList<T> list;
-
-    public ArrayListEnumerator(ArrayList<T> list)
+    class ArrayListEnumerator<T> : IEnumerator<T>
     {
-        this.list = list;
-    }
+        private int current = -1;
+        private ArrayList<T> list;
 
-    public T Current 
-    {
-        get
+        public ArrayListEnumerator(ArrayList<T> list)
         {
-            if (current < 0 || current >= list.Count)
-                throw new Exception("No current element!");
-
-            return list[current];
+            this.list = list;
         }
-    }
 
-    object IEnumerator.Current 
-    {
-        get
+        public T Current 
         {
-            return Current;
+            get
+            {
+                if (current < 0 || current >= list.Count)
+                    throw new Exception("No current element!");
+
+                return list[current];
+            }
         }
-    }
 
-    public void Dispose()
-    {
-    }
+        object IEnumerator.Current 
+        {
+            get
+            {
+                return Current;
+            }
+        }
 
-    public bool MoveNext()
-    {
-        if (current == list.Count - 1)
-            return false;
-        
-        current++;
-        return true;
-    }
+        public void Dispose()
+        {
+        }
 
-    public void Reset()
-    {
-        current = -1;
+        public bool MoveNext()
+        {
+            if (current == list.Count - 1)
+                return false;
+            
+            current++;
+            return true;
+        }
+
+        public void Reset()
+        {
+            current = -1;
+        }
     }
 }
