@@ -1,6 +1,6 @@
 using System.Collections;
 
-public partial class ArrayList<T> : ICollection<T>, IList<T>
+public partial class ArrayList<T>
 {
     private int size, count;
     private T[] data;
@@ -18,14 +18,6 @@ public partial class ArrayList<T> : ICollection<T>, IList<T>
     public int Count
     {
         get { return count; }
-    }
-
-    public bool IsReadOnly 
-    {
-        get 
-        { 
-            return false; 
-        }
     }
 
     public T this[int index]
@@ -65,86 +57,9 @@ public partial class ArrayList<T> : ICollection<T>, IList<T>
         size *= 2;
     }
 
-    public void Clear()
+    public void Print()
     {
-        Array.Clear(data);
-    }
-
-    private int IndexOf(T item)
-    {
-        if (item is null)
-            return -1;
-
         for (int i=0; i<count; i++)
-            if (data[i] is not null && data[i].Equals(item))
-                return i;
-        
-        return -1;
-    }
-
-    public bool Contains(T item)
-    {
-        return IndexOf(item) != -1;
-    }
-
-    public void CopyTo(T[] array, int arrayIndex)
-    {
-        Array.Copy(data, 0, array, arrayIndex, count);
-    }
-
-    public IEnumerator<T> GetEnumerator()
-    {
-        return new ArrayListEnumerator<T>(this);
-    }
-
-    public void RemoveAt(int index)
-    {
-        T[] new_data = new T[size];
-        Array.Copy(data, 0, new_data, 0, index);
-        Array.Copy(data, index+1, new_data, index, count - 1);
-        data = new_data;
-        count--;
-    }
-
-    public bool Remove(T item)
-    {
-        int index = IndexOf(item);
-        if (index > -1)
-        {
-            RemoveAt(index);
-            return true;
-        }
-
-        return false;
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return new ArrayListEnumerator<T>(this);
-    }
-
-    int IList<T>.IndexOf(T item)
-    {
-        return IndexOf(item);
-    }
-
-    public void Insert(int index, T item)
-    {
-        if (index > count)
-            throw new Exception("Bad index!");
-
-        int new_size = size;
-        if (count == size)
-            new_size = size * 2;
-
-        T[] new_data = new T[new_size];
-        
-        if (index > 0)
-            Array.Copy(data, 0, new_data, 0, index);
-        
-        new_data[index] = item;
-        Array.Copy(data, index, new_data, index+1, count - index);
-        data = new_data;
-        count++;
+            Console.WriteLine(data[i]);
     }
 }

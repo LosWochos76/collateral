@@ -1,18 +1,9 @@
 using System.Collections;
 
-public partial class LinkedList<T> : ICollection<T>
+public partial class LinkedList<T>
 {
     private NodeElement<T> head = null;
-
     public int Count { get; set; }
-
-    public bool IsReadOnly 
-    {
-        get 
-        {
-            return false;
-        }
-    }
 
     public void Add(T item)
     {
@@ -30,65 +21,28 @@ public partial class LinkedList<T> : ICollection<T>
         Count++;
     }
 
-    public void Clear()
+    public bool HasElements 
     {
-        head = null;
-        Count = 0;
+        get { return head != null; }
     }
 
-    public bool Contains(T item)
+    public T Remove()
+    {
+        if (!HasElements)
+            throw new Exception("List is empty!");
+
+        var value = head.Value;
+        head = head.Next;
+        return value;
+    }
+
+    public void Print()
     {
         var current = head;
         while (current != null)
         {
-            if (current.Value.Equals(item))
-                return true;
-
+            Console.WriteLine(current.Value);
             current = current.Next;
         }
-
-        return false;
-    }
-
-    public void CopyTo(T[] array, int arrayIndex)
-    {
-        int i = 0;
-        var current = head;
-        while (current != null)
-        {
-            array[i + arrayIndex] = current.Value;
-            current = current.Next;
-        }
-    }
-
-    public bool Remove(T item)
-    {
-        var current = head;
-        NodeElement<T> last = null;
-
-        while (current != null)
-        {
-            if (current.Value.Equals(item))
-            {
-                last.Next = current.Next;
-                Count--;
-                return true;
-            }
-
-            last = current;
-            current = current.Next;
-        }
-        
-        return false;
-    }
-
-    public IEnumerator<T> GetEnumerator()
-    {
-        return new LinkedListEnumerator<T>(this);
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return new LinkedListEnumerator<T>(this);
     }
 }
