@@ -12,8 +12,8 @@
         k.Auszahlen(50);
     }
 
-    private static void KontostandGeaendert(Bankkonto quelle, double neuer_kontostand) 
+    private static void KontostandGeaendert(object source, BankkontoEventArgs e) 
     {
-        Console.WriteLine("Kontostand geändert! Neuer Kontostand={0:C}", neuer_kontostand);
+        Console.WriteLine("Kontostand geändert! Neuer Kontostand={0:C}", e.Betrag);
     }
 }

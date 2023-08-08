@@ -1,9 +1,9 @@
-public delegate void KontostandGeandertVerarbeiter(Bankkonto quelle, double neuer_kontostand);
+public delegate void KontostandGeandertVerarbeiter(object sender, BankkontoEventArgs e);
 
 public class Bankkonto
 {
     public double Kontostand { get; private set; }
-    public KontostandGeandertVerarbeiter KontostandGeandert;
+    public event KontostandGeandertVerarbeiter KontostandGeandert;
 
     public void Einzahlen(double betrag)
     {
@@ -13,7 +13,7 @@ public class Bankkonto
         Kontostand += betrag;
 
         if (KontostandGeandert != null)
-            KontostandGeandert(this, Kontostand);
+            KontostandGeandert(this, new BankkontoEventArgs(betrag, true));
     }
 
     public void Auszahlen(double betrag)
@@ -27,6 +27,6 @@ public class Bankkonto
         Kontostand -= betrag;
         
         if (KontostandGeandert != null)
-            KontostandGeandert(this, Kontostand);
+            KontostandGeandert(this, new BankkontoEventArgs(betrag, false));
     }
 }
