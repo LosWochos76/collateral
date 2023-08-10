@@ -7,7 +7,13 @@
         mc:Ignorable="d"
         Title="MainWindow" SizeToContent="WidthAndHeight">
     <StackPanel Margin="5">
-        <GroupBox Header="Pizzabeläge">
+        <GroupBox>
+            <GroupBox.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="pack://application:,,,/Ressources/Pizza-Icon.png" Width="10" Stretch="Uniform"/>
+                    <Label>Pizzabeläge</Label>
+                </StackPanel>
+            </GroupBox.Header>
             <StackPanel x:Name="panel">
                 <CheckBox IsChecked="True">Käse</CheckBox>
                 <CheckBox>Salami</CheckBox>

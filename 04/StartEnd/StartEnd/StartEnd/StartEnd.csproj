@@ -7,12 +7,4 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Ressources\Pizza-icon.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Ressources\Pizza-icon.png" />
-  </ItemGroup>
-
 </Project>
