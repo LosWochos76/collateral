@@ -8,13 +8,13 @@
         Title="MainWindow" SizeToContent="WidthAndHeight">
     <StackPanel Margin="5">
         <GroupBox Header="Pizzabeläge">
-            <StackPanel x:Name="belaege">
+            <StackPanel x:Name="panel">
                 <CheckBox IsChecked="True">Käse</CheckBox>
                 <CheckBox>Salami</CheckBox>
                 <CheckBox>Schinken</CheckBox>
                 <CheckBox>Ananas</CheckBox>
             </StackPanel>
         </GroupBox>
-        <Button>Beläge anzeigen</Button>
+        <Button Click="Button_Click">Beläge anzeigen</Button>
     </StackPanel>
 </Window>

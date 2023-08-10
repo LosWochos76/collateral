@@ -6,7 +6,6 @@
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-
     <Canvas x:Name="canvas">
         <Button Padding="10" x:Name="button"
                 Canvas.Top="100" Canvas.Left="100" 
