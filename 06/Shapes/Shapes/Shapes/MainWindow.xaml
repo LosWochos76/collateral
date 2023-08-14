@@ -35,10 +35,6 @@
                     </PathGeometry>
                 </Path.Data>
             </Path>
-            <Image Source="https://upload.wikimedia.org/wikipedia/commons/
-a/a3/Eq_it-na_pizza-margherita_sep2005_sml.jpg" />
-            <Image Source="/Shapes;component/Images/Pizza.png" />
-            <Image Source="c:/Images/Pizza.jpg" />
         </StackPanel>
     </ScrollViewer>
 </Window>
