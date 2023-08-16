@@ -1,0 +1,25 @@
+﻿<Window x:Class="IValueConverterDemo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IValueConverterDemo"
+        mc:Ignorable="d"
+        Title="MainWindow" Width="400" SizeToContent="Height">
+    <Window.Resources>
+        <local:Celsius2FahrenheitConverter x:Key="c2f" />
+    </Window.Resources>
+    <StackPanel>
+        <Slider x:Name="slider" Minimum="-100" Maximum="100" Value="0" />
+        <Label Content="{Binding ElementName=slider, Path=Value}" ContentStringFormat="Temperatur: {0:F2}°C" />
+        <Label ContentStringFormat="Temperatur: {0:F2}°F">
+            <Label.Content>
+                <Binding ElementName="slider" Path="Value">
+                    <Binding.Converter>
+                        <local:Celsius2FahrenheitConverter />
+                    </Binding.Converter>
+                </Binding>
+            </Label.Content>
+        </Label>
+    </StackPanel>
+</Window>
