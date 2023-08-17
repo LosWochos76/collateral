@@ -5,10 +5,14 @@ namespace UserFormDemo;
 
 public partial class UserDialog : Window
 {
+    public  User CurrentUser { get; set; }
+
     public UserDialog(User user)
     {
         InitializeComponent();
-        DataContext = user;
+
+        CurrentUser = user;
+        DataContext = this;
     }
 
     private void Button_Ok_Click(object sender, RoutedEventArgs e)
@@ -21,5 +25,11 @@ public partial class UserDialog : Window
     {
         DialogResult = false;
         Close();
+    }
+
+    private void Button_Change_Data_Click(object sender, RoutedEventArgs e)
+    {
+        CurrentUser.Vorname = "Peter";
+        CurrentUser.Nachname = "Müller";
     }
 }

@@ -6,8 +6,6 @@ namespace Watch;
 
 public partial class WatchControl : UserControl
 {
-    private const double DegToRad = Math.PI / 180;
-
     public WatchControl()
     {
         InitializeComponent();

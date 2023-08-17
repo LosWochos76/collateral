@@ -10,6 +10,7 @@
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
             <Button Margin="5" Padding="4" IsDefault="True" Click="Button_Ok_Click">Ok</Button>
             <Button Margin="5" Padding="4" IsCancel="True" Click="Button_Cancel_Click">Abbrechen</Button>
+            <Button Margin="5" Padding="4" Click="Button_Change_Data_Click">Daten ändern</Button>
         </StackPanel>
         <Grid Margin="5">
             <Grid.ColumnDefinitions>
@@ -21,9 +22,9 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Label Grid.Row="0" Grid.Column="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Right">Vorname:</Label>
-            <TextBox x:Name="vorname" Grid.Row="0" Grid.Column="1" MinWidth="200" Margin="5" Text="{Binding Vorname}" />
+            <TextBox x:Name="vorname" Grid.Row="0" Grid.Column="1" MinWidth="200" Margin="5" Text="{Binding CurrentUser.Vorname}" />
             <Label Grid.Row="1" Grid.Column="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Right">Nachname:</Label>
-            <TextBox Grid.Row="1" Grid.Column="1" MinWidth="200" Margin="5" Text="{Binding Nachname}" />
+            <TextBox Grid.Row="1" Grid.Column="1" MinWidth="200" Margin="5" Text="{Binding CurrentUser.Nachname}" />
         </Grid>
     </DockPanel>
 </Window>
