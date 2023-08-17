@@ -1,0 +1,27 @@
+﻿<Window x:Class="TriggerDemo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TriggerDemo"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="200" Width="400">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="Background" Value="LightBlue" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderThickness" Value="10" />
+                    <Setter Property="Foreground" Value="White" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <StackPanel>
+        <Button>Erster Button</Button>
+        <Button>Zweiter Button</Button>
+        <Button>Dritter Button</Button>
+    </StackPanel>
+</Window>
