@@ -1,0 +1,39 @@
+﻿<Window x:Class="AnimationDemo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AnimationDemo"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="100" Width="300">
+    <StackPanel>
+        <Button x:Name="button" Content="Start">
+            <Button.Style>
+                <Style>
+                    <Setter Property="Button.Width" Value="100" />
+                    <Setter Property="Button.Height" Value="20" />
+                    <Style.Triggers>
+                        <Trigger Property="Button.IsMouseOver" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard >
+                                        <DoubleAnimation  Storyboard.TargetProperty="Width" To="200" Duration="0:0:1" />
+                                        <DoubleAnimation  Storyboard.TargetProperty="Height" To="100" Duration="0:0:1" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard >
+                                        <DoubleAnimation Storyboard.TargetProperty="Width" To="100" Duration="0:0:1" />
+                                        <DoubleAnimation Storyboard.TargetProperty="Height" To="20" Duration="0:0:1" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+    </StackPanel>
+</Window>
