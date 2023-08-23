@@ -8,9 +8,10 @@
         Title="MainWindow" Height="200" Width="400">
     <DockPanel>
         <ToolBar DockPanel.Dock="Top">
-            <Button Click="Button_Click">Hinzufügen</Button>
+            <Button Command="{Binding NewElementCommand}">Hinzufügen</Button>
+            <Button Command="{Binding RemoveCurrentElementCommand}">Löschen</Button>
         </ToolBar>
-        <ListBox ItemsSource="{Binding Elements}" HorizontalContentAlignment="Stretch">
+        <ListBox ItemsSource="{Binding Elements}" HorizontalContentAlignment="Stretch" SelectionMode="Single" SelectedItem="{Binding SelectedItem}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Grid Margin="5">

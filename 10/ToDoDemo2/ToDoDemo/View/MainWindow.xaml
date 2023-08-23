@@ -7,11 +7,11 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="200" Width="400">
     <DockPanel>
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-            <Button Margin="5" Click="Button_Add_Click">Hinzufügen</Button>
-            <Button x:Name="remove_button"  Margin="5" Click="Button_Remove_Click" IsEnabled="{Binding IsRemoveButtonEnabled}">Löschen</Button>
-        </StackPanel>
-        <ListBox x:Name="listbox" ItemsSource="{Binding Elements}" HorizontalContentAlignment="Stretch" SelectionMode="Single" SelectedItem="{Binding SelectedItem}">
+        <ToolBar DockPanel.Dock="Top">
+            <Button Command="{Binding NewElementCommand}">Hinzufügen</Button>
+            <Button Command="{Binding RemoveCurrentElementCommand}">Löschen</Button>
+        </ToolBar>
+        <ListBox ItemsSource="{Binding Elements}" HorizontalContentAlignment="Stretch" SelectionMode="Single" SelectedItem="{Binding SelectedItem}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Grid Margin="5">
@@ -19,8 +19,8 @@
                             <ColumnDefinition Width="3*" />
                             <ColumnDefinition Width="1*" />
                         </Grid.ColumnDefinitions>
-                        <TextBox Grid.Column="0" Text="{Binding Title}" />
-                        <Slider Grid.Column="1" Value="{Binding Completion}" Minimum="0" Maximum="100" />
+                        <TextBlock Grid.Column="0" Text="{Binding Title}" />
+                        <ProgressBar Grid.Column="1" Value="{Binding Completion}" Minimum="0" Maximum="100" />
                     </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
