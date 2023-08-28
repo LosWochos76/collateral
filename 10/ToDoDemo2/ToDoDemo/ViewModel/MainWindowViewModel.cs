@@ -38,17 +38,6 @@ public class MainWindowViewModel : INotifyPropertyChanged
         }
     }
 
-    public void AddNewItem()
-    {
-        Elements.Add(new ToDoItem("Neues Element", 0));
-    }
-
-    public void RemoveSelectedItem()
-    {
-        if (SelectedItem != null)
-            Elements.Remove(SelectedItem);
-    }
-
     protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

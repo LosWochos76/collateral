@@ -19,7 +19,7 @@ public partial class MainWindowViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(IsElementSelected))]
     private ToDoItem selectedItem = null;
 
-    public bool IsElementSelected { get { return SelectedItem != null; } }
+    public bool IsElementSelected { get { return selectedItem != null; } }
 
     [RelayCommand]
     public void AddNewItem()
