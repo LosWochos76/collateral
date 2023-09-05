@@ -5,8 +5,10 @@ using System.Collections.ObjectModel;
 
 namespace SeminarManager;
 
-public partial class PersonenListControlViewModel : ObservableObject
+public partial class PersonListViewModel : ObservableObject
 {
+    private NavigationStore navigation;
+    private DataRepository repository;
     public ObservableCollection<Person> Elements { get; set; } = new();
 
     [ObservableProperty]
@@ -20,28 +22,36 @@ public partial class PersonenListControlViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(IsElementSelected))]
     public void RemoveElement()
     {
-        Elements.Remove(SelectedElement);
+        repository.Persons.RemoveById(SelectedElement.ID);
+        UpdateElements();
     }
 
     [RelayCommand(CanExecute = nameof(IsElementSelected))]
     public void EditElement()
     {
-        var dialog = new EditPersonWindow(SelectedElement);
-        dialog.ShowDialog();
+        var viewmodel = new PersonViewModel(navigation, repository, SelectedElement);
+        navigation.NavigateTo(viewmodel);
     }
 
     [RelayCommand]
     public void NewElement()
     {
-        var obj = new Person();
-        var dialog = new EditPersonWindow(obj);
-        var result = dialog.ShowDialog();
-        if (result.HasValue && result.Value)
-            Elements.Add(obj);
+        var obj = new PersonViewModel(navigation, repository, new Person("", "", DateTime.Now));
+        navigation.NavigateTo(obj);
     }
 
-    public PersonenListControlViewModel() 
+    public PersonListViewModel(NavigationStore navigation, DataRepository repository) 
     {
-        Elements.Add(new Person() { Vorname = "Michael", Nachname = "Meier", Geburtstag = Convert.ToDateTime("1980-06-12") });
+        this.navigation = navigation;
+        this.repository = repository;
+
+        UpdateElements();
+    }
+
+    private void UpdateElements()
+    {
+        Elements.Clear();
+        foreach (var element in repository.Persons.Elements)
+            Elements.Add(element);
     }
 }

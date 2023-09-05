@@ -1,13 +1,24 @@
-﻿using System.Windows;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Windows;
 
 namespace SeminarManager;
 
 public partial class MainWindow : Window
 {
-    public MainWindow()
+    private NavigationStore navigation;
+    public ObservableObject CurrentViewModel { get; set; }
+
+    public MainWindow(NavigationStore navigation)
     {
         InitializeComponent();
 
-        DataContext = new MainWindowViewModel();
+        this.navigation = navigation;
+        CurrentViewModel = navigation.CurrentViewModel;
+        navigation.CurrentViewModelChanged += Navigation_CurrentViewModelChanged;
+    }
+
+    private void Navigation_CurrentViewModelChanged()
+    {
+        CurrentViewModel = navigation.CurrentViewModel;
     }
 }

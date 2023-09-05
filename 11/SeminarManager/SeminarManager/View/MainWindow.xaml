@@ -7,18 +7,29 @@
         mc:Ignorable="d"
         Title="SeminarManager" Height="450" Width="800">
     <DockPanel>
+        <DockPanel.Resources>
+            <DataTemplate DataType="{x:Type local:PersonListViewModel}">
+                <local:PersonListView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type local:PersonViewModel}">
+                <local:PersonView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type local:SeminarViewModel}">
+                <local:SeminarView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type local:SeminarListViewModel}">
+                <local:SeminarListView />
+            </DataTemplate>
+        </DockPanel.Resources>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Datei">
                 <MenuItem Header="Beenden" Command="{Binding ExitApplicationCommand}"/>
             </MenuItem>
         </Menu>
-        <TabControl>
-            <TabItem Header="Personen">
-                <local:PersonenListControl />
-            </TabItem>
-            <TabItem Header="Semiare">
-
-            </TabItem>
-        </TabControl>
+        <ToolBar DockPanel.Dock="Top">
+            <ToggleButton Command="{Binding NavigateToPersonenCommand}" IsChecked="{Binding IsPersonView, Mode=OneWay}">Personen</ToggleButton>
+            <ToggleButton Command="{Binding NavigateToSeminareCommand}" IsChecked="{Binding IsSeminarView, Mode=OneWay}">Seminare</ToggleButton>
+        </ToolBar>
+        <ContentControl Content="{Binding CurrentViewModel}" />
     </DockPanel>
 </Window>

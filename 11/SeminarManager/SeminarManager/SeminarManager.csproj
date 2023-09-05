@@ -12,7 +12,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Include="App.xaml" />
+    <Compile Update="View\SeminarView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\SeminarListView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
 </Project>

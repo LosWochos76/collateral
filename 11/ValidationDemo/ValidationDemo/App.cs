@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.Windows;
 
 namespace ValidationDemo;
@@ -13,14 +12,6 @@ public class App : Application
         app.Run();
     }
 
-    public App()
-    {
-        Services = ConfigureServices();
-    }
-
-    public IServiceProvider Services { get; }
-    public new static App Current => (App)Application.Current;
-
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
@@ -28,15 +19,5 @@ public class App : Application
         var window = new MainWindow();
         MainWindow = window;
         window.Show();
-    }
-
-    private static IServiceProvider ConfigureServices()
-    {
-        var services = new ServiceCollection();
-
-        services.AddTransient<EmailDialogViewModel>();
-        services.AddTransient<PersonDialogViewModel>();
-
-        return services.BuildServiceProvider();
     }
 }
