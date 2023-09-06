@@ -23,12 +23,7 @@ public partial class MainViewModel : ObservableObject
         this.repository = repository;
 
         CurrentViewModel = navigation.CurrentViewModel;
-        navigation.CurrentViewModelChanged += Navigation_CurrentViewModelChanged;
-    }
-
-    private void Navigation_CurrentViewModelChanged()
-    {
-        CurrentViewModel = navigation.CurrentViewModel;
+        navigation.CurrentViewModelChanged += () => { CurrentViewModel = navigation.CurrentViewModel; };
     }
 
     [RelayCommand]

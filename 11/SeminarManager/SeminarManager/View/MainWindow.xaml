@@ -6,21 +6,21 @@
         xmlns:local="clr-namespace:SeminarManager"
         mc:Ignorable="d"
         Title="SeminarManager" Height="450" Width="800">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type local:PersonListViewModel}">
+            <local:PersonListView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type local:PersonViewModel}">
+            <local:PersonView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type local:SeminarViewModel}">
+            <local:SeminarView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type local:SeminarListViewModel}">
+            <local:SeminarListView />
+        </DataTemplate>
+    </Window.Resources>
     <DockPanel>
-        <DockPanel.Resources>
-            <DataTemplate DataType="{x:Type local:PersonListViewModel}">
-                <local:PersonListView />
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type local:PersonViewModel}">
-                <local:PersonView />
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type local:SeminarViewModel}">
-                <local:SeminarView />
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type local:SeminarListViewModel}">
-                <local:SeminarListView />
-            </DataTemplate>
-        </DockPanel.Resources>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Datei">
                 <MenuItem Header="Laden" Command="{Binding LoadCommand}" />

@@ -10,8 +10,7 @@ public partial class PersonViewModel : ObservableValidator
 {
     private NavigationStore navigation;
     private DataRepository repository;
-
-    public Person Model { get; set; }
+    private Person model;
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
@@ -36,18 +35,16 @@ public partial class PersonViewModel : ObservableValidator
     private DateTime geburtstag = DateTime.Now.Date;
 
     public string FullName { get { return Vorname + " " + Nachname; } }
-
     public bool HasNoErrors { get { return !HasErrors; } }
 
     [RelayCommand(CanExecute=nameof(HasNoErrors))]
     public void Ok()
     {
-        Model.Vorname = Vorname;
-        Model.Nachname = Nachname;
-        Model.Geburtstag = Geburtstag;
+        model.Vorname = Vorname;
+        model.Nachname = Nachname;
+        model.Geburtstag = Geburtstag;
 
-        repository.Persons.Save(Model);
-
+        repository.Persons.Save(model);
         navigation.NavigateTo(new PersonListViewModel(navigation, repository));
     }
 
@@ -61,11 +58,10 @@ public partial class PersonViewModel : ObservableValidator
     {
         this.navigation = navigation;
         this.repository = repository;
-        Model = model;
+        this.model = model;
 
         Vorname = model.Vorname;
         Nachname = model.Nachname;
-
         ValidateAllProperties();
     }
 }

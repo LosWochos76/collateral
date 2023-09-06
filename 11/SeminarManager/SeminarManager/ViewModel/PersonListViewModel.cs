@@ -36,15 +36,15 @@ public partial class PersonListViewModel : ObservableObject
     [RelayCommand]
     public void NewElement()
     {
-        var obj = new PersonViewModel(navigation, repository, new Person("", "", DateTime.Now));
-        navigation.NavigateTo(obj);
+        var new_person = new Person("", "", DateTime.Now);
+        var viewmodel = new PersonViewModel(navigation, repository, new_person);
+        navigation.NavigateTo(viewmodel);
     }
 
     public PersonListViewModel(NavigationStore navigation, DataRepository repository) 
     {
         this.navigation = navigation;
         this.repository = repository;
-
         UpdateElements();
     }
 
