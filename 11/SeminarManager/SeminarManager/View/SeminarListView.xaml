@@ -17,6 +17,9 @@
                 <DataGridTextColumn Header="Dozent" Binding="{Binding Dozent.VollerName}" MinWidth="200" />
                 <DataGridTextColumn Header="AnzahlTeilnehmer" Binding="{Binding AnzahlTeilnehmer}" MinWidth="50" />
             </DataGrid.Columns>
+            <DataGrid.InputBindings>
+                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding EditElementCommand}" />
+            </DataGrid.InputBindings>
         </DataGrid>
     </DockPanel>
 </UserControl>

@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
+using System.Windows;
 
 namespace SeminarManager;
 
@@ -19,6 +20,8 @@ public partial class SeminarViewModel : ObservableValidator
     private string name = string.Empty;
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required]
     [NotifyPropertyChangedFor(nameof(DozentName))]
     private Person dozent;
 
@@ -39,6 +42,12 @@ public partial class SeminarViewModel : ObservableValidator
     [RelayCommand(CanExecute=nameof(HasNoErrors))]
     public void Ok()
     {
+        if (MultiSelect.SelectedElements.Contains(Dozent))
+        {
+            MessageBox.Show("Der Dozent darf nicht gleichzeitig Teilnehmer sein!");
+            return;
+        }
+
         model.Name = Name;
         model.Dozent = Dozent;
 

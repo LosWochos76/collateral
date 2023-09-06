@@ -15,14 +15,11 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Vorname" Binding="{Binding Vorname}" MinWidth="200" />
                 <DataGridTextColumn Header="Nachname" Binding="{Binding Nachname}" MinWidth="200" />
-                <DataGridTemplateColumn Header="Geburtstag" MinWidth="100">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <DatePicker SelectedDate="{Binding Geburtstag}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Geburtstag" Binding="{Binding Geburtstag, StringFormat=\{0:dd.MM.yyyy\}}" MinWidth="200" />
             </DataGrid.Columns>
+            <DataGrid.InputBindings>
+                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding EditElementCommand}" />
+            </DataGrid.InputBindings>
         </DataGrid>
     </DockPanel>
 </UserControl>

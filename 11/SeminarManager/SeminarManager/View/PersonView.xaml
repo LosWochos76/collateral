@@ -21,9 +21,9 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Label Margin="2" Grid.Column="0" Grid.Row="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Right">Vorname:</Label>
-            <TextBox Margin="2" Grid.Column="1" Grid.Row="0" VerticalContentAlignment="Center" MinWidth="200" Text="{Binding Vorname, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Margin="2" Grid.Column="1" Grid.Row="0" VerticalContentAlignment="Center" MinWidth="200" Text="{Binding Vorname, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
             <Label Margin="2" Grid.Column="0" Grid.Row="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Right">Nachname:</Label>
-            <TextBox Margin="2" Grid.Column="1" Grid.Row="1" VerticalContentAlignment="Center" MinWidth="200" Text="{Binding Nachname, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Margin="2" Grid.Column="1" Grid.Row="1" VerticalContentAlignment="Center" MinWidth="200" Text="{Binding Nachname, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
             <Label Margin="2" Grid.Column="0" Grid.Row="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Right">Geburtstag:</Label>
             <DatePicker Margin="2" Grid.Column="1" Grid.Row="2" SelectedDate="{Binding Geburtstag}" />
         </Grid>

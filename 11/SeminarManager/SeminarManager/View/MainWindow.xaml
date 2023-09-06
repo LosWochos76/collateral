@@ -23,6 +23,9 @@
         </DockPanel.Resources>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Datei">
+                <MenuItem Header="Laden" Command="{Binding LoadCommand}" />
+                <MenuItem Header="Speichern" Command="{Binding SaveCommand}" />
+                <Separator />
                 <MenuItem Header="Beenden" Command="{Binding ExitApplicationCommand}"/>
             </MenuItem>
         </Menu>
@@ -30,6 +33,6 @@
             <ToggleButton Command="{Binding NavigateToPersonenCommand}" IsChecked="{Binding IsPersonView, Mode=OneWay}">Personen</ToggleButton>
             <ToggleButton Command="{Binding NavigateToSeminareCommand}" IsChecked="{Binding IsSeminarView, Mode=OneWay}">Seminare</ToggleButton>
         </ToolBar>
-        <ContentControl Content="{Binding CurrentViewModel}" />
+        <ContentControl Content="{Binding CurrentViewModel}" Validation.ErrorTemplate="{x:Null}" />
     </DockPanel>
 </Window>

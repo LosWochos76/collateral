@@ -1,7 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Specialized;
 using System.Windows;
 
 namespace SeminarManager;
@@ -43,6 +41,8 @@ public partial class MainViewModel : ObservableObject
     public void NavigateToPersonen()
     {
         navigation.NavigateTo(new PersonListViewModel(navigation, repository));
+        NavigateToPersonenCommand.NotifyCanExecuteChanged();
+        NavigateToSeminareCommand.NotifyCanExecuteChanged();
     }
 
     [RelayCommand]
@@ -51,5 +51,21 @@ public partial class MainViewModel : ObservableObject
         navigation.NavigateTo(new SeminarListViewModel(navigation, repository));
         NavigateToPersonenCommand.NotifyCanExecuteChanged();
         NavigateToSeminareCommand.NotifyCanExecuteChanged();
+    }
+
+    [RelayCommand]
+    public void Save()
+    {
+        JsonSerializer.SaveToFile(repository, "daten.json");
+    }
+
+    [RelayCommand]
+    public void Load()
+    {
+        var result = JsonSerializer.LoadFromFile("daten.json");
+        if (result != null)
+            this.repository = result;
+
+        NavigateToPersonen();
     }
 }

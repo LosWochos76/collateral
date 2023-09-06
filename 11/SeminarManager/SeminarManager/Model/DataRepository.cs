@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace SeminarManager;
 
@@ -11,12 +14,5 @@ public class DataRepository
     {
         Persons = new PersonRepository();
         Seminars = new SeminarRepository();
-
-        var p = new Person("Michael", "Meier", Convert.ToDateTime("1980-06-12"));
-        Persons.Save(p);
-
-        var s = new Seminar("Objektorientierte Programmierung");
-        s.Dozent = p;
-        Seminars.Save(s);
     }
 }
