@@ -41,6 +41,8 @@ class App : Application
         });
 
         host = builder.Build();
+        host.Start();
+
         var app = new App();
         app.Run();
     }
@@ -49,7 +51,6 @@ class App : Application
     {
         var navigation = host.Services.GetService<NavigationStore>();
         navigation.CurrentViewModel = host.Services.GetService<PersonListViewModel>();
-        host.Start();
     }
 
     protected override void OnStartup(StartupEventArgs e)
