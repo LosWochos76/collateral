@@ -1,8 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
-using System.Runtime.CompilerServices;
+using System.IO;
 using System.Windows;
 
 namespace SeminarManager;
@@ -16,26 +17,45 @@ class App : Application
     {
         var builder = new HostBuilder();
 
-        builder.ConfigureAppConfiguration(configuration =>
+        builder.ConfigureHostConfiguration(configuration =>
         {
-            configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+            configuration.SetBasePath(Directory.GetCurrentDirectory());
+            configuration.AddJsonFile("launchsettings.json");
             configuration.AddCommandLine(args);
-            configuration.AddEnvironmentVariables("WPF1APP");
+            configuration.AddEnvironmentVariables(prefix: "SEMINARMANAGER_");
         });
 
-        /*builder.ConfigureLogging((context, logging) =>
+        builder.ConfigureAppConfiguration((context, configuration) =>
         {
-            logging.AddConfiguration(context.Configuration);
-            logging.AddSimpleConsole(configure => configure.SingleLine = true);
-            logging.AddFile("Wpf1App.log");
-        });*/
+            var env = context.HostingEnvironment;
+            configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+            configuration.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+            configuration.AddEnvironmentVariables(prefix: "SEMINARMANAGER_");
+            configuration.AddCommandLine(args);
+        });
+
+        builder.ConfigureLogging((context, loggingBuilder) =>
+        {
+            loggingBuilder.AddSimpleConsole(builder => {
+                builder.SingleLine = true;
+                builder.TimestampFormat = "[HH:mm:ss:F] ";
+            });
+
+            loggingBuilder.AddFile("SeminarManager.log");
+
+            if (context.HostingEnvironment.IsDevelopment())
+                loggingBuilder.SetMinimumLevel(LogLevel.Debug);
+            else
+                loggingBuilder.SetMinimumLevel(LogLevel.Warning);
+        });
 
         builder.ConfigureServices((context, services) =>
         {
-            services.AddTransient<MainWindow>();
-            services.AddTransient<MainViewModel>();
+            services.Configure<SomeApiOptions>(context.Configuration.GetSection(SomeApiOptions.SectionName));
             services.AddSingleton<NavigationStore>();
             services.AddSingleton<DataRepository>();
+            services.AddTransient<MainWindow>();
+            services.AddTransient<MainViewModel>();
             services.AddTransient<PersonListViewModel>();
             services.AddTransient<SeminarListViewModel>();
         });
@@ -55,9 +75,7 @@ class App : Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
-        var main = host.Services.GetRequiredService<MainWindow>();
-        main.Show();
-
+        host.Services.GetRequiredService<MainWindow>().Show();
         base.OnStartup(e);
     }
 

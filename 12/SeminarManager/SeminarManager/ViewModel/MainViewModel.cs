@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Windows;
 
@@ -9,6 +10,7 @@ namespace SeminarManager;
 public partial class MainViewModel : ObservableObject
 {
     private IServiceProvider services;
+    private ILogger<MainViewModel> logger;
     private NavigationStore navigation;
     private DataRepository repository;
 
@@ -23,10 +25,14 @@ public partial class MainViewModel : ObservableObject
     public MainViewModel(IServiceProvider services) 
     {
         this.services = services;
+        logger = services.GetRequiredService<ILogger<MainViewModel>>();
         navigation = services.GetRequiredService<NavigationStore>();
         repository = services.GetRequiredService<DataRepository>();
+
         CurrentViewModel = navigation.CurrentViewModel;
         navigation.CurrentViewModelChanged += () => { CurrentViewModel = navigation.CurrentViewModel; };
+
+        logger.LogInformation("MainViewModel created");
     }
 
     [RelayCommand]

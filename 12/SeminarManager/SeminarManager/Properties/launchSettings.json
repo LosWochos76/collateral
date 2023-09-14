@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "SeminarManager": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "WPF1APP_DB_PASSWORD": "Test"
+      }
+    }
+  }
+}
