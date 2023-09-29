@@ -2,50 +2,29 @@
 {
     public static void Main(string[] args)
     {
-        /*if (args.Length == 1)
-            Console.WriteLine(Caesar.EncryptString(args[0]));*/
+        /*
+        int[] zahlen = ArrayHelper.Zufallszahlen(5000);
+        Console.WriteLine(ArrayHelper.Min(zahlen));
+        Console.WriteLine(ArrayHelper.Summe(zahlen));
+        Console.WriteLine(ArrayHelper.ArithmetischerMittelwert(zahlen));
+        */
 
-        // GibSchaltjahreAus(1900, 2100);
+        /*
+        int[] fib = Fibonacci.Fill(10);
+        for (int i=0; i<fib.Length; i++)
+            Console.WriteLine(fib[i]);
+        */
 
-        TimeZoneInfo tzi = TimeZoneInfo.Local;
-        Console.WriteLine(tzi.Id);
-    }
+        /*
+        TicTacToe.LoescheDasSpielfeld();
+        TicTacToe.GibSpielbrettAus();
+        */
 
-    public static int Stunden(int jahr, int monat, int tag)
-    {
-        DateTime d = new DateTime(jahr, monat, tag, 0, 0, 0);
-        d = DateTime.SpecifyKind(d, DateTimeKind.Local);
-        int count = 0;
-
-        while (d.Day == tag)
-        {
-            DateTime utc = TimeZoneInfo.ConvertTime(d, TimeZoneInfo.Utc);
-            utc = utc.AddHours(1);
-            d = TimeZoneInfo.ConvertTime(utc, TimeZoneInfo.Local);
-            count++;
-        }
-
-        return count;
-    }
-
-    public static int TageBis(int tag, int monat)
-    {
-        DateTime d = DateTime.Today;
-        int days = 0;
-
-        while (d.Month != monat || d.Day != tag)
-        {
-            d = d.AddDays(1);
-            days++;
-        }
-
-        return days;
-    }
-
-    public static void GibSchaltjahreAus(int von, int bis)
-    {
-        for (int jahr=von; jahr<=bis; jahr++)
-            if (DateTime.IsLeapYear(jahr))
-                Console.WriteLine("Das Jahr {0} ist ein Schaltjahr!", jahr);
+        int[] zahlen = new int[100];
+        Array.Fill(zahlen, 42);
+        Array.Reverse(zahlen);
+        int position = Array.IndexOf(zahlen, 42);
+        Array.Sort(zahlen);
+        Array.Clear(zahlen);
     }
 }
