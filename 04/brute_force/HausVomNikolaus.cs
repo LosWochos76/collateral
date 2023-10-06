@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-
 public class HausVomNikolaus
 {
     private int counter;
