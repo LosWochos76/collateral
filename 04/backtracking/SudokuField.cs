@@ -24,9 +24,8 @@ public class SudokuField
         Console.WriteLine();
     }
 
-    public bool IsNumberGoodInRow(int pos, int number)
+    public bool IsNumberGoodInRow(int y, int number)
     {
-        int y = pos / 9;
         for (int x=0; x<9; x++)
             if (field[y, x] == number)
                 return false;
@@ -34,9 +33,8 @@ public class SudokuField
         return true;
     }
 
-    public bool IsNumberGoodInColumn(int pos, int number)
+    public bool IsNumberGoodInColumn(int x, int number)
     {
-        int x = pos % 9;
         for (int y=0; y<9; y++)
             if (field[y, x] == number)
                 return false;
@@ -44,51 +42,58 @@ public class SudokuField
         return true;
     }
 
-    public bool IsNumberGoodInBlock(int pos, int number)
+    public bool IsNumberGoodInBlock(int x, int y, int number)
     {
-        var starty = (pos / 9) / 3 * 3;
-        var startx = (pos % 9) / 3 * 3;
+        var starty = y / 3 * 3;
+        var startx = x / 3 * 3;
 
         int[] result = new int[9];
-        for (int y=0; y<3; y++)
-            for (int x=0; x<3; x++)
-                if (field[starty + y, startx + x] == number)
+        for (int y1=0; y1<3; y1++)
+            for (int x1=0; x1<3; x1++)
+                if (field[starty + y1, startx + x1] == number)
                     return false;
 
         return true;
     }
 
-    public bool Fill(int pos)
+    public bool IsNumberGood(int x, int y, int number)
     {
-        if (pos == 81)
-        {
-            Print();
+        return IsNumberGoodInRow(y, number) && 
+            IsNumberGoodInColumn(x, number) &&
+            IsNumberGoodInBlock(x, y, number);
+    }
+
+    public bool Solve()
+    {
+        return Solve(0, 0);
+    }
+
+    private bool Solve(int x, int y)
+    {
+        y += x / 9;
+        x %= 9;
+        if (y > 8)
             return true;
-        }
         
-        while (field[pos / 9, pos % 9] > 0)
-        {
-            pos++;
-            if (pos == 81)
-            {
-                Print();
-                return true;
-            }
-        }
+        while (field[y, x] > 0)
+            return Solve(x + 1, y);
 
         for (int number=1; number<=9; number++)
         {
-            if (IsNumberGoodInRow(pos, number) && 
-                IsNumberGoodInColumn(pos, number) &&
-                IsNumberGoodInBlock(pos, number))
+            if (IsNumberGood(x, y, number))
             {
-                field[pos / 9, pos % 9] = number;
-                if (Fill(pos + 1))
+                field[y, x] = number;
+                if (Solve(x + 1, y))
                     return true;
             }
         }
 
-        field[pos / 9, pos % 9] = 0;
+        field[y, x] = 0;
         return false;
+    }
+
+    public int GetTopLeftNumber()
+    {
+        return field[0,0]*100 + field[0,1] * 10 + field[0,2];
     }
 }

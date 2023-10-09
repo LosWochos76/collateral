@@ -1,4 +1,8 @@
 ﻿var fields = SudokuFieldReader.ReadFromFile("sudoku.txt");
 
+int sum = 0;
 foreach (var f in fields)
-    f.Fill(0);
+    if (f.Solve())
+        sum += f.GetTopLeftNumber();
+
+Console.WriteLine(sum);

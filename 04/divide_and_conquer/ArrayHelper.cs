@@ -1,6 +1,6 @@
 public class ArrayHelper
 {
-    public static int[] GeneriereZufallszahlen(int anzahl)
+    public static int[] Zufallszahlen(int anzahl)
     {
         Random rnd = new Random();
         int[] result = new int[anzahl];
