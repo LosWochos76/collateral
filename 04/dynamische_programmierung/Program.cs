@@ -1,13 +1,11 @@
 ﻿using System.Diagnostics;
 
-Stopwatch ws = new Stopwatch();
-ws.Start();
-Console.WriteLine(Fibonacci.Fib(43));
-ws.Stop();
-Console.WriteLine(ws.Elapsed);
+Console.WriteLine(Fibonacci.Fib(50));
 
-ws = new Stopwatch();
-ws.Start();
-Console.WriteLine(Fibonacci.FibWithMemory(43));
-ws.Stop();
-Console.WriteLine(ws.Elapsed);
+var maze = new Maze(new int[,] {
+    { 0,   3, 10,  3,  1,  2 },
+    { 15,  7, 17, 11,  3,  5 },
+    { 21,  9,  4,  2,  1,  2 },
+    { 3,  7,  6,  3,   5,  0 } });
+
+Console.WriteLine(maze.Solve());
