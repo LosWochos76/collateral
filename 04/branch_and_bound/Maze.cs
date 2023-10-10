@@ -14,18 +14,21 @@ public class Maze
     public int Solve()
     {
         Solve(0,0,0);
-        Console.WriteLine(call_count);
+        Console.WriteLine("CALLS: {0}", call_count);
         return min;
     }
 
     private void Solve(int x, int y, int current_sum)
     {
+        var max_y = maze.GetLength(0) - 1;
+        var max_x = maze.GetLength(1) - 1;
+
+        if (x > max_x || y > max_y)
+            return;
+
         current_sum += maze[y, x];
         current_path.Add(string.Format("{0},{1}",x,y));
         call_count++;
-
-        var max_y = maze.GetLength(0) - 1;
-        var max_x = maze.GetLength(1) - 1;
 
         if (current_sum > min)
         { 
@@ -39,18 +42,6 @@ public class Maze
                 best_path = string.Join("->", current_path.ToArray());
                 Console.WriteLine("NEW BEST {0}: {1}", min, best_path);
             }
-            else
-            {
-                Console.WriteLine("NOT BETTER {0}: {1}", min, best_path);
-            }
-        }
-        else if (y == max_y)
-        {
-            Solve(x+1, y, current_sum);
-        }
-        else if (x == max_x)
-        {
-            Solve(x, y+1, current_sum);
         }
         else
         {
