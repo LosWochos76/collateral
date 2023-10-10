@@ -7,12 +7,12 @@ public class Maze
         this.maze = maze;
     }
 
-    public int SolveGreedy()
+    public int Solve()
     {
-        return SolveGreedy(0,0);
+        return Solve(0,0);
     }
 
-    private int SolveGreedy(int x, int y)
+    private int Solve(int x, int y)
     {
         Console.WriteLine("{0},{1},{2}", x, y, maze[x,y]);
 
@@ -20,8 +20,8 @@ public class Maze
             return maze[x,y];
         
         if (maze[x+1,y] < maze[x,y+1])
-            return maze[x,y] + SolveGreedy(x+1, y);
+            return maze[x,y] + Solve(x+1, y);
         else
-            return maze[x,y] + SolveGreedy(x,y+1);
+            return maze[x,y] + Solve(x,y+1);
     }
 }
