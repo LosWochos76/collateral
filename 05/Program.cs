@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-static void TestArrayList()
+﻿static void TestArrayList()
 {
     var rnd = new Random();
     ArrayList<int> list = new ArrayList<int>();
@@ -10,15 +8,24 @@ static void TestArrayList()
     list.Print();
 }
 
-static void TestLinkedList()
+static void TestStack()
 {
-    var rnd = new Random();
     LinkedList<int> list = new LinkedList<int>();
-    for (int i=0; i<1000; i++)
-        list.Add(rnd.Next());
+    for (int i=0; i<10; i++)
+        list.Push(i);
 
     while (list.HasElements)
-        Console.WriteLine(list.Remove());
+        Console.WriteLine(list.Pop());
 }
 
-TestLinkedList();
+static void TestQueue()
+{
+    LinkedList<int> list = new LinkedList<int>();
+    for (int i=0; i<10; i++)
+        list.Enqueue(i);
+
+    while (list.HasElements)
+        Console.WriteLine(list.Dequeue());
+}
+
+TestQueue();

@@ -30,11 +30,11 @@ public class Maze
         current_path.Add(string.Format("{0},{1}",x,y));
         call_count++;
 
-        if (current_sum > min)
+        /*if (current_sum > min)
         { 
             Console.WriteLine("BOUND! {0}: {1}", current_sum, string.Join("->", current_path.ToArray()));
         }
-        else if (y == max_y && x == max_x)
+        else */if (y == max_y && x == max_x)
         {
             if (current_sum <= min)
             {

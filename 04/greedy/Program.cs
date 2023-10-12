@@ -9,4 +9,4 @@ var maze = new Maze(new int[,] {
     { 21,  9,  4,  2,  1,  2 },
     {  3,  7,  6,  3,  5,  0 } });
 
-Console.WriteLine(maze.Solve());
+maze.Solve();
