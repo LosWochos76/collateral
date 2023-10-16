@@ -11,4 +11,4 @@ Console.WriteLine(list.Contains(0));*/
 var list = new ArrayList<int>(
     new int[]{ 1, 3, 9, 15, 22, 24, 30, 31, 44, 68, 73 }
 );
-Console.WriteLine(list.ContainsBinary(23));
+Console.WriteLine(list.ContainsBinary(73));
