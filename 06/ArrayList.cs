@@ -1,6 +1,6 @@
 using System.Collections;
 
-public partial class ArrayList<T>
+public partial class ArrayList<T> where T : IComparable<T>
 {
     private int size, count;
     private T[] data;
@@ -13,6 +13,12 @@ public partial class ArrayList<T>
 
     public ArrayList() : this(10)
     {
+    }
+
+    public ArrayList(T[] source) : this(source.Length)
+    {
+        Array.Copy(source, data, source.Length);
+        count = source.Length;
     }
 
     public int Count
@@ -82,17 +88,24 @@ public partial class ArrayList<T>
         data[pos2] = tmp;
     }
 
-    public bool ContainsOrganized(T value)
+    public bool ContainsBinary(T value)
     {
-        for (int i=0; i<count; i++)
-        {
-            if (data[i].Equals(value))
-            {
-                Swap(i, 0);
-                return true;
-            }
-        }
-        
-        return false;
+        return ContainsBinary(value, 0, count);
+    }
+
+    private bool ContainsBinary(T value, int from, int to)
+    {
+        if (to <= from)
+            return false;
+
+        int middle_pos = (from + to) / 2;
+        int compare_result = value.CompareTo(data[middle_pos]);
+
+        if (compare_result == 0)
+            return true;
+        else if (compare_result < 0)
+            return ContainsBinary(value, from, middle_pos);
+        else
+            return ContainsBinary(value, middle_pos+1, to);
     }
 }
