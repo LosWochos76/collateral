@@ -153,4 +153,33 @@
 		
 		return parent.Value;
 	}
+
+	public void Delete(T value)
+	{
+		root = Delete(root, value);
+	}
+
+	private ComparableTreeNode<T> Delete(ComparableTreeNode<T> node, T value)
+	{
+		if (node == null)
+            return node;
+
+        if (node.IsLagerThan(value))
+            node.Left = Delete(node.Left, value);
+        else if (node.IsSmallerThan(value))
+            node.Right = Delete(node.Right, value);
+        else
+        {
+            if (node.Left == null)
+                return node.Right;
+            else if (node.Right == null)
+                return node.Left;
+
+            node.Value = GetMinimumValue(node.Right);
+			var hasd = Delete(node.Right, node.Value);
+            node.Right = hasd;
+        }
+
+        return node;
+	}
 }

@@ -15,6 +15,16 @@ public class ComparableTreeNode<T> where T : IComparable<T>
         return value.CompareTo(Value) >= 0;
     }
 
+    public bool IsLagerThan(T value)
+    {
+        return value.CompareTo(Value) < 0;
+    }
+
+        public bool IsSmallerThan(T value)
+    {
+        return value.CompareTo(Value) > 0;
+    }
+
     public bool Equals(T value)
     {
         return Value.Equals(value);
