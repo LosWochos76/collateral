@@ -14,3 +14,10 @@ for (int i=0; i<10; i++)
 list.SelectionSort();
 list.Print();*/
 
+var list = new ArrayList<int>();
+var rnd = new Random();
+for (int i=0; i<10; i++)
+    list.Add(rnd.Next(100));
+
+list.BubbleSort();
+list.Print();

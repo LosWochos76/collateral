@@ -72,7 +72,7 @@ public partial class ArrayList<T> where T : IComparable<T>
         }
     }
 
-    private int FindSmallestIndex(int start)
+    public int FindSmallestIndex(int start)
     {
         var min = data[start];
         var min_index = start;
@@ -94,5 +94,29 @@ public partial class ArrayList<T> where T : IComparable<T>
         var temp = data[index1];
         data[index1] = data[index2];
         data[index2] = temp;
+    }
+
+    private bool BubbleUp(int length)
+    {
+        bool did_swap = false;
+        for (int i = 1; i < length; i++)
+        {
+            if (data[i].CompareTo(data[i - 1]) < 0)
+            {
+                SwapValues(i - 1, i);
+                did_swap = true;
+            }
+        }
+
+        return did_swap;
+    }
+
+    public void BubbleSort()
+    {
+        for (int i = 0; i < count; i++)
+        {
+            if (!BubbleUp(count - i))
+                return;
+        }
     }
 }
