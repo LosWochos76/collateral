@@ -8,50 +8,55 @@
 		root = InsertRecursive(root, value);
 	}
 
-	private ComparableTreeNode<T> InsertRecursive(ComparableTreeNode<T> parent, T value)
+	private ComparableTreeNode<T> InsertRecursive(ComparableTreeNode<T> node, T value)
 	{
-		if (parent == null)
+		if (node == null)
 		{
-			parent = new ComparableTreeNode<T>(value);
+			node = new ComparableTreeNode<T>(value);
 			Count++;
 		}
-		else if (parent.IsSmallerOrEqualThan(value))
-			parent.Right = InsertRecursive(parent.Right, value);
+		else if (node.IsSmallerOrEqualThan(value))
+			node.Right = InsertRecursive(node.Right, value);
 		else
-			parent.Left = InsertRecursive(parent.Left, value);
+			node.Left = InsertRecursive(node.Left, value);
 
-		parent.Height = 1 + Math.Max(Height(parent.Left), Height(parent.Right));
-		int balance = BalanceFactor(parent);
+		var rebalanced = Rebalance(node, value);
+		return rebalanced != null ? rebalanced : node;
+	}
+
+	private ComparableTreeNode<T> Rebalance(ComparableTreeNode<T> node, T value)
+	{
+		node.Height = 1 + Math.Max(Height(node.Left), Height(node.Right));
+		int balance = BalanceFactor(node);
 
 		// Links zu schwer
 		if (balance > 1)
 		{
-			if (parent.Left.IsSmallerOrEqualThan(value))
-				parent.Left = RotateLeft(parent.Left);
+			if (node.Left.IsSmallerOrEqualThan(value))
+				node.Left = RotateLeft(node.Left);
 			
-			return RotateRight(parent);
+			return RotateRight(node);
 		}
 
 		// Rechts zu schwer
 		if (balance < -1)
 		{
-			if (!parent.Right.IsSmallerOrEqualThan(value))
-				parent.Right = RotateRight(parent.Right);
+			if (!node.Right.IsSmallerOrEqualThan(value))
+				node.Right = RotateRight(node.Right);
 			
-			return RotateLeft(parent);
+			return RotateLeft(node);
 		}
 
-		return parent;
+		return null;
 	}
 
 	private ComparableTreeNode<T> RotateRight(ComparableTreeNode<T> y)
     {
-		Console.WriteLine("Rotate Right: {0}", y.Value);
         var x = y.Left;
-        var temp = x.Right;
+        var beta = x.Right;
 
         x.Right = y;
-        y.Left = temp;
+        y.Left = beta;
 
         y.Height = Math.Max(Height(y.Left), Height(y.Right)) + 1;
         x.Height = Math.Max(Height(x.Left), Height(x.Right)) + 1;
@@ -61,12 +66,11 @@
 
     private ComparableTreeNode<T> RotateLeft(ComparableTreeNode<T> x)
     {
-		Console.WriteLine("Rotate Left: {0}", x.Value);
         var y = x.Right;
-        var temp = y.Left;
+        var beta = y.Left;
 
         y.Left = x;
-        x.Right = temp;
+        x.Right = beta;
 
         x.Height = Math.Max(Height(x.Left), Height(x.Right)) + 1;
         y.Height = Math.Max(Height(y.Left), Height(y.Right)) + 1;
@@ -176,10 +180,35 @@
                 return node.Left;
 
             node.Value = GetMinimumValue(node.Right);
-			var hasd = Delete(node.Right, node.Value);
-            node.Right = hasd;
+            node.Right = Delete(node.Right, node.Value);;
         }
 
-        return node;
+		var rebalanced = Rebalance(node, value);
+		return rebalanced != null ? rebalanced : node;
+	}
+
+	public string ToDot()
+	{
+		return "digraph {\n" + ToDot(root) + "\n}";
+	}
+
+	private string ToDot(ComparableTreeNode<T> node)
+	{
+		if (node == null)
+			return string.Empty;
+		
+		string result = string.Format("\t{0}[label=\"{1}\"];\n", node.GetHashCode().ToString(), node.Value);
+
+		if (node.Left != null)
+		{
+			result += string.Format("\t{0} -> {1};\n", node.GetHashCode().ToString(), node.Left.GetHashCode().ToString()) + ToDot(node.Left);
+		}
+
+		if (node.Right != null)
+		{
+			result += string.Format("\t{0} -> {1};\n", node.GetHashCode().ToString(), node.Right.GetHashCode().ToString()) + ToDot(node.Right);
+		}
+
+		return result;
 	}
 }
