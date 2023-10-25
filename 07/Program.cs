@@ -8,15 +8,9 @@ tree.Print();
 Console.WriteLine(tree.GetMaximumValue());*/
 
 var tree = new AvlTree<int>();
-tree.Insert(7);
-tree.Insert(3);
-tree.Insert(22);
-tree.Insert(1);
-tree.Insert(5);
-tree.Insert(14);
-tree.Insert(35);
-tree.Insert(4);
-tree.Delete(7);
-tree.Delete(35);
-tree.Delete(5);
+tree.Insert(17);
+tree.Insert(9);
+tree.Insert(25);
+tree.Insert(28);
+tree.Insert(27);
 Console.WriteLine(tree.ToDot());

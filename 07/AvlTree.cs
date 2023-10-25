@@ -32,6 +32,7 @@
 		// Links zu schwer
 		if (balance > 1)
 		{
+			 // Neuer Knoten hängt rechts
 			if (node.Left.IsSmallerOrEqualThan(value))
 				node.Left = RotateLeft(node.Left);
 			
@@ -41,7 +42,8 @@
 		// Rechts zu schwer
 		if (balance < -1)
 		{
-			if (!node.Right.IsSmallerOrEqualThan(value))
+			// Neuer Knoten hängt links
+			if (node.Right.IsLagerThan(value)) 
 				node.Right = RotateRight(node.Right);
 			
 			return RotateLeft(node);
@@ -52,6 +54,7 @@
 
 	private ComparableTreeNode<T> RotateRight(ComparableTreeNode<T> y)
     {
+		Console.WriteLine("Rotate right around {0}", y.Value);
         var x = y.Left;
         var beta = x.Right;
 
@@ -66,6 +69,7 @@
 
     private ComparableTreeNode<T> RotateLeft(ComparableTreeNode<T> x)
     {
+		Console.WriteLine("Rotate left around {0}", x.Value);
         var y = x.Right;
         var beta = y.Left;
 
