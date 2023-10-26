@@ -1,6 +1,6 @@
 ﻿public class AvlTree<T> where T : IComparable<T>
 {
-	private ComparableTreeNode<T> root = null;
+	private AvlTreeNode<T> root = null;
 	public int Count { get; private set; }
 
 	public void Insert(T value)
@@ -8,11 +8,11 @@
 		root = InsertRecursive(root, value);
 	}
 
-	private ComparableTreeNode<T> InsertRecursive(ComparableTreeNode<T> node, T value)
+	private AvlTreeNode<T> InsertRecursive(AvlTreeNode<T> node, T value)
 	{
 		if (node == null)
 		{
-			node = new ComparableTreeNode<T>(value);
+			node = new AvlTreeNode<T>(value);
 			Count++;
 		}
 		else if (node.IsSmallerOrEqualThan(value))
@@ -20,146 +20,9 @@
 		else
 			node.Left = InsertRecursive(node.Left, value);
 
-		var rebalanced = Rebalance(node, value);
-		return rebalanced != null ? rebalanced : node;
-	}
-
-	private ComparableTreeNode<T> Rebalance(ComparableTreeNode<T> node, T value)
-	{
 		node.Height = 1 + Math.Max(Height(node.Left), Height(node.Right));
-		int balance = BalanceFactor(node);
-
-		// Links zu schwer
-		if (balance > 1)
-		{
-			 // Neuer Knoten hängt rechts
-			if (node.Left.IsSmallerOrEqualThan(value))
-				node.Left = RotateLeft(node.Left);
-			
-			return RotateRight(node);
-		}
-
-		// Rechts zu schwer
-		if (balance < -1)
-		{
-			// Neuer Knoten hängt links
-			if (node.Right.IsLagerThan(value)) 
-				node.Right = RotateRight(node.Right);
-			
-			return RotateLeft(node);
-		}
-
-		return null;
-	}
-
-	private ComparableTreeNode<T> RotateRight(ComparableTreeNode<T> y)
-    {
-		Console.WriteLine("Rotate right around {0}", y.Value);
-        var x = y.Left;
-        var beta = x.Right;
-
-        x.Right = y;
-        y.Left = beta;
-
-        y.Height = Math.Max(Height(y.Left), Height(y.Right)) + 1;
-        x.Height = Math.Max(Height(x.Left), Height(x.Right)) + 1;
-
-        return x;
-    }
-
-    private ComparableTreeNode<T> RotateLeft(ComparableTreeNode<T> x)
-    {
-		Console.WriteLine("Rotate left around {0}", x.Value);
-        var y = x.Right;
-        var beta = y.Left;
-
-        y.Left = x;
-        x.Right = beta;
-
-        x.Height = Math.Max(Height(x.Left), Height(x.Right)) + 1;
-        y.Height = Math.Max(Height(y.Left), Height(y.Right)) + 1;
-
-        return y;
-    }
-
-	private int Height(ComparableTreeNode<T> node)
-    {
-        if (node == null)
-            return 0;
-
-        return node.Height;
-    }
-
-	private int BalanceFactor(ComparableTreeNode<T> node)
-    {
-        if (node == null)
-            return 0;
-
-        return Height(node.Left) - Height(node.Right);
-    }
-
-	public void Print()
-	{
-		Print(root);
-	}
-
-	private void Print(ComparableTreeNode<T> node)
-	{
-		if (node == null)
-			return;
-		
-		Console.WriteLine("{0}:{1}", node.Value, node.Height);
-		Print(node.Left);
-		Print(node.Right);
-	}
-
-	public bool Contains(T value)
-	{
-		return ContainsRecursive(root, value);
-	}
-
-	private bool ContainsRecursive(ComparableTreeNode<T> node, T value)
-	{
-		if (node == null)
-			return false;
-		else if (node.Equals(value))
-			return true;
-		else if (node.IsSmallerOrEqualThan(value))
-			return ContainsRecursive(node.Right, value);
-		else
-			return ContainsRecursive(node.Left, value);
-	}
-
-	public T GetMinimumValue()
-	{
-		if (root == null)
-			throw new Exception("Empty tree has no minumim!");
-
-		return GetMinimumValue(root);
-	}
-
-	private T GetMinimumValue(ComparableTreeNode<T> parent)
-	{
-		if (parent.Left != null)
-			return GetMinimumValue(parent.Left);
-		
-		return parent.Value;
-	}
-
-	public T GetMaximumValue()
-	{
-		if (root == null)
-			throw new Exception("Empty tree has no maximum!");
-
-		return GetMaximumValue(root);
-	}
-
-	private T GetMaximumValue(ComparableTreeNode<T> parent)
-	{
-		if (parent.Right != null)
-			return GetMaximumValue(parent.Right);
-		
-		return parent.Value;
+		var rebalance = Rebalance(node);
+		return rebalance != null ? rebalance : node;
 	}
 
 	public void Delete(T value)
@@ -167,7 +30,7 @@
 		root = Delete(root, value);
 	}
 
-	private ComparableTreeNode<T> Delete(ComparableTreeNode<T> node, T value)
+	private AvlTreeNode<T> Delete(AvlTreeNode<T> node, T value)
 	{
 		if (node == null)
             return node;
@@ -187,16 +50,157 @@
             node.Right = Delete(node.Right, node.Value);;
         }
 
-		var rebalanced = Rebalance(node, value);
-		return rebalanced != null ? rebalanced : node;
+        node.Height = 1 + Math.Max(Height(node.Left), Height(node.Right));
+        var rebalance = Rebalance(node);
+		return rebalance != null ? rebalance : node;
+	}
+
+	private AvlTreeNode<T> Rebalance(AvlTreeNode<T> node)
+	{
+		int balance = BalanceFactor(node);
+        if (balance > 1)
+        {
+            if (BalanceFactor(node.Left) >= 0)
+                return RotateRight(node);
+
+            if (BalanceFactor(node.Left) < 0)
+            {
+                node.Left = RotateLeft(node.Left);
+                return RotateRight(node);
+            }
+        }
+
+        if (balance < -1)
+        {
+            if (BalanceFactor(node.Right) <= 0)
+                return RotateLeft(node);
+
+            if (BalanceFactor(node.Right) > 0)
+            {
+                node.Right = RotateRight(node.Right);
+                return RotateLeft(node);
+            }
+        }
+
+		return null;
+	}
+
+	private AvlTreeNode<T> RotateRight(AvlTreeNode<T> y)
+    {
+		Console.WriteLine("Rotate right around {0}", y.Value);
+        var x = y.Left;
+        var beta = x.Right;
+
+        x.Right = y;
+        y.Left = beta;
+
+        y.Height = Math.Max(Height(y.Left), Height(y.Right)) + 1;
+        x.Height = Math.Max(Height(x.Left), Height(x.Right)) + 1;
+
+        return x;
+    }
+
+    private AvlTreeNode<T> RotateLeft(AvlTreeNode<T> x)
+    {
+		Console.WriteLine("Rotate left around {0}", x.Value);
+        var y = x.Right;
+        var beta = y.Left;
+
+        y.Left = x;
+        x.Right = beta;
+
+        x.Height = Math.Max(Height(x.Left), Height(x.Right)) + 1;
+        y.Height = Math.Max(Height(y.Left), Height(y.Right)) + 1;
+
+        return y;
+    }
+
+	private int Height(AvlTreeNode<T> node)
+    {
+        if (node == null)
+            return 0;
+
+        return node.Height;
+    }
+
+	private int BalanceFactor(AvlTreeNode<T> node)
+    {
+        if (node == null)
+            return 0;
+
+        return Height(node.Left) - Height(node.Right);
+    }
+
+	public void Print()
+	{
+		Print(root);
+	}
+
+	private void Print(AvlTreeNode<T> node)
+	{
+		if (node == null)
+			return;
+		
+		Console.WriteLine("{0}:{1}", node.Value, node.Height);
+		Print(node.Left);
+		Print(node.Right);
+	}
+
+	public bool Contains(T value)
+	{
+		return ContainsRecursive(root, value);
+	}
+
+	private bool ContainsRecursive(AvlTreeNode<T> node, T value)
+	{
+		if (node == null)
+			return false;
+		else if (node.Equals(value))
+			return true;
+		else if (node.IsSmallerOrEqualThan(value))
+			return ContainsRecursive(node.Right, value);
+		else
+			return ContainsRecursive(node.Left, value);
+	}
+
+	public T GetMinimumValue()
+	{
+		if (root == null)
+			throw new Exception("Empty tree has no minumim!");
+
+		return GetMinimumValue(root);
+	}
+
+	private T GetMinimumValue(AvlTreeNode<T> parent)
+	{
+		if (parent.Left != null)
+			return GetMinimumValue(parent.Left);
+		
+		return parent.Value;
+	}
+
+	public T GetMaximumValue()
+	{
+		if (root == null)
+			throw new Exception("Empty tree has no maximum!");
+
+		return GetMaximumValue(root);
+	}
+
+	private T GetMaximumValue(AvlTreeNode<T> parent)
+	{
+		if (parent.Right != null)
+			return GetMaximumValue(parent.Right);
+		
+		return parent.Value;
 	}
 
 	public string ToDot()
 	{
-		return "digraph {\n" + ToDot(root) + "\n}";
+		return "digraph {\n" + ToDot(root) + "}";
 	}
 
-	private string ToDot(ComparableTreeNode<T> node)
+	private string ToDot(AvlTreeNode<T> node)
 	{
 		if (node == null)
 			return string.Empty;

@@ -1,11 +1,11 @@
-public class ComparableTreeNode<T> where T : IComparable<T>
+public class AvlTreeNode<T> where T : IComparable<T>
 {
     public T Value { get; set; }
     public int Height { get; set; } = 1;
-    public ComparableTreeNode<T> Left { get; set; }
-    public ComparableTreeNode<T> Right { get; set; }
+    public AvlTreeNode<T> Left { get; set; }
+    public AvlTreeNode<T> Right { get; set; }
 
-    public ComparableTreeNode(T value)
+    public AvlTreeNode(T value)
     {
         Value = value;
     }
