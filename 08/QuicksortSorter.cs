@@ -17,16 +17,14 @@ public class QuicksortSorter
 
     private static int Partition(int[] array, int from, int to)
     {
-        int pivot = array[to];
-        int left = from;
-        int right = to;
+        int pivot = array[to], left = from, right = to;
 
         while (true)
         {
-            while (right > from && array[right].CompareTo(pivot) >= 0)
+            while (right > from && array[right] >= pivot)
                 right--;
 
-            while (array[left].CompareTo(pivot) < 0)
+            while (array[left] < pivot)
                 left++;
 
             if (left < right)

@@ -10,6 +10,10 @@ list.Print();*/
 BubblesortSorter.Sort(array2);
 ArrayHelper.Print(array2);*/
 
-var array = ArrayHelper.RandomNumbers(10);
+/*var array = ArrayHelper.RandomNumbers(10);
 QuicksortSorter.Sort(array);
-ArrayHelper.Print(array);
+ArrayHelper.Print(array);*/
+
+var array = ArrayHelper.RandomNumbers(10);
+var sorted = MergesortSorter.Sort(array);
+ArrayHelper.Print(sorted);
