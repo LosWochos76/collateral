@@ -3,6 +3,7 @@ public partial class LinkedList<T> where T : IComparable<T>
     private NodeElement<T> head = null;
     private NodeElement<T> tail = null;
     public int Count { get; set; }
+    public NodeElement<T> Head { get { return head; } }
 
     public void Push(T item)
     {
@@ -73,37 +74,20 @@ public partial class LinkedList<T> where T : IComparable<T>
         }
     }
 
-    public void SelectionSort()
-    {
-        var current = head;
-        while (current != null)
-        {
-            var min = FindSmallest(current);
-            SwapValues(min, current);
-            current = current.Next;
-        }
-    }
-
-    private NodeElement<T> FindSmallest(NodeElement<T> start)
-    {
-        var min = start;
-        var current = start.Next;
-
-        while (current != null)
-        {
-            if (current.Value.CompareTo(min.Value) < 0)
-                min = current;
-
-            current = current.Next;
-        }
-
-        return min;
-    }
-
-    private void SwapValues(NodeElement<T> a, NodeElement<T> b)
+    public void SwapValues(NodeElement<T> a, NodeElement<T> b)
     {
         var temp = a.Value;
         a.Value = b.Value;
         b.Value = temp;
+    }
+
+    public static LinkedList<int> RandomNumbers(int count)
+    {
+        var rnd = new Random();
+        var list = new LinkedList<int>();
+        for (int i=0; i<count; i++)
+            list.Enqueue(rnd.Next(100));
+        
+        return list;
     }
 }

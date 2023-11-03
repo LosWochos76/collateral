@@ -28,6 +28,7 @@
 	public void Delete(T value)
 	{
 		root = Delete(root, value);
+		Count--;
 	}
 
 	private AvlTreeNode<T> Delete(AvlTreeNode<T> node, T value)
@@ -87,7 +88,7 @@
 
 	private AvlTreeNode<T> RotateRight(AvlTreeNode<T> y)
     {
-		Console.WriteLine("Rotate right around {0}", y.Value);
+		//Console.WriteLine("Rotate right around {0}", y.Value);
         var x = y.Left;
         var beta = x.Right;
 
@@ -102,7 +103,7 @@
 
     private AvlTreeNode<T> RotateLeft(AvlTreeNode<T> x)
     {
-		Console.WriteLine("Rotate left around {0}", x.Value);
+		//Console.WriteLine("Rotate left around {0}", x.Value);
         var y = x.Right;
         var beta = y.Left;
 
@@ -171,12 +172,12 @@
 		return GetMinimumValue(root);
 	}
 
-	private T GetMinimumValue(AvlTreeNode<T> parent)
+	private T GetMinimumValue(AvlTreeNode<T> node)
 	{
-		if (parent.Left != null)
-			return GetMinimumValue(parent.Left);
+		if (node.Left != null)
+			return GetMinimumValue(node.Left);
 		
-		return parent.Value;
+		return node.Value;
 	}
 
 	public T GetMaximumValue()
@@ -187,12 +188,26 @@
 		return GetMaximumValue(root);
 	}
 
-	private T GetMaximumValue(AvlTreeNode<T> parent)
+	private T GetMaximumValue(AvlTreeNode<T> node)
 	{
-		if (parent.Right != null)
-			return GetMaximumValue(parent.Right);
+		if (node.Right != null)
+			return GetMaximumValue(node.Right);
 		
-		return parent.Value;
+		return node.Value;
+	}
+
+	public T ExtractMin()
+	{
+		var min = GetMinimumValue();
+		Delete(min);
+		return min;
+	}
+
+	public T ExtractMax()
+	{
+		var min = GetMaximumValue();
+		Delete(min);
+		return min;
 	}
 
 	public string ToDot()
