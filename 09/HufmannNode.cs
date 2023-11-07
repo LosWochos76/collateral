@@ -1,17 +1,17 @@
-public class HuffmanNode : IComparable<HuffmanNode>
+public class HufmanNode : IComparable<HufmanNode>
 {
     public char Character { get; set; }
     public int Freq { get; set; }
-    public HuffmanNode Left { get; set; }
-    public HuffmanNode Right { get; set; }
+    public HufmanNode Left { get; set; }
+    public HufmanNode Right { get; set; }
 
-    public HuffmanNode(char c, int f)
+    public HufmanNode(char c, int f)
     {
         Character = c;
         Freq = f;
     }
 
-    public int CompareTo(HuffmanNode? other)
+    public int CompareTo(HufmanNode? other)
     {
         if (other == null)
             return -1;
