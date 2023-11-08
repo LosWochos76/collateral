@@ -2,13 +2,13 @@ using System.Text;
 
 public class Hufman
 {
-    private HufmanNode root;
+    public HufmanNode Root { get; private set; } = null;
     private Dictionary<char, string> codeTable;
 
     public Hufman(Dictionary<char, int> frequencies)
     {
         var heap = ToHeap(frequencies);
-        root = ToHuffmannTree(heap);
+        Root = ToHufmannTree(heap);
 
         BuildCodeTable();
     }
@@ -22,7 +22,7 @@ public class Hufman
         return heap;
     }
 
-    private static HufmanNode ToHuffmannTree(MaxHeap<HufmanNode> heap)
+    private static HufmanNode ToHufmannTree(MaxHeap<HufmanNode> heap)
     {
         while (heap.Count > 1)
         {
@@ -42,7 +42,7 @@ public class Hufman
     private void BuildCodeTable()
     {
         codeTable = new Dictionary<char, string>();
-        BuildCodeTable(root, string.Empty);
+        BuildCodeTable(Root, string.Empty);
     }
 
     private void BuildCodeTable(HufmanNode node, string code)
@@ -57,7 +57,7 @@ public class Hufman
             BuildCodeTable(node.Right, code + "1");
     }
 
-    public string Compress(char[] content)
+    public string Compress(string content)
     {
         StringBuilder builder = new StringBuilder();
         foreach (char c in content)
@@ -69,7 +69,7 @@ public class Hufman
     public string Decompress(string encodedText)
     {
         var decodedText = new StringBuilder();
-        var currentNode = root;
+        var currentNode = Root;
 
         foreach (char bit in encodedText)
         {
@@ -85,7 +85,7 @@ public class Hufman
             if (currentNode.Character != '\0')
             {
                 decodedText.Append(currentNode.Character);
-                currentNode = root;
+                currentNode = Root;
             }
         }
 

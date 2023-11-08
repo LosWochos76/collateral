@@ -3,7 +3,7 @@ while (heap.HasElements)
     Console.WriteLine(heap.ExtractMax());
 */
 
-var content = FileHelper.ReadAsChars("alice-in-wonderland.txt");
+var content = File.ReadAllText("alice-in-wonderland.txt");
 var freq = FileHelper.GetFrequencies(content);
 
 var hm = new Hufman(freq);
