@@ -1,11 +1,11 @@
 using System.Text;
 
-public class Huffman
+public class Hufman
 {
-    private HuffmanNode root;
+    private HufmanNode root;
     private Dictionary<char, string> codeTable;
 
-    public Huffman(Dictionary<char, int> frequencies)
+    public Hufman(Dictionary<char, int> frequencies)
     {
         var heap = ToHeap(frequencies);
         root = ToHuffmannTree(heap);
@@ -13,23 +13,23 @@ public class Huffman
         BuildCodeTable();
     }
 
-    private static MaxHeap<HuffmanNode> ToHeap(Dictionary<char, int> freq)
+    private static MaxHeap<HufmanNode> ToHeap(Dictionary<char, int> freq)
     {
-        var heap = new MaxHeap<HuffmanNode>();
+        var heap = new MaxHeap<HufmanNode>();
         foreach (var kvp in freq)
-            heap.Insert(new HuffmanNode(kvp.Key, kvp.Value));
+            heap.Insert(new HufmanNode(kvp.Key, kvp.Value));
 
         return heap;
     }
 
-    private static HuffmanNode ToHuffmannTree(MaxHeap<HuffmanNode> heap)
+    private static HufmanNode ToHuffmannTree(MaxHeap<HufmanNode> heap)
     {
         while (heap.Count > 1)
         {
             var left = heap.ExtractMax();
             var right = heap.ExtractMax();
 
-            var parent = new HuffmanNode('\0', left.Freq + right.Freq);
+            var parent = new HufmanNode('\0', left.Freq + right.Freq);
             parent.Left = left;
             parent.Right = right;
 
@@ -45,7 +45,7 @@ public class Huffman
         BuildCodeTable(root, string.Empty);
     }
 
-    private void BuildCodeTable(HuffmanNode node, string code)
+    private void BuildCodeTable(HufmanNode node, string code)
     {
         if (node.Character != '\0')
             codeTable[node.Character] = code;

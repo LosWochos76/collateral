@@ -9,10 +9,26 @@ public class MaxHeap<T> where T : IComparable<T>
         heap = new List<T>();
     }
 
-    public MaxHeap(IEnumerable<T> elements) : this()
+    public MaxHeap(T[] elements)
     {
-        foreach (var e in elements)
-            Insert(e);
+        heap = new List<T>(elements);
+        BuildMaxHeap();
+    }
+
+    public int Count
+    {
+        get { return heap.Count; }
+    }
+
+    public bool HasElements
+    {
+        get { return heap.Count > 0; }
+    }
+
+    private void BuildMaxHeap()
+    {
+        for (int i=heap.Count / 2; i>=0; i--)
+            MaxHeapify(i);
     }
 
     public void Insert(T item)
@@ -35,22 +51,15 @@ public class MaxHeap<T> where T : IComparable<T>
         return max;
     }
 
-    public T PeekMax()
+    public T Max
     {
-        if (heap.Count == 0)
-            throw new InvalidOperationException("Heap is empty");
-        
-        return heap[0];
-    }
+        get 
+        { 
+            if (!HasElements)
+                throw new InvalidOperationException("Heap is empty");
 
-    public int Count
-    {
-        get { return heap.Count; }
-    }
-
-    public bool HasElements
-    {
-        get { return heap.Count > 0; }
+            return heap[0];
+        }        
     }
 
     private void MaxHeapify(int index)
