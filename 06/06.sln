@@ -1,25 +1,28 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.5.002.0
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "06", "06.csproj", "{577612C3-DBB5-4C06-82E2-7EC59B8AF2EE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "src", "src\src.csproj", "{92D1E156-4148-4FFD-808E-50733DCFC794}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests", "tests\tests.csproj", "{1351DF5F-3710-4CA6-AAD9-24A2ADEA1DDF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{577612C3-DBB5-4C06-82E2-7EC59B8AF2EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{577612C3-DBB5-4C06-82E2-7EC59B8AF2EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{577612C3-DBB5-4C06-82E2-7EC59B8AF2EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{577612C3-DBB5-4C06-82E2-7EC59B8AF2EE}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {788193D0-1889-4976-BE53-557B902BD34B}
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{92D1E156-4148-4FFD-808E-50733DCFC794}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92D1E156-4148-4FFD-808E-50733DCFC794}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92D1E156-4148-4FFD-808E-50733DCFC794}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92D1E156-4148-4FFD-808E-50733DCFC794}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1351DF5F-3710-4CA6-AAD9-24A2ADEA1DDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1351DF5F-3710-4CA6-AAD9-24A2ADEA1DDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1351DF5F-3710-4CA6-AAD9-24A2ADEA1DDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1351DF5F-3710-4CA6-AAD9-24A2ADEA1DDF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
