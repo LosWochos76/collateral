@@ -39,6 +39,11 @@ public class Hufman
         return heap.ExtractMax();
     }
 
+    public string GetCodeFor(char c)
+    {
+        return codeTable[c];
+    }
+
     private void BuildCodeTable()
     {
         codeTable = new Dictionary<char, string>();
@@ -47,14 +52,14 @@ public class Hufman
 
     private void BuildCodeTable(HufmanNode node, string code)
     {
-        if (node.Character != '\0')
-            codeTable[node.Character] = code;
-
-        if (node.Left != null)
+        if (node.HasLeftBranch)
             BuildCodeTable(node.Left, code + "0");
 
-        if (node.Right != null)
+        if (node.HasRightBranch)
             BuildCodeTable(node.Right, code + "1");
+
+        if (node.IsLeaf)
+            codeTable[node.Character] = code;
     }
 
     public string Compress(string content)
@@ -74,15 +79,11 @@ public class Hufman
         foreach (char bit in encodedText)
         {
             if (bit == '0')
-            {
                 currentNode = currentNode.Left;
-            }
             else if (bit == '1')
-            {
                 currentNode = currentNode.Right;
-            }
 
-            if (currentNode.Character != '\0')
+            if (currentNode.IsLeaf)
             {
                 decodedText.Append(currentNode.Character);
                 currentNode = Root;

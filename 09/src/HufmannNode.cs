@@ -4,6 +4,9 @@ public class HufmanNode : IComparable<HufmanNode>
     public int Freq { get; set; }
     public HufmanNode Left { get; set; }
     public HufmanNode Right { get; set; }
+    public bool IsLeaf { get { return Left == null && Right == null; } }
+    public bool HasLeftBranch { get { return Left != null; } }
+    public bool HasRightBranch { get { return Right != null; } }
 
     public HufmanNode(char c, int f)
     {
