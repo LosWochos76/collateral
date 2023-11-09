@@ -1,6 +1,4 @@
-using System.Collections;
-
-public partial class ArrayList<T>
+public class ArrayList<T>
 {
     private int size, count;
     private T[] data;
