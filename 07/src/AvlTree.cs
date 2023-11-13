@@ -20,7 +20,7 @@
 		else
 			node.Left = InsertRecursive(node.Left, value);
 
-		node.Height = 1 + Math.Max(Height(node.Left), Height(node.Right));
+		node.Height = 1 + Math.Max(GetHeight(node.Left), GetHeight(node.Right));
 		var rebalance = Rebalance(node);
 		return rebalance != null ? rebalance : node;
 	}
@@ -51,7 +51,7 @@
             node.Right = Delete(node.Right, node.Value);;
         }
 
-        node.Height = 1 + Math.Max(Height(node.Left), Height(node.Right));
+        node.Height = 1 + Math.Max(GetHeight(node.Left), GetHeight(node.Right));
         var rebalance = Rebalance(node);
 		return rebalance != null ? rebalance : node;
 	}
@@ -95,8 +95,8 @@
         x.Right = y;
         y.Left = beta;
 
-        y.Height = Math.Max(Height(y.Left), Height(y.Right)) + 1;
-        x.Height = Math.Max(Height(x.Left), Height(x.Right)) + 1;
+        y.Height = Math.Max(GetHeight(y.Left), GetHeight(y.Right)) + 1;
+        x.Height = Math.Max(GetHeight(x.Left), GetHeight(x.Right)) + 1;
 
         return x;
     }
@@ -110,13 +110,21 @@
         y.Left = x;
         x.Right = beta;
 
-        x.Height = Math.Max(Height(x.Left), Height(x.Right)) + 1;
-        y.Height = Math.Max(Height(y.Left), Height(y.Right)) + 1;
+        x.Height = Math.Max(GetHeight(x.Left), GetHeight(x.Right)) + 1;
+        y.Height = Math.Max(GetHeight(y.Left), GetHeight(y.Right)) + 1;
 
         return y;
     }
 
-	private int Height(AvlTreeNode<T> node)
+	public int Height
+	{ 
+		get 
+		{ 
+			return GetHeight(root);
+		}
+	}
+
+	private int GetHeight(AvlTreeNode<T> node)
     {
         if (node == null)
             return 0;
@@ -129,7 +137,7 @@
         if (node == null)
             return 0;
 
-        return Height(node.Left) - Height(node.Right);
+        return GetHeight(node.Left) - GetHeight(node.Right);
     }
 
 	public void Print()
