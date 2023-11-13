@@ -32,7 +32,7 @@ public class SelectionsortSorter
         while (current != null)
         {
             var min = FindSmallest(current);
-            list.SwapValues(min, current);
+            LinkedListHelper.SwapValues(min, current);
             current = current.Next;
         }
     }

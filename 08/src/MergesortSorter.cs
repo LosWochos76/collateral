@@ -1,5 +1,3 @@
-using System.Formats.Tar;
-
 public class MergesortSorter
 {
     public static int[] Sort(int[] array)

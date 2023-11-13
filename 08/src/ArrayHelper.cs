@@ -26,4 +26,16 @@ public class ArrayHelper
         for (int i=0; i<array.Length; i++)
             Console.WriteLine("{0}: {1}", i, array[i]);
     }
+
+    public static bool IsSorted(int[] array)
+    {
+        if (array.Length <= 1)
+            return true;
+
+        for (int i=1; i<array.Length; i++)
+            if (array[i-1] > array[i])
+                return false;
+        
+        return true;
+    }
 }
