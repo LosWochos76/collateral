@@ -4,3 +4,6 @@ hm.Insert('a', 100);
 Console.WriteLine(hm.LoadFactor);
 hm.Insert('b', 200);
 Console.WriteLine(hm.LoadFactor);
+
+
+

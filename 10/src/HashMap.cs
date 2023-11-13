@@ -5,12 +5,12 @@ public class HashMap<K, V> where K : IComparable
     public int Size { get; private set; }
     public int Count {get; private set; } = 0;
     public double LoadFactor { get { return (double)Count / Size; } }
-    private LinkedList<Tuple<K, V>>[] items;
+    private Tuple<K, V>[] items;
 
     public HashMap(int size)
     {
         this.Size = size;
-        items = new LinkedList<Tuple<K, V>>[size];
+        items = new Tuple<K, V>[size];
     }
 
     public HashMap() : this(100) 
@@ -20,11 +20,18 @@ public class HashMap<K, V> where K : IComparable
     public void Insert(K key, V value)
     {
         int pos = key.GetHashCode() % Size;
-        if (items[pos] == null)
-            items[pos] = new LinkedList<Tuple<K, V>>();
-
-        items[pos].Push(new Tuple<K, V>(key, value));
+        var item = new Tuple<K, V>(key, value);
         Count++;
+
+        if (items[pos] == null)
+        {
+            items[pos] = item;
+        }
+        else
+        {
+            item.Next = items[pos];
+            items[pos] = item;
+        }
 
         if (LoadFactor > 0.75)
             Reorganize();
@@ -38,10 +45,10 @@ public class HashMap<K, V> where K : IComparable
             if (items[i] == null)
                 continue;
 
-            var current = items[i].Head;
+            var current = items[i];
             while (current != null)
             {
-                new_hm.Insert(current.Value.Key, current.Value.Value);
+                new_hm.Insert(current.Key, current.Value);
                 current = current.Next;
             }
         }
@@ -56,37 +63,58 @@ public class HashMap<K, V> where K : IComparable
         if (items[pos] == null)
             return;
 
-        var has_removed = items[pos].RemoveFirst(t => { 
-            return t.Key.Equals(key); 
-        });
-
-        if (has_removed)
+        if (items[pos].Key.Equals(key))
+        {
+            items[pos] = items[pos].Next;
             Count--;
+            return;
+        }
+
+        Tuple<K, V> last = null;
+        Tuple<K, V> current = items[pos];
+        while (current != null && !current.Key.Equals(key))
+        {
+            last = current;
+            current = current.Next;
+        }
+
+        if (current != null)
+        {
+            last.Next = current.Next;
+            Count--;
+        }
+    }
+
+    private Tuple<K, V> Find(K key)
+    {
+        int pos = key.GetHashCode() % Size;
+        if (items[pos] == null)
+            return null;
+        
+        Tuple<K, V> current = items[pos];
+        while (current != null)
+        {
+            if (current.Key.Equals(key))
+                return current;
+    
+            current = current.Next;
+        }
+
+        return null;
     }
 
     public bool ContainsKey(K key)
     {
-        int pos = key.GetHashCode() % Size;
-        if (items[pos] != null)
-        {
-            return items[pos].FindFirst(t => { 
-                return t.Key.Equals(key); 
-            }) != null;
-        }
-
-        return false;
+        return Find(key) != null;
     }
 
     public V GetValue(K key)
     {
-        int pos = key.GetHashCode() % Size;
-        if (items[pos] != null)
-        {
-            return items[pos].FindFirst(t => { 
-                return t.Key.Equals(key); 
-            }).Value.Value;
-        }
+        var item = Find(key);
 
-        throw new Exception($"Key '{key}' not found!");
+        if (item == null)
+            throw new Exception($"Key '{key}' not found!");
+        else
+            return item.Value;
     }
 }
