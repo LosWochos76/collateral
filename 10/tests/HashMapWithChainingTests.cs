@@ -1,9 +1,9 @@
-public class HashMapTests
+public class HashMapWithChainingTests
 {
     [Test]
     public void Test_ContainsKey()
     {
-        var hm = new HashMap<char, int>();
+        var hm = new HashMapWithChaining<char, int>();
 
         Assert.AreEqual(0, hm.Count);
         Assert.IsFalse(hm.ContainsKey('a'));
@@ -16,7 +16,7 @@ public class HashMapTests
     [Test]
     public void Test_Insert()
     {
-        var hm = new HashMap<char, int>();
+        var hm = new HashMapWithChaining<char, int>();
         hm.Insert('a', 100);
         hm.Insert('b', 200);
         hm.Insert('c', 300);
@@ -31,7 +31,7 @@ public class HashMapTests
     [Test]
     public void Test_Remove()
     {
-        var hm = new HashMap<char, int>();
+        var hm = new HashMapWithChaining<char, int>();
 
         hm.Insert('a', 100);
         Assert.IsTrue(hm.ContainsKey('a'));
@@ -44,7 +44,7 @@ public class HashMapTests
     [Test]
     public void Test_Reorganize()
     {
-        var hm = new HashMap<char, int>(2);
+        var hm = new HashMapWithChaining<char, int>(2);
         Assert.AreEqual(2, hm.Size);
         hm.Insert('a', 100);
         Assert.AreEqual(1, hm.Count);

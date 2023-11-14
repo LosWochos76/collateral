@@ -1,19 +1,17 @@
-using System.Runtime.CompilerServices;
-
-public class HashMap<K, V> where K : IComparable
+public class HashMapWithChaining<K, V> where K : IComparable
 {
     public int Size { get; private set; }
     public int Count {get; private set; } = 0;
     public double LoadFactor { get { return (double)Count / Size; } }
     private Tuple<K, V>[] items;
 
-    public HashMap(int size)
+    public HashMapWithChaining(int size)
     {
         this.Size = size;
         items = new Tuple<K, V>[size];
     }
 
-    public HashMap() : this(100) 
+    public HashMapWithChaining() : this(100) 
     {
     }
 
@@ -33,18 +31,17 @@ public class HashMap<K, V> where K : IComparable
             items[pos] = item;
         }
 
-        if (LoadFactor > 0.75)
-            Reorganize();
+        ReorganizeIfNecessary();
     }
 
-    private void Reorganize()
+    private void ReorganizeIfNecessary()
     {
-        var new_hm = new HashMap<K, V>(Size * 2);
+        if (LoadFactor < 0.75)
+            return;
+
+        var new_hm = new HashMapWithChaining<K, V>(Size * 2);
         for (int i=0; i<Size; i++)
         {
-            if (items[i] == null)
-                continue;
-
             var current = items[i];
             while (current != null)
             {
