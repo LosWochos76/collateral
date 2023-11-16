@@ -5,8 +5,7 @@ Console.WriteLine(hm.LoadFactor);
 hm.Insert('b', 200);
 Console.WriteLine(hm.LoadFactor);*/
 
-
-string input = "geekific-geekific";
+string input = "abracadabra";
 List<int> compressed = LZW.Compress(input);
 string decompressed = LZW.Decompress(compressed);
 
