@@ -11,23 +11,23 @@ public class DirectedGraphAM : IGraph
 
     public void AddEdge(int u, int v)
     {
-        adjacenz_matrix[u, v] = 1;
+        adjacenz_matrix[u-1, v-1] = 1;
     }
 
     public void DeleteEdge(int u, int v)
     {
-        adjacenz_matrix[u, v] = 0;
+        adjacenz_matrix[u-1, v-1] = 0;
     }
 
     public bool HasEdge(int u, int v)
     {
-        return adjacenz_matrix[u, v] != 0;
+        return adjacenz_matrix[u-1, v-1] != 0;
     }
 
     public IEnumerable<int> GetNeighborsOf(int u)
     {
         var neighbors = new List<int>();
-        for (int v=0; v<node_count; v++)
+        for (int v=1; v<=node_count; v++)
             if (HasEdge(u, v))
                 neighbors.Add(v);
 
