@@ -3,32 +3,39 @@ public class UndirectedGraphAL : IGraph
 {
     private Dictionary<int, HashSet<int>> adjacency_list = new();
 
+    private void CreateIfNotExists(int u)
+    {
+        if (!adjacency_list.ContainsKey(u))
+            adjacency_list[u] = new HashSet<int>();
+    }
+
     public void AddEdge(int u, int v)
     {
-        if (!adjacency_list.ContainsKey(u-1))
-            adjacency_list[u-1] = new HashSet<int>();
-        
-        adjacency_list[u-1].Add(v);
+        CreateIfNotExists(u);
+        adjacency_list[u].Add(v);
 
-        if (!adjacency_list.ContainsKey(v-1))
-            adjacency_list[v-1] = new HashSet<int>();
-
-        adjacency_list[v-1].Add(u);
+        CreateIfNotExists(v);
+        adjacency_list[v].Add(u);
     }
 
     public void DeleteEdge(int u, int v)
     {
-        adjacency_list[u-1].Remove(v);
-        adjacency_list[v-1].Remove(u);
+        CreateIfNotExists(u);
+        adjacency_list[u].Remove(v);
+
+        CreateIfNotExists(v);
+        adjacency_list[v].Remove(u);
     }
 
     public IEnumerable<int> GetNeighborsOf(int u)
     {
-        return adjacency_list[u-1];
+        CreateIfNotExists(u);
+        return adjacency_list[u];
     }
 
     public bool HasEdge(int u, int v)
     {
-        return adjacency_list[u-1].Contains(v);
+        CreateIfNotExists(u);
+        return adjacency_list[u].Contains(v);
     }
 }

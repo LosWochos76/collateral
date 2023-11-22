@@ -1,9 +1,9 @@
-public class DirectedGraphAMTests
+public class DirectedGraphALTests
 {
     [Test]
-    public void Test_Addge_HasEdge()
+    public void Test_Addge_HasEdge_DeleteEdge()
     {
-        var hvn = new DirectedGraphAM(5);
+        var hvn = new DirectedGraphAL();
 
         Assert.False(hvn.HasEdge(1,2));
         Assert.False(hvn.HasEdge(2,1));
@@ -35,7 +35,7 @@ public class DirectedGraphAMTests
     [Test]
     public void Test_GetNeighborsOf()
     {
-        var hvn = new DirectedGraphAM(5);
+        var hvn = new DirectedGraphAL();
         hvn.AddEdge(1, 2);
         hvn.AddEdge(1, 3);
         hvn.AddEdge(1, 4);
