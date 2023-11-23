@@ -11,6 +11,7 @@ public class DirectedGraphAL : IGraph
     public void AddEdge(int u, int v)
     {
         CreateIfNotExists(u);
+        CreateIfNotExists(v);
         adjacency_list[u].Add(v);
     }
 
@@ -30,5 +31,13 @@ public class DirectedGraphAL : IGraph
     {
         CreateIfNotExists(u);
         return adjacency_list[u].Contains(v);
+    }
+
+    public IEnumerable<int> AllNodes
+    {
+        get
+        {
+            return adjacency_list.Keys;
+        }
     }
 }

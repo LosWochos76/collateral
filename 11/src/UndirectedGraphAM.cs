@@ -35,4 +35,13 @@ public class UndirectedGraphAM : IGraph
 
         return neighbors;
     }
+
+    public IEnumerable<int> AllNodes
+    {
+        get
+        {
+            for (int i=1; i<=node_count; i++)
+                yield return i;
+        }
+    }
 }

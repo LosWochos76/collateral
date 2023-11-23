@@ -38,4 +38,12 @@ public class UndirectedGraphAL : IGraph
         CreateIfNotExists(u);
         return adjacency_list[u].Contains(v);
     }
+
+    public IEnumerable<int> AllNodes
+    {
+        get
+        {
+            return adjacency_list.Keys;
+        }
+    }
 }
