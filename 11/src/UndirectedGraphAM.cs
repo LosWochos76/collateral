@@ -1,6 +1,7 @@
 public class UndirectedGraphAM : IGraph
 {
-    private int node_count;
+    private int node_count = 0;
+    private int edge_count = 0;
     private int[,] adjacenz_matrix;
 
     public UndirectedGraphAM(int node_count)
@@ -11,14 +12,22 @@ public class UndirectedGraphAM : IGraph
 
     public void AddEdge(int u, int v)
     {
+        if (HasEdge(u,v))
+            return;
+            
         adjacenz_matrix[u-1, v-1] = 1;
         adjacenz_matrix[v-1, u-1] = 1;
+        edge_count++;
     }
 
     public void DeleteEdge(int u, int v)
     {
+        if (!HasEdge(u, v))
+            return;
+
         adjacenz_matrix[u-1, v-1] = 0;
         adjacenz_matrix[v-1, u-1] = 0;
+        edge_count--;
     }
 
     public bool HasEdge(int u, int v)
@@ -43,5 +52,15 @@ public class UndirectedGraphAM : IGraph
             for (int i=1; i<=node_count; i++)
                 yield return i;
         }
+    }
+
+    public int NodeCount
+    {
+        get { return node_count; }
+    }
+
+    public int EdgeCount
+    {
+        get { return edge_count; }
     }
 }

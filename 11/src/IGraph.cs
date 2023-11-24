@@ -5,4 +5,6 @@ public interface IGraph
     void DeleteEdge(int u, int v);
     IEnumerable<int> GetNeighborsOf(int u);
     IEnumerable<int> AllNodes { get; }
+    public int NodeCount { get; }
+    public int EdgeCount { get; }
 }

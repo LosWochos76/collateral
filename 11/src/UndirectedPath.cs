@@ -24,8 +24,13 @@ public class UndirectedPath
         return false;
     }
 
+    public override string ToString()
+    {
+        return string.Join("->", Array.ConvertAll(path.ToArray(), x => x.ToString()));
+    }
+
     public void Print()
     {
-        Console.WriteLine(string.Join("->", Array.ConvertAll(path.ToArray(), x => x.ToString())));
+        Console.WriteLine(this);
     }
 }

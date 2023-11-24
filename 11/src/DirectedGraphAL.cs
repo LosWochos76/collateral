@@ -1,5 +1,6 @@
 public class DirectedGraphAL : IGraph
 {
+    private int edge_count = 0;
     private Dictionary<int, HashSet<int>> adjacency_list = new();
 
     private void CreateIfNotExists(int u)
@@ -12,12 +13,14 @@ public class DirectedGraphAL : IGraph
     {
         CreateIfNotExists(u);
         CreateIfNotExists(v);
+        edge_count++;
         adjacency_list[u].Add(v);
     }
 
     public void DeleteEdge(int u, int v)
     {
         CreateIfNotExists(u);
+        edge_count--;
         adjacency_list[u].Remove(v);
     }
 
@@ -35,9 +38,16 @@ public class DirectedGraphAL : IGraph
 
     public IEnumerable<int> AllNodes
     {
-        get
-        {
-            return adjacency_list.Keys;
-        }
+        get { return adjacency_list.Keys; }
+    }
+
+    public int NodeCount
+    {
+        get { return adjacency_list.Keys.Count; }
+    }
+
+    public int EdgeCount
+    {
+        get { return edge_count; }
     }
 }

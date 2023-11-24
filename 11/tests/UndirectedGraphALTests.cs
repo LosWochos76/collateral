@@ -4,7 +4,6 @@ public class UndirectedGraphALTests
     public void Test_AddEdge_HasEdge()
     {
         var hvn = new UndirectedGraphAL();
-
         Assert.False(hvn.HasEdge(1,2));
         Assert.False(hvn.HasEdge(2,1));
         Assert.False(hvn.HasEdge(1,3));
@@ -46,5 +45,20 @@ public class UndirectedGraphALTests
         Assert.True(nhs.Contains(3));
         Assert.True(nhs.Contains(4));
         Assert.False(nhs.Contains(5));
+    }
+
+    [Test]
+    public void Test_EdgeCount_NodeCount()
+    {
+        var hvn = new UndirectedGraphAL();
+        Assert.AreEqual(0, hvn.NodeCount);
+        Assert.AreEqual(0, hvn.EdgeCount);
+
+        hvn.AddEdge(1, 2);
+        hvn.AddEdge(1, 3);
+        hvn.AddEdge(1, 4);
+
+        Assert.AreEqual(4, hvn.NodeCount);
+        Assert.AreEqual(3, hvn.EdgeCount);
     }
 }

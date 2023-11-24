@@ -1,40 +1,34 @@
-using System.Drawing;
-
-public class HausVomNikolausMitTiefensuche
+public class EulerWeg
 {
     private IGraph graph;
     private UndirectedPath path;
+    private HashSet<string> solutions;
 
-    public HausVomNikolausMitTiefensuche()
+    public EulerWeg(IGraph graph)
     {
-        graph = new UndirectedGraphAL();
-        graph.AddEdge(1, 2);
-        graph.AddEdge(1, 3);
-        graph.AddEdge(1, 4);
-        graph.AddEdge(2, 3);
-        graph.AddEdge(2, 4);
-        graph.AddEdge(3, 4);
-        graph.AddEdge(3, 5);
-        graph.AddEdge(4, 5);
-
+        this.graph = graph;
         path = new UndirectedPath();
     }
 
-    public void FindSolutions()
+    public HashSet<string> FindSolutions()
     {
+        solutions = new HashSet<string>();
+
         foreach (var node in graph.AllNodes)
         {
             Visit(node);
         }
+
+        return solutions;
     }
 
     private void Visit(int node)
     {
         path.PushNode(node);
 
-        if (path.Count == 9)
+        if (path.Count == graph.EdgeCount + 1)
         {
-            path.Print();
+            solutions.Add(path.ToString());
         }
         else
         {

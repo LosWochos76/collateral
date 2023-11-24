@@ -47,4 +47,19 @@ public class DirectedGraphAMTests
         Assert.True(nhs.Contains(4));
         Assert.False(nhs.Contains(5));
     }
+
+    [Test]
+    public void Test_EdgeCount_NodeCount()
+    {
+        var hvn = new DirectedGraphAM(4);
+        Assert.AreEqual(4, hvn.NodeCount);
+        Assert.AreEqual(0, hvn.EdgeCount);
+
+        hvn.AddEdge(1, 2);
+        hvn.AddEdge(1, 3);
+        hvn.AddEdge(1, 4);
+
+        Assert.AreEqual(4, hvn.NodeCount);
+        Assert.AreEqual(3, hvn.EdgeCount);
+    }
 }
