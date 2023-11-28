@@ -1,6 +1,4 @@
 ﻿var hvn = HausVomNikolaus.Erzeuge();
-var ew = new EulerWeg(hvn);
-var solutions = ew.FindSolutions();
-
-foreach (var s in solutions)
-    Console.WriteLine(s);
+var dfs = new DepthFirstSearch(hvn);
+dfs.Explore();
+Console.WriteLine("HasCycle={0}, Components={1}", dfs.HasCycle, dfs.Components);

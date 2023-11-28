@@ -12,7 +12,7 @@ public class UndirectedPath
         path.RemoveAt(path.Count - 1); 
     }
 
-    public int Count { get { return path.Count; } }
+    public int NodeCount { get { return path.Count; } }
 
     public bool IsEdgeInPath(int u, int v)
     {
