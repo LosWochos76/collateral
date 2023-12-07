@@ -12,30 +12,28 @@ public class EulerWeg
     {
         solutions = new HashSet<string>();
         foreach (var node in graph.AllNodes)
-            Visit(node, new UndirectedPath());
+            Visit(node, new Path());
 
         return solutions;
     }
 
-    private void Visit(int node, UndirectedPath path)
+    private void Visit(int u, Path path)
     {
-        path.PushNode(node);
-
-        if (path.NodeCount - 1 == graph.EdgeCount)
+        if (path.Length == graph.EdgeCount)
         {
             solutions.Add(path.ToString());
         }
         else
         {
-            foreach (var neighbour in graph.GetNeighborsOf(node))
+            foreach (var e in graph.GetEdgesFrom(u))
             {
-                if (!path.IsEdgeInPath(node, neighbour))
+                if (!path.IsInPath(e))
                 {
-                    Visit(neighbour, path);
+                    path.Push(e);
+                    Visit(e.Vertex2, path);
+                    path.Pop();
                 }
             }
         }
-
-        path.PopNode();
     }
 }
