@@ -1,6 +1,6 @@
 public class Caesar
 {
-    public static char EncryptChar(char c)
+    public static char Encrypt(char c)
     {
         var ascii = Convert.ToInt32(c);
         
@@ -13,17 +13,11 @@ public class Caesar
         return Convert.ToChar(ascii);
     }
 
-    public static void EncryptChars(char[] s)
-    {
-        for (int i=0; i<s.Length; i++)
-            s[i] = EncryptChar(s[i]);
-    }
-
-    public static string EncryptString(string s)
+    public static string Encrypt(string s)
     {
         string result = "";
-        foreach (char c in s)
-            result += EncryptChar(c);
+        for (int i=0; i<s.Length; i++)
+            result += Encrypt(s[i]);
         
         return result;
     }
