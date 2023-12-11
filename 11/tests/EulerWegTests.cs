@@ -8,12 +8,12 @@ public class EulerWegTests
         var solutions = ew.FindSolutions();
 
         Assert.AreEqual(88, solutions.Count);
-        Assert.IsTrue(solutions.Contains("1->2,2->3,3->1,1->4,4->3,3->5,5->4,4->2"));
+        Assert.IsTrue(solutions.Contains("1<->2,2<->3,3<->1,1<->4,4<->3,3<->5,5<->4,4<->2"));
 
         foreach (var s in solutions)
         {
-            var start = s.Substring(0, 3);
-            Assert.IsTrue(start.Equals("1->") || start.Equals("2->"));
+            var start = s.Substring(0, 4);
+            Assert.IsTrue(start.Equals("1<->") || start.Equals("2<->"));
         }
     }
 }

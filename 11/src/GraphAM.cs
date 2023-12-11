@@ -1,6 +1,6 @@
 public class GraphAM : IGraph
 {
-    private double[,] adjacenz_matrix;
+    private Edge[,] adjacenz_matrix;
     public int NodeCount { get; private set; }
     public int EdgeCount { get; private set; }
     public bool IsDirected { get; private set; }
@@ -18,10 +18,10 @@ public class GraphAM : IGraph
         if (HasEdge(u,v))
             return;
 
-        adjacenz_matrix[u-1, v-1] = weight;
+        adjacenz_matrix[u-1, v-1] = new Edge(IsDirected, u, v, weight);
 
         if (IsUndirected)
-            adjacenz_matrix[v-1, u-1] = weight;
+            adjacenz_matrix[v-1, u-1] = new Edge(IsDirected, v, u, weight);;
 
         EdgeCount++;
     }
@@ -31,17 +31,17 @@ public class GraphAM : IGraph
         if (!HasEdge(u, v))
             return;
 
-        adjacenz_matrix[u-1, v-1] = 0;
+        adjacenz_matrix[u-1, v-1] = null;
 
         if (IsUndirected)
-            adjacenz_matrix[v-1, u-1] = 0;
+            adjacenz_matrix[v-1, u-1] = null;
 
         EdgeCount--;
     }
 
     public bool HasEdge(int u, int v)
     {
-        return adjacenz_matrix[u-1, v-1] != 0;
+        return adjacenz_matrix[u-1, v-1] != null;
     }
 
     public IEnumerable<int> GetNeighborsOf(int u)
@@ -55,12 +55,15 @@ public class GraphAM : IGraph
     {
         for (int v=1; v<=NodeCount; v++)
             if (HasEdge(u, v))
-                yield return new Edge(IsDirected, u, v, GetWeight(u, v));
+                yield return adjacenz_matrix[u-1, v-1];
     }
 
     public double GetWeight(int u, int v)
     {
-        return adjacenz_matrix[u-1, v-1];
+        if (HasEdge(u, v))
+            return adjacenz_matrix[u-1, v-1].Weight;
+        else
+            return 0;
     }
 
     public IEnumerable<int> AllNodes
@@ -74,7 +77,20 @@ public class GraphAM : IGraph
 
     public void Clear()
     {
-        adjacenz_matrix = new double[NodeCount, NodeCount];
+        adjacenz_matrix = new Edge[NodeCount, NodeCount];
         EdgeCount = 0;
+    }
+
+    public IEnumerable<Edge> AllEdges
+    {
+        get 
+        {
+            var hs = new HashSet<Edge>();
+            foreach (var node in AllNodes)
+                foreach (var edge in GetEdgesFrom(node))
+                   hs.Add(edge);
+
+            return hs;
+        }
     }
 }

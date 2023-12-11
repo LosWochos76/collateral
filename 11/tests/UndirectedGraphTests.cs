@@ -49,4 +49,20 @@ public class UndirectedGraphTests
         Assert.False(n.Contains(3));
         Assert.False(n.Contains(4));
     }
+
+    [TestCaseSource(nameof(TestCases))]
+    public void Test_GetEdges(IGraph g)
+    {
+        g.Clear();
+        g.AddEdge(1,2);
+        g.AddEdge(2,1);
+        g.AddEdge(1,4);
+
+        var hs = new HashSet<Edge>(g.AllEdges);
+        Assert.AreEqual(2, hs.Count);
+        Assert.True(hs.Contains(new Edge(false, 1,2)));
+        Assert.True(hs.Contains(new Edge(false, 2,1)));
+        Assert.True(hs.Contains(new Edge(false, 1,4)));
+        Assert.False(hs.Contains(new Edge(true, 1,5)));
+    }
 }

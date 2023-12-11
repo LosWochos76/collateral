@@ -6,7 +6,7 @@ public class Edge : IComparable<Edge>
     public int Vertex2 { get; set; }
     public double Weight { get; private set; }
 
-    public Edge(bool is_directed, int vertex1, int vertex2, double weight)
+    public Edge(bool is_directed, int vertex1, int vertex2, double weight = 1)
     {
         IsDirected = is_directed;
         Vertex1 = vertex1;
@@ -33,6 +33,14 @@ public class Edge : IComparable<Edge>
         return false;
     }
 
+    public override int GetHashCode()
+    {
+        if (IsDirected)
+            return (Vertex1, Vertex2).GetHashCode();
+        else
+            return Vertex1.GetHashCode() ^ Vertex2.GetHashCode();
+    }
+
     public int CompareTo(Edge? other)
     {
         return Weight.CompareTo(other.Weight);
@@ -40,6 +48,23 @@ public class Edge : IComparable<Edge>
 
     public override string ToString()
     {
-        return string.Format("{0}->{1}", Vertex1, Vertex2);
+        if (IsDirected)
+            return string.Format("{0}->{1}", Vertex1, Vertex2);
+        else
+            return string.Format("{0}<->{1}", Vertex1, Vertex2);
+    }
+
+    public bool ConnectsTo(Edge other)
+    {
+        if (IsDirected && other.IsDirected)
+            if (Vertex2.Equals(other.Vertex1))
+                return true;
+        
+        if (IsUndirected && other.IsUndirected)
+            if (Vertex2.Equals(other.Vertex1) ||
+                Vertex1.Equals(other.Vertex2))
+                return true;
+        
+        return false;
     }
 }

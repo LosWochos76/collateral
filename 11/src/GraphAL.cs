@@ -1,8 +1,7 @@
 
 public class GraphAL : IGraph
 {
-    private Dictionary<int, HashSet<int>> adjacency_list;
-    private Dictionary<(int, int), double> weights;
+    private Dictionary<int, HashSet<Edge>> adjacency_list;
     public int EdgeCount { get; private set; }
     public int NodeCount { get; private set; }
     public bool IsDirected { get; private set; }
@@ -15,19 +14,15 @@ public class GraphAL : IGraph
         Clear();
     }
 
-    public void AddEdge(int u, int v, double weight)
+    public void AddEdge(int u, int v, double weight = 1)
     {
         if (HasEdge(u, v))
             return;
 
-        adjacency_list[u].Add(v);
-        weights[(u,v)] = weight;
+        adjacency_list[u].Add(new Edge(IsDirected, u, v, weight));
 
         if (IsUndirected)
-        {
-            adjacency_list[v].Add(u);
-            weights[(v,u)] = weight;
-        }
+            adjacency_list[v].Add(new Edge(IsDirected, v, u, weight));
 
         EdgeCount++;
     }
@@ -37,49 +32,66 @@ public class GraphAL : IGraph
         if (!HasEdge(u, v))
             return;
 
-        adjacency_list[u].Remove(v);
-        weights.Remove((u,v));
+        adjacency_list[u].Remove(new Edge(IsDirected, v, u, 1));
 
         if (IsUndirected)
-        {
-            adjacency_list[v].Remove(u);
-            weights.Remove((v,u));
-        }
+            adjacency_list[v].Remove(new Edge(IsDirected, v, u, 1));
 
         EdgeCount--;
     }
 
     public IEnumerable<int> GetNeighborsOf(int u)
     {
-        return adjacency_list[u];
+        foreach (var edge in adjacency_list[u])
+            yield return edge.Vertex2;
     }
 
     public IEnumerable<Edge> GetEdgesFrom(int u)
     {
-        foreach (var v in adjacency_list[u])
-            yield return new Edge(IsDirected, u, v, GetWeight(u,v));
+        return adjacency_list[u];
+    }
+
+    public IEnumerable<Edge> AllEdges
+    {
+        get 
+        {
+            var hs = new HashSet<Edge>();
+            foreach (var node in AllNodes)
+                foreach (var edge in GetEdgesFrom(node))
+                   hs.Add(edge);
+            
+            return hs;
+        }
+    }
+
+    private Edge GetEdge(int u, int v)
+    {
+        if (!adjacency_list.ContainsKey(u))
+            return null;
+
+        var search_edge = new Edge(IsDirected, u, v);
+        Edge find_edge = null;
+        adjacency_list[u].TryGetValue(search_edge, out find_edge);
+        return find_edge;
     }
 
     public bool HasEdge(int u, int v)
     {
-        return adjacency_list[u].Contains(v);
+        return GetEdge(u, v) != null;
     }
 
     public double GetWeight(int u, int v)
     {
-        if (!weights.ContainsKey((u,v)))
-            return 0;
-        else
-            return weights[(u,v)];
+        var edge = GetEdge(u, v);
+        return edge is null ? 0 : edge.Weight;
     }
 
     public void Clear()
     {
-        adjacency_list = new Dictionary<int, HashSet<int>>();
+        adjacency_list = new Dictionary<int, HashSet<Edge>>();
         for (int i=1; i<=NodeCount; i++)
-            adjacency_list[i] = new HashSet<int>();
+            adjacency_list[i] = new HashSet<Edge>();
 
-        weights = new Dictionary<(int, int), double>();
         EdgeCount = 0;
     }
 

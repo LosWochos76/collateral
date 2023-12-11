@@ -27,7 +27,7 @@ public class EulerWeg
         {
             foreach (var e in graph.GetEdgesFrom(u))
             {
-                if (!path.IsInPath(e))
+                if (!path.IsPartOf(e))
                 {
                     path.Push(e);
                     Visit(e.Vertex2, path);

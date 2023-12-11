@@ -21,13 +21,9 @@ public class Path
 
     public int Length { get { return edges.Count; } }
 
-    public bool IsInPath(Edge edge)
+    public bool IsPartOf(Edge edge)
     {
-        foreach (var e in edges)
-            if (edge.Equals(e))
-                return true;
-        
-        return false;
+        return edges.Contains(edge);
     }
 
     public override string ToString()
@@ -43,5 +39,33 @@ public class Path
     public void Clear()
     {
         edges = new List<Edge>();
+    }
+
+    public IEnumerable<Edge> Edges
+    {
+        get { return edges; }
+    }
+
+    public Edge First { get { return edges[0]; } }
+    public Edge Last { get { return edges[edges.Count - 1]; } }
+
+    public bool IsConnected
+    {
+        get
+        {
+            for (int i=1; i<edges.Count; i++)
+                if (!edges[i-1].ConnectsTo(edges[i]))
+                    return false;
+
+            return true;
+        }
+    }
+
+    public bool IsCircle
+    {
+        get
+        {
+            return IsConnected && Last.ConnectsTo(First);
+        }
     }
 }

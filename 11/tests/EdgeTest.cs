@@ -31,4 +31,26 @@ public class EdgeTest
         Assert.AreEqual(1, e2.CompareTo(e1));
         Assert.AreEqual(0, e2.CompareTo(e3));
     }
+
+    [Test]
+    public void Test_Directed_ConnectsTo()
+    {
+        var e1 = new Edge(true, 1, 2, 5);
+        var e2 = new Edge(true, 2, 3, 7);
+        var e3 = new Edge(true, 5, 7, 7);
+
+        Assert.True(e1.ConnectsTo(e2));
+        Assert.False(e2.ConnectsTo(e1));
+        Assert.False(e1.ConnectsTo(e3));
+    }
+
+    [Test]
+    public void Test_Undirected_ConnectsTo()
+    {
+        var e1 = new Edge(false, 1, 2, 5);
+        var e2 = new Edge(false, 2, 3, 7);
+
+        Assert.True(e1.ConnectsTo(e2));
+        Assert.True(e2.ConnectsTo(e1));
+    }
 }
