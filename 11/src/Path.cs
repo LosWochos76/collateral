@@ -1,11 +1,7 @@
 public class Path
 {
-    private List<Edge> edges;
-
-    public Path()
-    {
-       edges = new List<Edge>();
-    }
+    private List<Edge> edges = new List<Edge>();
+    public int Length { get { return edges.Count; } }
 
     public void Push(Edge e) 
     { 
@@ -18,9 +14,7 @@ public class Path
         edges.RemoveAt(edges.Count - 1);
         return edge;
     }
-
-    public int Length { get { return edges.Count; } }
-
+    
     public bool IsPartOf(Edge edge)
     {
         return edges.Contains(edge);

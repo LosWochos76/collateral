@@ -66,9 +66,6 @@ public class GraphAL : IGraph
 
     private Edge GetEdge(int u, int v)
     {
-        if (!adjacency_list.ContainsKey(u))
-            return null;
-
         var search_edge = new Edge(IsDirected, u, v);
         Edge find_edge = null;
         adjacency_list[u].TryGetValue(search_edge, out find_edge);

@@ -8,6 +8,9 @@ public class Edge : IComparable<Edge>
 
     public Edge(bool is_directed, int vertex1, int vertex2, double weight = 1)
     {
+        if (vertex1 == vertex2)
+            throw new Exception("Schleifen sind nicht erlaubt!");
+
         IsDirected = is_directed;
         Vertex1 = vertex1;
         Vertex2 = vertex2;
