@@ -3,7 +3,7 @@ public class EulerWegTests
     [Test]
     public void Test_FindSolutions()
     {
-        var hvn = HausVomNikolaus.Erzeuge();
+        var hvn = ExampleGraphs.HausVomNikolaus();
         var ew = new EulerWeg(hvn);
         var solutions = ew.FindSolutions();
 

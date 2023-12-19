@@ -1,4 +1,6 @@
 
+using System.Text;
+
 public class GraphAL : IGraph
 {
     private Dictionary<int, HashSet<Edge>> adjacency_list;
@@ -43,7 +45,7 @@ public class GraphAL : IGraph
     public IEnumerable<int> GetNeighborsOf(int u)
     {
         foreach (var edge in adjacency_list[u])
-            yield return edge.Vertex2;
+            yield return edge.V;
     }
 
     public IEnumerable<Edge> GetEdgesFrom(int u)

@@ -19,7 +19,7 @@ public class EulerWeg
 
     private void Visit(int u, Path path)
     {
-        if (path.Length == graph.EdgeCount)
+        if (path.EdgeCount == graph.EdgeCount)
         {
             solutions.Add(path.ToString());
         }
@@ -29,8 +29,8 @@ public class EulerWeg
             {
                 if (!path.IsPartOf(e))
                 {
-                    path.Push(e);
-                    Visit(e.Vertex2, path);
+                    path.Add(e);
+                    Visit(e.V, path);
                     path.Pop();
                 }
             }

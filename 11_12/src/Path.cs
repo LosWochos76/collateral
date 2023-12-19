@@ -1,9 +1,11 @@
+using System.ComponentModel;
+
 public class Path
 {
     private List<Edge> edges = new List<Edge>();
-    public int Length { get { return edges.Count; } }
+    public int EdgeCount { get { return edges.Count; } }
 
-    public void Push(Edge e) 
+    public void Add(Edge e) 
     { 
         edges.Add(e); 
     }
@@ -13,6 +15,20 @@ public class Path
         var edge = edges.Last();
         edges.RemoveAt(edges.Count - 1);
         return edge;
+    }
+
+    public void Insert(Edge e)
+    {
+        edges.Insert(0, e);
+    }
+
+    public bool IsPartOf(int u)
+    {
+        foreach (var e in edges)
+            if (e.IsPartOf(u))
+                return true;
+
+        return false;
     }
     
     public bool IsPartOf(Edge edge)
@@ -60,6 +76,18 @@ public class Path
         get
         {
             return IsConnected && Last.ConnectsTo(First);
+        }
+    }
+
+    public double Length
+    {
+        get
+        {
+            double length = 0;
+            foreach (var e in Edges)
+                length += e.Weight;
+            
+            return length;
         }
     }
 }

@@ -28,21 +28,20 @@ namespace AUD.Graphs
         private void Init(int start_node)
         {
             this.start_node = start_node;
-
             for (int i = 1; i <= g.NodeCount; i++)
             {
                 color[i] = WHITE;
                 distance[i] = -1;
                 parent[i] = -1;
             }
-
-            distance[start_node] = 0;
-            queue = new Queue<int>();
-            queue.Enqueue(start_node);
         }
 
         private void BFS(int start_node)
         {
+            distance[start_node] = 0;
+            queue = new Queue<int>();
+            queue.Enqueue(start_node);
+
             while (queue.Count > 0)
             {
                 int u = queue.Dequeue();
