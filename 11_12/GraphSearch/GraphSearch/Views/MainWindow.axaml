@@ -12,8 +12,9 @@
         Title="GraphSearch">
 	<DockPanel>
 		<StackPanel Margin="5" Orientation="Horizontal" DockPanel.Dock="Top">
-			<Button Command="{Binding RunCommand}">Start</Button>
-			<Button Command="{Binding StopCommand}">Stop</Button>
+			<Button Command="{Binding GenerateCommand}">Generate</Button>
+			<Button Command="{Binding ResetCommand}">Reset</Button>
+			<Button Command="{Binding RunCommand}">Search</Button>
 			<ComboBox ItemsSource="{Binding Algorithms}" SelectedItem="{Binding SelectedAlgorithms}" />
 		</StackPanel>
 		<ItemsControl Margin="5" ItemsSource="{Binding Items}" DockPanel.Dock="Bottom">

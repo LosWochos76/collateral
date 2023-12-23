@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Splat;
 
 namespace GraphSearch;
 
@@ -54,16 +55,15 @@ public partial class MainWindowViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsRunning))]
     [NotifyCanExecuteChangedFor(nameof(RunCommand))]
-    [NotifyCanExecuteChangedFor(nameof(StopCommand))]
     private bool isStopped = true;
-    
-    public bool IsRunning { get { return !IsStopped; } }
 
     [RelayCommand(CanExecute=nameof(IsStopped))]
     public void Run()
     {
+        if (algo != null)
+            algo.Stop();
+        
         if (SelectedAlgorithms == "Breitensuche") ;
             algo = new BreadthFirstSearch(this);
 
@@ -71,14 +71,28 @@ public partial class MainWindowViewModel : ObservableObject
             algo = new AStar(this);
             
         algo.Run();
-        IsStopped = false;
+    }
+    
+    [RelayCommand]
+    public void Generate()
+    {
+        if (algo != null)
+            algo.Stop();
+
+        Init();
     }
 
-    [RelayCommand(CanExecute=nameof(IsRunning))]
-    public void Stop()
+    [RelayCommand]
+    public void Reset()
     {
-        algo.Stop();
-        Init();
-        IsStopped = true;
+        if (algo != null)
+            algo.Stop();
+        
+        foreach (var block in Items)
+            if (block.Color != Colors.Black)
+                block.Color = Colors.White;
+        
+        Start.Color = Colors.Blue;
+        Destination.Color = Colors.Green;
     }
 }
