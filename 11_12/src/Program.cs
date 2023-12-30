@@ -1,4 +1,6 @@
-﻿var g = ExampleGraphs.Dijkstra();
-var d = new Dijkstra(g);
-Path p = d.FindShortestPath(1, 6);
-Console.WriteLine(p);
+﻿var g = ExampleGraphs.Kruskal();
+var k = new Kruskal(g);
+var edges = k.Find();
+
+foreach (var edge in edges)
+    Console.WriteLine("{0}: {1}", edge, edge.Weight);

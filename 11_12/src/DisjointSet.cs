@@ -29,4 +29,6 @@ public class DisjointSet
     {
         return FindSet(u) == FindSet(v);
     }
+
+    public int Count { get { return sets.Count; } }
 }
