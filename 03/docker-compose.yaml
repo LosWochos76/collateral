@@ -8,6 +8,8 @@ services:
       - MARIADB_USER=wordpress
       - MARIADB_PASSWORD=secret
       - MARIADB_DATABASE=wordpress
+    volumes:
+      - mariadb_data:/var/lib/mysql
   
   wordpress:
     image: wordpress:latest
@@ -18,3 +20,9 @@ services:
       - WORDPRESS_DB_NAME=wordpress
     ports:
       - 80:80
+    volumes:
+     - wordpress_data:/var/www/html
+
+volumes:
+    mariadb_data:
+    wordpress_data:
