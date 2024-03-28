@@ -1,15 +1,8 @@
 public class Startup
 {
-    public IConfiguration Configuration { get; set; }
-
-    public Startup(IConfiguration configuration)
-    {
-        Configuration = configuration;
-    }
-
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddMvc();
+        //services.AddMvc();
     }
 
     public void Configure(IApplicationBuilder app, IHostEnvironment env)
@@ -35,9 +28,10 @@ public class Startup
             );
         });*/
 
-        app.Run(async context =>
-        {
+        app.Use(async (HttpContext context, RequestDelegate next) => {
+            // do something before the next element in the pipeline
             await context.Response.WriteAsync("Hello world!");
+            // do something after the next element in the pipeline
         });
     }
 }
