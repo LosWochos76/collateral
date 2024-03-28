@@ -14,7 +14,7 @@ public class Program
         builder.ConfigureAppConfiguration((hostingContext, config) => {
             var env = hostingContext.HostingEnvironment;
             config.AddJsonFile("appsettings.json", optional: false);
-            config.AddJsonFile($"appsettings.{env.EnvironmentName}.json");
+            config.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional:true);
             config.AddEnvironmentVariables();
             config.AddCommandLine(args);
         });

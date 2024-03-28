@@ -14,7 +14,11 @@ public class Startup
 
     public void Configure(IApplicationBuilder app, IHostEnvironment env)
     {
-        if (!env.IsDevelopment())
+        /*if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+        else
         {
             app.UseExceptionHandler("/Home/Error");
         }
@@ -29,6 +33,11 @@ public class Startup
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}"
             );
+        });*/
+
+        app.Run(async context =>
+        {
+            await context.Response.WriteAsync("Hello world!");
         });
     }
 }
