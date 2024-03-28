@@ -2,36 +2,18 @@ public class Startup
 {
     public void ConfigureServices(IServiceCollection services)
     {
-        //services.AddMvc();
+        services.AddControllersWithViews();
     }
 
     public void Configure(IApplicationBuilder app, IHostEnvironment env)
     {
-        /*if (env.IsDevelopment())
-        {
-            app.UseDeveloperExceptionPage();
-        }
-        else
-        {
-            app.UseExceptionHandler("/Home/Error");
-        }
-
+        app.UseMiddleware<CustomMiddleware>();
         app.UseStaticFiles();
         app.UseRouting();
-        app.UseAuthorization();
-
-        app.UseEndpoints(endpointBuilder => 
-        {
-            endpointBuilder.MapControllerRoute(
+        app.UseEndpoints(endpoints => {
+            endpoints.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}"
-            );
-        });*/
-
-        app.Use(async (HttpContext context, RequestDelegate next) => {
-            // do something before the next element in the pipeline
-            await context.Response.WriteAsync("Hello world!");
-            // do something after the next element in the pipeline
+                pattern: "{controller=Home}/{action=Index}/{id?}");
         });
     }
 }
