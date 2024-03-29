@@ -2,7 +2,7 @@ public class Startup
 {
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddControllersWithViews();
+        //services.AddControllersWithViews();
     }
 
     public void Configure(IApplicationBuilder app, IHostEnvironment env)
@@ -11,9 +11,14 @@ public class Startup
         app.UseStaticFiles();
         app.UseRouting();
         app.UseEndpoints(endpoints => {
-            endpoints.MapControllerRoute(
+            endpoints.MapGet("/", async context => {
+                await context.Response.WriteAsync("Hello, World!");
+            });
+
+
+            /*endpoints.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Home}/{action=Index}/{id?}");*/
         });
     }
 }
