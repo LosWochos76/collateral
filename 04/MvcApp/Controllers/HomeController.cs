@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MvcApp.Controllers;
 
-public class HomeController : Controller
+public class HomeController : ControllerBase
 {
     private readonly ILogger<HomeController> _logger;
 
@@ -12,8 +12,14 @@ public class HomeController : Controller
         _logger = logger;
     }
 
+    [Route("/")]
     public IActionResult Index()
     {
-        return Ok("Hello, World!");
+        return new ContentResult() 
+        { 
+            Content = "Hello, World!", ContentType = "text/html" 
+        };
+
+        return Content("Hello, World!");
     }
 }
