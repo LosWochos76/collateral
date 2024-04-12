@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace MvcApp.Controllers;
 
@@ -6,7 +7,7 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
 
-    public HomeController(ILogger<HomeController> logger)
+     public HomeController(ILogger<HomeController> logger)
     {
         _logger = logger;
     }
@@ -56,5 +57,21 @@ public class HomeController : Controller
             return Redirect("/data");
         else
             return View();
+    }
+
+    public IActionResult FromRoute([FromRoute] int? id)
+    {
+        if (id is null)
+            return Content($"No ID found!");
+        else
+            return Content($"ID {id} was passed!");
+    }
+
+    public IActionResult FromQuery([FromQuery] int? page)
+    {
+        if (page is null)
+            return Content($"No page found!");
+        else
+            return Content($"Page is {page}!");
     }
 }
