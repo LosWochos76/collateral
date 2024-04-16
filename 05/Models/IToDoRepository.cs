@@ -1,4 +1,11 @@
-public interface IToDoRepository : IRepository<ToDo>
+namespace ToDoService.Models;
+
+public interface IToDoRepository
 {
-    IEnumerable<ToDo> GetAllForUser(User user);
+    ToDoListResult GetAll(ToDoFilter filter);
+    ToDo GetSingle(Guid id);
+    ToDo Add(ToDo entity);
+    void Delete(Guid id);
+    ToDo Update(ToDo entity);
+    ToDoListResult GetAllForUser(User user, ToDoFilter filter);
 }

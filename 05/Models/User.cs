@@ -1,3 +1,5 @@
+namespace ToDoService.Models;
+
 public class User : Entity
 {
     public string Firstname { get; set; }

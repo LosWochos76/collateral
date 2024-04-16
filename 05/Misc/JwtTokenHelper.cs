@@ -2,6 +2,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using ToDoService.Models;
+
+namespace ToDoService.Misc;
 
 public class JwtTokenHelper
 {

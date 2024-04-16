@@ -1,3 +1,5 @@
+namespace ToDoService.Models;
+
 public class ToDo : Entity
 {
     public string Title { get; set; }

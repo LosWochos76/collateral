@@ -1,14 +1,47 @@
-
 using System.Security.Cryptography;
 using System.Text;
 
-public class UserMemoryRepository : AbstractRepository<User>, IUserRepository
+namespace ToDoService.Models;
+
+public class UserMemoryRepository : IUserRepository
 {
     private IConfiguration configuration;
+    private Dictionary<Guid, User> items = new Dictionary<Guid, User>();
 
     public UserMemoryRepository(IConfiguration configuration)
     {
         this.configuration = configuration;
+    }
+
+    public IEnumerable<User> GetAll()
+    {
+       return items.Values;
+    }
+
+    public User GetSingle(Guid id)
+    {
+        if (items.ContainsKey(id))
+            return items[id];
+
+        return null;
+    }
+
+    public User Add(User entity)
+    {
+        entity.ID = Guid.NewGuid();
+        items.Add(entity.ID, entity);
+        return entity;
+    }
+
+    public User Update(User entity)
+    {
+        items[entity.ID] = entity;
+        return entity;
+    }
+
+    public void Delete(Guid id)
+    {
+        items.Remove(id);
     }
 
     public User FindByLogin(LoginData login)

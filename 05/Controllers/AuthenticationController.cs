@@ -1,4 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using ToDoService.Misc;
+using ToDoService.Models;
+
+namespace ToDoService.Controllers;
 
 public class AuthenticationController : Controller
 {

@@ -1,6 +1,11 @@
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using ToDoService.Misc;
+using ToDoService.Models;
 
 public class Startup
 {
@@ -13,10 +18,12 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddControllers();
-
-        var r1 = new ToDoMemoryRepository();
-        services.AddSingleton<IToDoRepository>(r1);
+        services.AddControllers().AddJsonOptions(options => {
+            options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+            options.JsonSerializerOptions.PropertyNamingPolicy = null;
+            options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        });
+        services.AddSingleton<IToDoRepository, ToDoMemoryRepository>();
 
         var r2 = new UserMemoryRepository(config);
         r2.Add(new User() {

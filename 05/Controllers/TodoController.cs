@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ToDoService.Models;
+
+namespace ToDoService.Controllers;
 
 public class TodoController : Controller
 {
@@ -20,14 +23,16 @@ public class TodoController : Controller
     [Route("/ToDo/")]
     [HttpGet]
     [Authorize]
-    public IActionResult GetAll()
+    public IActionResult GetAll([FromBody] ToDoFilter filter)
     {
         var currentUser = GetCurrentUser();
 
+        var bla = ModelState;
+
         if (currentUser.IsAdmin)
-            return Ok(toDoRepository.GetAll());
+            return Ok(toDoRepository.GetAll(filter));
         else
-            return Ok(toDoRepository.GetAllForUser(currentUser));
+            return Ok(toDoRepository.GetAllForUser(currentUser, filter));
     }
 
     [Route("/ToDo/{id}")]
