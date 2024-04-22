@@ -1,0 +1,60 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgis/postgis
+    hostname: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=secret
+    volumes:
+      - postgres-data:/var/lib/postgresql/data/
+
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - 8080:80
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@wb-fernstudium.de
+      - PGADMIN_DEFAULT_PASSWORD=secret
+    volumes:
+      - pgadmin-config:/var/lib/pgadmin/
+
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb
+    ports:
+      - "8086:8086"
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=wbh
+      - DOCKER_INFLUXDB_INIT_PASSWORD=secretsecret
+      - DOCKER_INFLUXDB_INIT_ORG=wbh
+      - DOCKER_INFLUXDB_INIT_BUCKET=wbh
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=tokentoken
+    volumes:
+      - influx-data:/var/lib/influxdb2
+      - influx-config:/etc/influxdb2
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    links:
+      - influxdb
+    environment:
+      - GF_SECURITY_ADMIN_USER=wbh
+      - GF_SECURITY_ADMIN_PASSWORD=secretsecret
+    volumes:
+      - grafana-data:/var/lib/grafana 
+
+volumes:
+  postgres-data:
+  pgadmin-config:
+  influx-data:
+  influx-config:
+  grafana-data:
+
+  
