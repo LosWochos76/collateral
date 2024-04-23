@@ -1,0 +1,36 @@
+﻿<Window x:Class="WpfMailer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfMailer"
+        mc:Ignorable="d"
+        Title="E-Mail-Sender" SizeToContent="WidthAndHeight" MinWidth="300">
+    <Grid Margin="5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right">Username:</Label>
+        <TextBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" x:Name="username"/>
+        <Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right">Password:</Label>
+        <PasswordBox Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" x:Name="password"/>
+        <Label Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right">To:</Label>
+        <TextBox Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" x:Name="to"/>
+        <Label Grid.Column="0" Grid.Row="3" HorizontalAlignment="Right">Subject:</Label>
+        <TextBox Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" x:Name="subject"/>
+        <Label Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right">Text:</Label>
+        <TextBox Grid.Column="1" Grid.Row="4" VerticalAlignment="Top" TextWrapping="Wrap" MinHeight="150" AcceptsReturn="True" x:Name="text" />
+        <StackPanel Grid.Column="1" Grid.Row="5">
+            <Button Margin="0,5,0,0" Click="Send_Clicked" x:Name="button">Send</Button>
+        </StackPanel>
+    </Grid>
+</Window>
