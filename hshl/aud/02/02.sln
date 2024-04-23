@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "primzahl", "primzahl\primzahl.csproj", "{5BBAC8E8-BAC0-4DB4-87C4-C4B87C875F24}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "primzahl.test", "primzahl.test\primzahl.test.csproj", "{629FE250-C9E0-4BB4-A11D-8BD5C2C5680F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5BBAC8E8-BAC0-4DB4-87C4-C4B87C875F24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BBAC8E8-BAC0-4DB4-87C4-C4B87C875F24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BBAC8E8-BAC0-4DB4-87C4-C4B87C875F24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BBAC8E8-BAC0-4DB4-87C4-C4B87C875F24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{629FE250-C9E0-4BB4-A11D-8BD5C2C5680F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{629FE250-C9E0-4BB4-A11D-8BD5C2C5680F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{629FE250-C9E0-4BB4-A11D-8BD5C2C5680F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{629FE250-C9E0-4BB4-A11D-8BD5C2C5680F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

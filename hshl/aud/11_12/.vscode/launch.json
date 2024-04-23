@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Code",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/src/bin/Debug/net7.0/src.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src",
+            "stopAtEntry": false,
+            "console": "internalConsole"
+        }
+    ]
+}

@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "divide_and_conquer", "divide_and_conquer\divide_and_conquer.csproj", "{C139BFFD-1D50-41B9-8928-881ACD76B8F0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "brute_force", "brute_force\brute_force.csproj", "{0E482725-80B4-4C7B-85DB-3263F180523C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "sudoku", "backtracking\sudoku.csproj", "{822FBCEC-3568-4AC2-BA9A-E4916F4F7246}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "greedy", "greedy\greedy.csproj", "{0AE7129C-307A-4DC4-8E27-289FFD274E96}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dynamische_programmierung", "dynamische_programmierung\dynamische_programmierung.csproj", "{A1965FCF-703E-4A31-A17E-748277C5456B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "decrease_and_conquer", "decrease_and_conquer\decrease_and_conquer.csproj", "{3FDC263C-6D24-425F-B99A-AA974503444E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C139BFFD-1D50-41B9-8928-881ACD76B8F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C139BFFD-1D50-41B9-8928-881ACD76B8F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C139BFFD-1D50-41B9-8928-881ACD76B8F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C139BFFD-1D50-41B9-8928-881ACD76B8F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E482725-80B4-4C7B-85DB-3263F180523C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E482725-80B4-4C7B-85DB-3263F180523C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E482725-80B4-4C7B-85DB-3263F180523C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E482725-80B4-4C7B-85DB-3263F180523C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{822FBCEC-3568-4AC2-BA9A-E4916F4F7246}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{822FBCEC-3568-4AC2-BA9A-E4916F4F7246}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{822FBCEC-3568-4AC2-BA9A-E4916F4F7246}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{822FBCEC-3568-4AC2-BA9A-E4916F4F7246}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AE7129C-307A-4DC4-8E27-289FFD274E96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AE7129C-307A-4DC4-8E27-289FFD274E96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AE7129C-307A-4DC4-8E27-289FFD274E96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AE7129C-307A-4DC4-8E27-289FFD274E96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1965FCF-703E-4A31-A17E-748277C5456B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1965FCF-703E-4A31-A17E-748277C5456B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1965FCF-703E-4A31-A17E-748277C5456B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1965FCF-703E-4A31-A17E-748277C5456B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FDC263C-6D24-425F-B99A-AA974503444E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FDC263C-6D24-425F-B99A-AA974503444E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FDC263C-6D24-425F-B99A-AA974503444E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FDC263C-6D24-425F-B99A-AA974503444E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {40C31FCD-A2B1-498B-8605-A04C097A3833}
+	EndGlobalSection
+EndGlobal
