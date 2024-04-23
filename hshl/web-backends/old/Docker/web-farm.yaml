@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+    hostname: redis
+
+  web1:
+    image: stuckenholz/seminarmanagermvc
+    environment:
+      - REDIS_CONNECTION_STRING=redis:6379
+    hostname: web1
+
+  web2:
+    image: stuckenholz/seminarmanagermvc
+    environment:
+      - REDIS_CONNECTION_STRING=redis:6379
+    hostname: web2
+
+  web3:
+    image: stuckenholz/seminarmanagermvc
+    environment:
+      - REDIS_CONNECTION_STRING=redis:6379  
+    hostname: web3
+  
+  nginx:
+    build: ./nginx
+    depends_on:
+      - redis
+      - web1
+      - web2
+      - web3
+    ports: 
+      - 80:80

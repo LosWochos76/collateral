@@ -1,0 +1,28 @@
+name: wordpress
+
+services:
+  mariadb:
+    image: mariadb:latest
+    environment:
+      - MARIADB_ROOT_PASSWORD=secret
+      - MARIADB_USER=wordpress
+      - MARIADB_PASSWORD=secret
+      - MARIADB_DATABASE=wordpress
+    volumes:
+      - mariadb_data:/var/lib/mysql
+  
+  wordpress:
+    image: wordpress:latest
+    environment:
+      - WORDPRESS_DB_HOST=mariadb
+      - WORDPRESS_DB_USER=wordpress
+      - WORDPRESS_DB_PASSWORD=secret
+      - WORDPRESS_DB_NAME=wordpress
+    ports:
+      - 80:80
+    volumes:
+     - wordpress_data:/var/www/html
+
+volumes:
+    mariadb_data:
+    wordpress_data:

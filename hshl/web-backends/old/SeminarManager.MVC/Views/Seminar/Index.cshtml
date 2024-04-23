@@ -1,0 +1,38 @@
+@{
+    Layout = "Layout";
+    ViewData["Title"] = "List of Seminars";
+}
+@using SeminarManager.Model;
+@model List<Seminar>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<h1>List of seminars</h1>
+
+<form method="GET" action="/Seminar/Add">
+    <button type="submit" class="btn btn-primary">Add new</button>
+</form>
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Extent</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < @Model.Count; i++)
+        {
+            <tr>
+                <th scope="row">@(i+1)</th>
+                <td>@Model[i].Name</td>
+                <td>@Model[i].Extent</td>
+                <td>
+                    <a asp-controller="Seminar" asp-action="Edit" asp-route-id="@Model[i].ID">Edit</a>
+                    <a asp-controller="Seminar" asp-action="Delete" asp-route-id="@Model[i].ID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
