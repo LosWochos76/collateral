@@ -27,8 +27,6 @@ public class TodoController : Controller
     {
         var currentUser = GetCurrentUser();
 
-        var bla = ModelState;
-
         if (currentUser.IsAdmin)
             return Ok(toDoRepository.GetAll(filter));
         else
