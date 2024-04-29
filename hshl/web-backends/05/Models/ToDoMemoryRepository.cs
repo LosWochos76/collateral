@@ -39,11 +39,11 @@ public class ToDoMemoryRepository : IToDoRepository
         if (filter is null || filter.StartPage == -1)
         {
             result.Items = input;
-            result.Page = 0;
+            result.CurrentPage = 0;
             return result;
         }
 
-        result.PageCount = input.Count() / filter.ItemsPerPage;
+        result.PagesCount = input.Count() / filter.ItemsPerPage;
         result.Items = input.Skip(filter.StartPage * filter.ItemsPerPage).Take(filter.ItemsPerPage);
         return result;
     }

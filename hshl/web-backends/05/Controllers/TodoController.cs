@@ -25,7 +25,9 @@ public class TodoController : Controller
     [Authorize]
     public IActionResult GetAll([FromBody] ToDoFilter filter)
     {
-        var currentUser = GetCurrentUser();
+        var id = User.FindFirst("id").Value;
+        var guid = Guid.Parse(id);
+        var currentUser = userRepository.GetSingle(guid);
 
         if (currentUser.IsAdmin)
             return Ok(toDoRepository.GetAll(filter));
