@@ -24,6 +24,8 @@ public class JwtTokenHelper
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
         var claims = new List<Claim>() { new Claim("id", user.ID.ToString()) };
+        claims.Add(new Claim("Age", "21"));
+        
         if (user.IsAdmin)
             claims.Add(new Claim(ClaimTypes.Role, "Admin"));
 

@@ -8,36 +8,25 @@ public class TodoController : Controller
 {
     private readonly ILogger<TodoController> logger;
     private readonly IToDoRepository toDoRepository;
-    private readonly IUserRepository userRepository;
 
-    public TodoController(
-        ILogger<TodoController> logger, 
-        IToDoRepository toDoRepository, 
-        IUserRepository userRepository)
+    public TodoController(ILogger<TodoController> logger, IToDoRepository toDoRepository)
     {
         this.logger = logger;
         this.toDoRepository = toDoRepository;
-        this.userRepository = userRepository;
     }
 
     [Route("/ToDo/")]
     [HttpGet]
-    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK, Type=typeof(ToDoListResult))]
     public IActionResult GetAll([FromBody] ToDoFilter filter)
     {
-        var id = User.FindFirst("id").Value;
-        var guid = Guid.Parse(id);
-        var currentUser = userRepository.GetSingle(guid);
-
-        if (currentUser.IsAdmin)
-            return Ok(toDoRepository.GetAll(filter));
-        else
-            return Ok(toDoRepository.GetAllForUser(currentUser, filter));
+        return Ok(toDoRepository.GetAll(filter));
     }
 
     [Route("/ToDo/{id}")]
     [HttpGet]
-    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult GetSingle([FromRoute] Guid id)
     {
         var obj = toDoRepository.GetSingle(id);
@@ -49,52 +38,35 @@ public class TodoController : Controller
 
     [Route("/ToDo/{id}")]
     [HttpPut]
-    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult Update([FromBody] ToDo obj)
     {
-        var currentUser = GetCurrentUser();
         var old = toDoRepository.GetSingle(obj.ID);
+        if (old is null)
+            return NotFound();
 
-        if (!old.Owner.ID.Equals(currentUser.ID) || !currentUser.IsAdmin)
-            return BadRequest("Not allowed!");
-
-        toDoRepository.Update(obj);
-        return Ok();
+        return Ok(toDoRepository.Update(obj));
     }
 
     [Route("/ToDo/")]
     [HttpPost]
-    [Authorize]
     public IActionResult Insert([FromBody] ToDo obj)
     {
-        obj.Owner = GetCurrentUser();
-        obj = toDoRepository.Add(obj);
-        return Ok(obj);
+        return Ok(toDoRepository.Add(obj));
     }
 
     [Route("/ToDo/{id}")]
     [HttpDelete]
-    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult Delete(Guid id)
     {
-        var currentUser = GetCurrentUser();
         var obj = toDoRepository.GetSingle(id);
-
         if (obj is null)
             return NotFound();
 
-        if (!obj.Owner.ID.Equals(currentUser.ID) || !currentUser.IsAdmin)
-            return BadRequest("Not allowed!");
-
         toDoRepository.Delete(id);
         return Ok();
-    }
-
-    private User GetCurrentUser()
-    { 
-        var id = User.FindFirst("id").Value;
-        var guid = Guid.Parse(id);
-        var user = userRepository.GetSingle(guid);
-        return user;
     }
 }
