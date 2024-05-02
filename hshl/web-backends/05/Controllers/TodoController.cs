@@ -1,29 +1,41 @@
-using Microsoft.AspNetCore.Authorization;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using ToDoService.Models;
 
 namespace ToDoService.Controllers;
 
-public class TodoController : Controller
+[ApiVersion(1)]
+[ApiVersion(2)]
+[ApiController]
+[Route("/api/v{v:apiVersion}/ToDo/")]
+public class TodoControllerV1 : Controller
 {
-    private readonly ILogger<TodoController> logger;
+    private readonly ILogger<TodoControllerV1> logger;
     private readonly IToDoRepository toDoRepository;
 
-    public TodoController(ILogger<TodoController> logger, IToDoRepository toDoRepository)
+    public TodoControllerV1(ILogger<TodoControllerV1> logger, IToDoRepository toDoRepository)
     {
         this.logger = logger;
         this.toDoRepository = toDoRepository;
     }
 
-    [Route("/ToDo/")]
     [HttpGet]
+    [MapToApiVersion(1)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type=typeof(IEnumerable<ToDo>))]
+    public IActionResult GetAll()
+    {
+        return Ok(toDoRepository.GetAll());
+    }
+
+    [HttpGet]
+    [MapToApiVersion(2)]
     [ProducesResponseType(StatusCodes.Status200OK, Type=typeof(ToDoListResult))]
-    public IActionResult GetAll([FromBody] ToDoFilter filter)
+    public IActionResult GetAllV2([FromBody] ToDoFilter filter)
     {
         return Ok(toDoRepository.GetAll(filter));
     }
 
-    [Route("/ToDo/{id}")]
+    [Route("{id}")]
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -36,7 +48,7 @@ public class TodoController : Controller
         return Ok(obj);
     }
 
-    [Route("/ToDo/{id}")]
+    [Route("/{id}")]
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -49,14 +61,13 @@ public class TodoController : Controller
         return Ok(toDoRepository.Update(obj));
     }
 
-    [Route("/ToDo/")]
     [HttpPost]
     public IActionResult Insert([FromBody] ToDo obj)
     {
         return Ok(toDoRepository.Add(obj));
     }
 
-    [Route("/ToDo/{id}")]
+    [Route("/{id}")]
     [HttpDelete]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

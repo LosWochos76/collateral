@@ -4,6 +4,11 @@ public class ToDoMemoryRepository : IToDoRepository
 {
     protected Dictionary<Guid, ToDo> items = new Dictionary<Guid, ToDo>();
 
+    public IEnumerable<ToDo> GetAll()
+    {
+        return items.Values;
+    }
+
     private IEnumerable<ToDo> Filter(IEnumerable<ToDo> input, ToDoFilter filter)
     {
         if (filter is null || filter.FilterExpressions is null || filter.FilterExpressions.Count() == 0)
