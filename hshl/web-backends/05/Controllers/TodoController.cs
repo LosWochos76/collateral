@@ -43,7 +43,7 @@ public class TodoControllerV1 : Controller
     {
         var obj = toDoRepository.GetSingle(id);
         if (obj is null)
-            return NotFound();
+            return NotFound(new ProblemDetails() { Title  = $"The ToDo-object with the ID {id} was not found!" });
         
         return Ok(obj);
     }

@@ -1,0 +1,155 @@
+{
+	"info": {
+		"_postman_id": "811d777f-9fda-49ed-9676-5ea24eaf99fa",
+		"name": "ToDo2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3400927"
+	},
+	"item": [
+		{
+			"name": "Insert",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Learn C#\",\n    \"completion\": 0,\n    \"description\": \"This is a description\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5223/ToDo/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5223",
+					"path": [
+						"ToDo",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAll V1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5223/api/v1/ToDo/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5223",
+					"path": [
+						"api",
+						"v1",
+						"ToDo",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAll V2",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEwNzg0Yzg2LTlkNWQtNGMxNC05MDYxLWMzYWM4ZTJjODcyOCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzEzMjgwODQwLCJpc3MiOiJ5b3VyQ29tcGFueUlzc3Vlci5jb20iLCJhdWQiOiJ5b3VyQ29tcGFueUlzc3Vlci5jb20ifQ.ofLgcDwaYsazPNYfeaSCEpQHuLqurYJlXuiD8p35JeI",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUiLCJleHAiOjE3MTMxODMyNTgsImlzcyI6InlvdXJDb21wYW55SXNzdWVyLmNvbSIsImF1ZCI6InlvdXJDb21wYW55SXNzdWVyLmNvbSJ9.-qteiNA2zEjEAKPPNlt62pZOz6DMNc0iRwH2ox_NJms"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"startpage\": -1,\n    \"itemsperpage\": 10,\n    \"OrderBy\": \"Title\",\n    \"FilterExpressions\": \n    [\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5223/api/v2/ToDo/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5223",
+					"path": [
+						"api",
+						"v2",
+						"ToDo",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetSingle",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5223/api/v2/ToDo/ffc641bb-a54f-4f8d-a614-b9a66d82787f",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5223",
+					"path": [
+						"api",
+						"v2",
+						"ToDo",
+						"ffc641bb-a54f-4f8d-a614-b9a66d82787f"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5223/ToDo/2ce4c066-812d-4f09-8b17-d8b0a23246b7",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5223",
+					"path": [
+						"ToDo",
+						"2ce4c066-812d-4f09-8b17-d8b0a23246b7"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

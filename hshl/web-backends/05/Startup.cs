@@ -34,23 +34,28 @@ public class Startup
             options.SubstituteApiVersionInUrl = true;
         });
 
-        services.AddSwaggerGen(c =>
+        /*services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "ToDoService v1", Version = "v1" });
             c.SwaggerDoc("v2", new OpenApiInfo { Title = "ToDoService v2", Version = "v2" });             
-        });
+        });*/
+
+        services.AddMvc();
+        services.AddProblemDetails();
+        services.AddExceptionHandler<GlobalExceptionHandler>();
     }
 
     public void Configure(IApplicationBuilder app, IHostEnvironment env)
     {
+        app.UseExceptionHandler();
         app.UseRouting();
 
-        app.UseSwagger();
+        /*app.UseSwagger();
         app.UseSwaggerUI(c =>
         {
             c.SwaggerEndpoint("/swagger/v1/swagger.json", "ToDoService v1");
             c.SwaggerEndpoint("/swagger/v2/swagger.json", "ToDoService v2");
-        });
+        });*/
 
         app.UseEndpoints(endpoints => {
             endpoints.MapControllers();
