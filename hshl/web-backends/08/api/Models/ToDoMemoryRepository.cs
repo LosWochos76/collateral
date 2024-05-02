@@ -4,11 +4,6 @@ public class ToDoMemoryRepository : IToDoRepository
 {
     protected Dictionary<Guid, ToDo> items = new Dictionary<Guid, ToDo>();
 
-    public IEnumerable<ToDo> GetAll()
-    {
-        return items.Values;
-    }
-
     private IEnumerable<ToDo> Filter(IEnumerable<ToDo> input, ToDoFilter filter)
     {
         if (filter is null || filter.FilterExpressions is null || filter.FilterExpressions.Count() == 0)
@@ -59,6 +54,19 @@ public class ToDoMemoryRepository : IToDoRepository
         objects = Order(objects, filter);
         var result = Paginate(objects, filter);
         return result;
+    }
+
+    public ToDoListResult GetAllForUser(User user, ToDoFilter filter)
+    {
+        var objects = Filter(items.Values, filter);
+
+        var objects_with_owner = new List<ToDo>();
+        foreach (var item in objects)
+            if (item.Owner.ID.Equals(user.ID))
+                objects_with_owner.Add(item);
+
+        objects = Order(objects_with_owner, filter);
+        return Paginate(objects, filter);
     }
 
     private bool CompliesFilter(Object obj, FilterExpression expression)

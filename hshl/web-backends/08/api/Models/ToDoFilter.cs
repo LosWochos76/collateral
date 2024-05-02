@@ -1,4 +1,6 @@
-namespace ToDoService.Models;
+using System.ComponentModel.DataAnnotations;
+
+namespace ToDoService;
 
 public class ToDoFilter
 {

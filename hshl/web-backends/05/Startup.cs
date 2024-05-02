@@ -1,10 +1,6 @@
-using System.Text;
-using System.Text.Json;
 using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using ToDoService.Misc;
+using Asp.Versioning;
+using Microsoft.OpenApi.Models;
 using ToDoService.Models;
 
 public class Startup
@@ -18,41 +14,30 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddSingleton<IToDoRepository, ToDoMemoryRepository>();
+        
         services.AddControllers().AddJsonOptions(options => {
             options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
             options.JsonSerializerOptions.PropertyNamingPolicy = null;
             options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         });
-        services.AddSingleton<IToDoRepository, ToDoMemoryRepository>();
 
-        var r2 = new UserMemoryRepository(config);
-        r2.Add(new User() {
-            ID = Guid.NewGuid(),
-            Firstname = "Alexander", 
-            Lastname = "Stucknholz", 
-            EMail = "alexander.stuckenholz@hshl.de", 
-            PasswordHash = "kZpD09nuVLSGBI9m+wYCSjVJjojh1fMv+ZGiOqBMvOg=", 
-            IsAdmin = true
+        services.AddApiVersioning(options => {
+            options.DefaultApiVersion = new ApiVersion(2);
+            options.ReportApiVersions = true;
+            options.AssumeDefaultVersionWhenUnspecified = true;
+            options.ApiVersionReader = ApiVersionReader.Combine(
+                new UrlSegmentApiVersionReader(),
+                new HeaderApiVersionReader("X-Api-Version"));
+        }).AddApiExplorer(options => {
+            options.GroupNameFormat = "'v'V";
+            options.SubstituteApiVersionInUrl = true;
         });
-        services.AddSingleton<IUserRepository>(r2);
 
-        services.AddSingleton<JwtTokenHelper>();
-
-        var jwtIssuer = config.GetSection("Jwt:Issuer").Get<string>();
-        var jwtKey = config.GetSection("Jwt:Key").Get<string>();
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        .AddJwtBearer(options =>
+        services.AddSwaggerGen(c =>
         {
-            options.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = jwtIssuer,
-                ValidAudience = jwtIssuer,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
-            };
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "ToDoService v1", Version = "v1" });
+            c.SwaggerDoc("v2", new OpenApiInfo { Title = "ToDoService v2", Version = "v2" });             
         });
     }
 
@@ -60,8 +45,12 @@ public class Startup
     {
         app.UseRouting();
 
-        app.UseAuthentication();
-        app.UseAuthorization();
+        app.UseSwagger();
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "ToDoService v1");
+            c.SwaggerEndpoint("/swagger/v2/swagger.json", "ToDoService v2");
+        });
 
         app.UseEndpoints(endpoints => {
             endpoints.MapControllers();
