@@ -32,8 +32,8 @@ public class BruteForcePasswordCracker
 
         do
         {
-            attempt = NextCandidate(attempt, 0);
-            //Console.WriteLine(currentAttempt);
+            attempt = NextCandidateLinear(attempt);
+            Console.WriteLine(attempt);
             attempts++;
         }
         while (!IsEqual(attempt, hash));
@@ -48,7 +48,7 @@ public class BruteForcePasswordCracker
         return characters[(characters.IndexOf(c) + 1) % characters.Length];
     }
 
-    private static string NextCandidate(string current, int pos)
+    private static string NextCandidateRecursive(string current, int pos)
     {
         if (pos > current.Length - 1)
             return current + characters[0];
@@ -59,8 +59,28 @@ public class BruteForcePasswordCracker
         current = new string(chars);
 
         if (next_char == 'a')
-            current = NextCandidate(current, pos + 1);
+            current = NextCandidateRecursive(current, pos + 1);
 
         return current; 
+    }
+
+    public static string NextCandidateLinear(string passw)
+    {
+        //aktuelles Passwort von rechts nach links durchgehen:
+        for(int i = passw.Length - 1; i >= 0; i--)
+        {
+            if (passw[i] == characters[characters.Length - 1]) // wenn letzter in characters: zurrücksetzten 
+            {
+                passw = passw.Remove(i, 1).Insert(i, characters[0].ToString());
+            }
+            else // wenn nicht, einfach durch nächsten in characters austauschen 
+            {
+                int PosChar = characters.IndexOf(passw[i]);
+                return passw.Remove(i, 1).Insert(i, characters[PosChar + 1].ToString());
+            }
+        }
+
+        // alle Kombinationen für die Passwortlänge durch -> weitere stelle hinzufügen
+        return passw + characters[0];
     }
 }
