@@ -34,7 +34,7 @@ def clear():
 def load_vereine(season, league):
     url = f"https://api.openligadb.de/getavailableteams/bl{league}/{season}"
     request = requests.get(url)
-    vereine = json.loads(request.content)
+    vereine = json.loads(request.text)
 
     with connection.cursor() as cur:
         for verein in vereine:
@@ -44,7 +44,7 @@ def load_vereine(season, league):
 def load_spiele(season, league):
     url = f"https://api.openligadb.de/getmatchdata/bl{league}/{season}"
     request = requests.get(url)
-    spiele = json.loads(request.content)
+    spiele = json.loads(request.text)
 
     with connection.cursor() as cur:
         for spiel in spiele:
