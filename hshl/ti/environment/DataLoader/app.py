@@ -9,11 +9,9 @@ def index():
 
 @app.route("/bundesliga")
 def bundesliga():
-    Bundesliga.clear_vereine()
+    Bundesliga.clear()
     Bundesliga.load_vereine("2023", 1)
     Bundesliga.load_vereine("2023", 2)
-
-    Bundesliga.clear_spiele()
     Bundesliga.load_spiele("2023", 1)
     Bundesliga.load_spiele("2023", 2)
     return redirect("/")
