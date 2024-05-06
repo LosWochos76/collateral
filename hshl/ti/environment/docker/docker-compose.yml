@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   postgres:
     image: postgis/postgis
@@ -16,7 +14,7 @@ services:
     ports:
       - 80:80
     environment:
-      - PGADMIN_DEFAULT_EMAIL=hshl@localhost
+      - PGADMIN_DEFAULT_EMAIL=user@hshl.de
       - PGADMIN_DEFAULT_PASSWORD=hshl
     volumes:
       - ti-pgadmin-data:/var/lib/pgadmin/
