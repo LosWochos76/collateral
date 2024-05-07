@@ -7,14 +7,11 @@ host = os.getenv("POSTGRES_HOST", "localhost")
 user = os.getenv("POSTGRES_USER", "postgres")
 database = os.getenv("POSTGRES_DATABASE", "postgres")
 password = os.getenv("POSTGRES_PASSWORD", "hshl")
-
-try:
-    connection = psycopg2.connect(host=host, user=user, password=password, database=database)
-    connection.autocommit = True
-except (Exception) as error:
-    print(error)
+connection = psycopg2.connect(host=host, user=user, password=password, database=database)
+connection.autocommit = True
 
 def clear():
+    global connection
     with connection.cursor() as cur:
         cur.execute("drop schema if exists bundesliga CASCADE;")
         cur.execute("create schema bundesliga;")
@@ -32,6 +29,7 @@ def clear():
             tore_gast int)""")
 
 def load_vereine(season, league):
+    global connection
     url = f"https://api.openligadb.de/getavailableteams/bl{league}/{season}"
     request = requests.get(url)
     vereine = json.loads(request.text)
@@ -42,6 +40,7 @@ def load_vereine(season, league):
             cur.execute(sql)
 
 def load_spiele(season, league):
+    global connection
     url = f"https://api.openligadb.de/getmatchdata/bl{league}/{season}"
     request = requests.get(url)
     spiele = json.loads(request.text)

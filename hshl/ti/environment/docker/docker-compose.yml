@@ -19,6 +19,16 @@ services:
     volumes:
       - ti-pgadmin-data:/var/lib/pgadmin/
 
+  dataloader:
+    image: stuckenholz/dataloader
+    restart: always
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=hshl
+    ports:
+      - 8080:5000
+
 volumes:
   ti-postgres-data:
   ti-pgadmin-data:
