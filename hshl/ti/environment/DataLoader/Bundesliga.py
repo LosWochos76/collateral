@@ -28,6 +28,13 @@ def clear():
             tore_heim int,
             tore_gast int)""")
 
+def get_current_season():
+    current_year = datetime.datetime.now().year
+    if datetime.datetime.now() < datetime.datetime(current_year, 8, 1):
+        return current_year - 1
+    else:
+        return current_year
+
 def load_vereine(season, league):
     global connection
     url = f"https://api.openligadb.de/getavailableteams/bl{league}/{season}"
