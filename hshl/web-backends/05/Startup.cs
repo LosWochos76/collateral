@@ -22,27 +22,25 @@ public class Startup
             options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         });
 
+        services.AddMvc();
+        services.AddProblemDetails();
+        services.AddExceptionHandler<GlobalExceptionHandler>();
+
         services.AddApiVersioning(options => {
             options.DefaultApiVersion = new ApiVersion(2);
             options.ReportApiVersions = true;
             options.AssumeDefaultVersionWhenUnspecified = true;
-            options.ApiVersionReader = ApiVersionReader.Combine(
-                new UrlSegmentApiVersionReader(),
-                new HeaderApiVersionReader("X-Api-Version"));
+            options.ApiVersionReader = new UrlSegmentApiVersionReader();
         }).AddApiExplorer(options => {
             options.GroupNameFormat = "'v'V";
             options.SubstituteApiVersionInUrl = true;
         });
 
-        /*services.AddSwaggerGen(c =>
+        services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "ToDoService v1", Version = "v1" });
-            c.SwaggerDoc("v2", new OpenApiInfo { Title = "ToDoService v2", Version = "v2" });             
-        });*/
-
-        services.AddMvc();
-        services.AddProblemDetails();
-        services.AddExceptionHandler<GlobalExceptionHandler>();
+            c.SwaggerDoc("v2", new OpenApiInfo { Title = "ToDoService v2", Version = "v2" });
+        });
     }
 
     public void Configure(IApplicationBuilder app, IHostEnvironment env)
@@ -50,12 +48,15 @@ public class Startup
         app.UseExceptionHandler();
         app.UseRouting();
 
-        /*app.UseSwagger();
-        app.UseSwaggerUI(c =>
+        if (env.IsDevelopment())
         {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "ToDoService v1");
-            c.SwaggerEndpoint("/swagger/v2/swagger.json", "ToDoService v2");
-        });*/
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ToDoService v1");
+                c.SwaggerEndpoint("/swagger/v2/swagger.json", "ToDoService v2");
+            });
+        }
 
         app.UseEndpoints(endpoints => {
             endpoints.MapControllers();

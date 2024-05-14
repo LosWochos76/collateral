@@ -8,12 +8,12 @@ namespace ToDoService.Controllers;
 [ApiVersion(2)]
 [ApiController]
 [Route("/api/v{v:apiVersion}/ToDo/")]
-public class TodoControllerV1 : Controller
+public class TodoController : Controller
 {
-    private readonly ILogger<TodoControllerV1> logger;
+    private readonly ILogger<TodoController> logger;
     private readonly IToDoRepository toDoRepository;
 
-    public TodoControllerV1(ILogger<TodoControllerV1> logger, IToDoRepository toDoRepository)
+    public TodoController(ILogger<TodoController> logger, IToDoRepository toDoRepository)
     {
         this.logger = logger;
         this.toDoRepository = toDoRepository;
@@ -30,7 +30,7 @@ public class TodoControllerV1 : Controller
     [HttpGet]
     [MapToApiVersion(2)]
     [ProducesResponseType(StatusCodes.Status200OK, Type=typeof(ToDoListResult))]
-    public IActionResult GetAllV2([FromBody] ToDoFilter filter)
+    public IActionResult GetAllV2([FromQuery] ToDoFilter filter)
     {
         return Ok(toDoRepository.GetAll(filter));
     }
@@ -48,7 +48,7 @@ public class TodoControllerV1 : Controller
         return Ok(obj);
     }
 
-    [Route("/{id}")]
+    [Route("{id}")]
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -67,7 +67,7 @@ public class TodoControllerV1 : Controller
         return Ok(toDoRepository.Add(obj));
     }
 
-    [Route("/{id}")]
+    [Route("{id}")]
     [HttpDelete]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
