@@ -37,8 +37,8 @@ public class TodoController : Controller
 
     [Route("{id}")]
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type=typeof(ToDo))]
+    [ProducesResponseType(StatusCodes.Status404NotFound, Type=typeof(ProblemDetails))]
     public IActionResult GetSingle([FromRoute] Guid id)
     {
         var obj = toDoRepository.GetSingle(id);
@@ -50,7 +50,7 @@ public class TodoController : Controller
 
     [Route("{id}")]
     [HttpPut]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type=typeof(ToDo))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult Update([FromBody] ToDo obj)
     {
@@ -62,6 +62,7 @@ public class TodoController : Controller
     }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK, Type=typeof(ToDo))]
     public IActionResult Insert([FromBody] ToDo obj)
     {
         return Ok(toDoRepository.Add(obj));
