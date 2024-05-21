@@ -1,0 +1,22 @@
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "ToDo - Edit";
+}
+
+<form method="post" action="/ToDo/edit">
+  <input type="hidden" name="ID" value="@Model.ID">
+  <div class="form-group">
+    <label for="exampleInputEmail1">Title</label>
+    <input type="text" class="form-control" id="Title" name="Title" value="@Model.Title">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Completion</label>
+    <input type="text" class="form-control" id="Completion" name="Completion" value="@Model.Completion">
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlTextarea1">Description</label>
+    <textarea class="form-control" id="Description" rows="3" name="Description">@Model.Description</textarea>
+  </div>
+  <button type="submit" class="btn btn-primary">Ok</button>
+  <a class="btn btn-primary" href="/" role="button">Cancel</a>
+</form>
