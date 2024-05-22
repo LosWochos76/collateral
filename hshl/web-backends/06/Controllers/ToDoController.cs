@@ -23,14 +23,17 @@ public class ToDoController : Controller
     [HttpGet("/ToDo/Edit/{id}")]
     public IActionResult Edit([FromRoute] Guid id)
     {
-        if (id == Guid.Empty)
-            return View(new ToDo());
-
         var obj = toDoRepository.GetSingle(id);
         if (obj == null)
             return NotFound();
 
         return View(obj);
+    }
+
+    [HttpGet("/ToDo/New")]
+    public IActionResult New()
+    {
+        return View("Edit", new ToDo());
     }
 
     [HttpPost("/ToDo/Edit")]
