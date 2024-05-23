@@ -27,7 +27,7 @@ public class Startup
         app.UseEndpoints(endpoints => {
             endpoints.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=ToDo}/{action=Index}/{id?}");
+                pattern: "{controller=ToDo}/{action=List}/{id?}");
         });
     }
 }

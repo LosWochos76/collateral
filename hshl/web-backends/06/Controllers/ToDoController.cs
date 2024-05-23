@@ -14,9 +14,9 @@ public class ToDoController : Controller
         this.toDoRepository = toDoRepository;
     }
 
-    public IActionResult Index()
+    public IActionResult List([FromQuery] ToDoFilter filter)
     {
-        var objects = toDoRepository.GetAll(null);
+        var objects = toDoRepository.GetAll(filter);
         return View(objects);
     }
 
