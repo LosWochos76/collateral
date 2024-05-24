@@ -25,13 +25,13 @@ tree.Insert(7);
 tree.Insert(13);
 Console.WriteLine(tree.Contains(13));
 
-var root = new TreeNode<string>("*");
+/*var root = new TreeNode<string>("*");
 root.Left = new TreeNode<string>("/");
 root.Right = new TreeNode<string>("^");
 root.Left.Left = new TreeNode<string>("+");
-root.Left.Right = new TreeNode<string>("-8");
+root.Left.Right = new TreeNode<string>("8");
 root.Right.Left = new TreeNode<string>("4");
 root.Right.Right = new TreeNode<string>("2");
 root.Left.Left.Left = new TreeNode<string>("5");
 root.Left.Left.Right = new TreeNode<string>("7");
-Console.WriteLine(ExpressionSolver.Solve(root));
+Console.WriteLine(ExpressionSolver.Solve(root));*/
