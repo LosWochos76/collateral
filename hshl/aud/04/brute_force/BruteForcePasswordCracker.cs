@@ -29,12 +29,9 @@ public class BruteForcePasswordCracker
     private static string GetCandidate(int attempt)
     {
         var candidate = string.Empty;
-        do
-        {
-            candidate += characters[attempt % characters.Length];
-            attempt /= characters.Length;
-        }
-        while (attempt > 0);
+        
+        // Hier fehlt Ihr Programmcode, um aus der Zahl in "attempt" ein Passwort zu machen.
+
         return candidate;
     }
 }
