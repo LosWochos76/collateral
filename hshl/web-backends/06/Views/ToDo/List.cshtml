@@ -1,3 +1,4 @@
+@model IEnumerable<ToDo>
 @{
     Layout = "_Layout";
     ViewData["Title"] = "ToDo - List";
@@ -23,7 +24,6 @@
             <td>@obj.Title</td>
             <td>@obj.Completion</td>
             <td><a href="/ToDo/edit/@obj.ID">Edit</a> | <a href="/ToDo/delete/@obj.ID">Delete</a></td>
-            @if (index > 2) {  <p>Hurga!</p> } else {  <p>Bla</p>  }
         </tr>
         index++;
     }

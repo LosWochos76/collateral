@@ -36,11 +36,14 @@ public class ToDoController : Controller
         return View("Edit", new ToDo());
     }
 
-    [HttpPost("/ToDo/Edit")]
+    [HttpPost("/ToDo/Save/")]
     public IActionResult Save([FromForm] ToDo obj)
     {
         if (obj == null)
             return Redirect("/");
+
+        if (!ModelState.IsValid)
+            return View("Edit", obj);
 
         if (obj.ID == Guid.Empty)
             toDoRepository.Add(obj);
