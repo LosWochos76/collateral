@@ -1,11 +1,9 @@
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace ToDoUI.Models;
 
-public class ToDo : Entity
+public class ToDo : Entity, IValidatableObject
 {
     [Required]
     [MinLength(10, ErrorMessage = "The title must have a length of minimum 10 characters!")]
@@ -17,4 +15,10 @@ public class ToDo : Entity
 
     [ValidateNever]
     public string Description { get; set; }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if (Description.Equals(Title))
+            yield return new ValidationResult("Title and Description canot be equal", new List<string>() { "Description" });
+    }
 }
