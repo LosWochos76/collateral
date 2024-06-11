@@ -55,10 +55,10 @@ public class Startup
             });
         
         services.AddAuthorization(options => {
-            options.AddPolicy("AtLeast18", policyBuilder => policyBuilder.AddRequirements(new MinimumAgeRequirement(18)));
+            options.AddPolicy("AtLeast18", policyBuilder => policyBuilder.AddRequirements(new MinimumAgeRequirement(42)));
         });
 
-        services.AddSingleton<IAuthorizationHandler, MimimumAgeAuthorizationHandler>();
+        //services.AddSingleton<IAuthorizationHandler, MimimumAgeAuthorizationHandler>();
     }
 
     public void Configure(IApplicationBuilder app, IHostEnvironment env)
