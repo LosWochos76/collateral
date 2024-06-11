@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 
+namespace Common.ViewModels;
+
 public class PasswordResetViewModel : IValidatableObject
 {
     public string Token { get; set; }

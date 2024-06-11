@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
-namespace ToDoUI.Models;
+namespace Common.Models;
 
 public class ToDo : Entity, IValidatableObject
 {
@@ -13,7 +12,6 @@ public class ToDo : Entity, IValidatableObject
     [Range(0,100,ErrorMessage = "Value must be between 0 and 100!")]
     public int Completion { get; set; }
 
-    [ValidateNever]
     public string Description { get; set; }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

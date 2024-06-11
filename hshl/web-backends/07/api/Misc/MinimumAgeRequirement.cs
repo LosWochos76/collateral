@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 
-public class HurgaMinimumAgeRequirement : IAuthorizationRequirement
+public class MinimumAgeRequirement : IAuthorizationRequirement
 {
     public int MinimumAge { get; set; }
 

@@ -1,9 +1,11 @@
 using System.Security.Claims;
+using Common.Misc;
+using Common.Models;
+using Common.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using ToDoUI.Misc;
-using ToDoUI.ViewModels;
 
 namespace ToDoUI.Models;
 
@@ -28,18 +30,11 @@ public class AuthenticationController : Controller
         return View();
     }
 
-    [HttpGet("/Authentication/Logout/")]
-    public async Task<IActionResult> Logout()
-    {
-        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        return Redirect("/Authentication/Login");
-    }
-
     [HttpPost("/Authentication/Authenticate/")]
     public async Task<IActionResult> Authenticate([FromForm] LoginViewModel login)
     {
         if (!ModelState.IsValid)
-            return View("Login");
+            return View("Login", login);
         
         var user = userRepository.FindByLogin(login.EMail, login.Password);
         if (user is null)
@@ -49,6 +44,13 @@ public class AuthenticationController : Controller
         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
         return Redirect("/");
+    }
+
+    [HttpGet("/Authentication/Logout/")]
+    public async Task<IActionResult> Logout()
+    {
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        return Redirect("/Authentication/Login");
     }
 
     [HttpGet("/Authentication/PasswordForgotten/")]

@@ -1,10 +1,10 @@
 using System.Text;
 using System.Text.Json.Serialization;
+using Common.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using ToDoService.Misc;
-using ToDoService.Models;
 
 public class Startup
 {
@@ -17,25 +17,16 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        services.Configure<JwtInfo>(options => config.GetSection("JWT").Bind(options));
+        services.AddSingleton<JwtTokenHelper>();
+        
         services.AddControllers().AddJsonOptions(options => {
             options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
             options.JsonSerializerOptions.PropertyNamingPolicy = null;
             options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         });
         services.AddSingleton<IToDoRepository, ToDoMemoryRepository>();
-
-        var r2 = new UserMemoryRepository(config);
-        r2.Add(new User() {
-            ID = Guid.NewGuid(),
-            Firstname = "Alexander", 
-            Lastname = "Stucknholz", 
-            EMail = "alexander.stuckenholz@hshl.de", 
-            PasswordHash = "kZpD09nuVLSGBI9m+wYCSjVJjojh1fMv+ZGiOqBMvOg=", 
-            IsAdmin = true
-        });
-        services.AddSingleton<IUserRepository>(r2);
-
-        services.AddSingleton<JwtTokenHelper>();
+        services.AddSingleton<IUserRepository, UserMemoryRepository>();
 
         var jwtIssuer = config.GetSection("Jwt:Issuer").Get<string>();
         var jwtKey = config.GetSection("Jwt:Key").Get<string>();
@@ -58,7 +49,7 @@ public class Startup
             options.AddPolicy("AtLeast18", policyBuilder => policyBuilder.AddRequirements(new MinimumAgeRequirement(42)));
         });
 
-        //services.AddSingleton<IAuthorizationHandler, MimimumAgeAuthorizationHandler>();
+        services.AddSingleton<IAuthorizationHandler, MimimumAgeAuthorizationHandler>();
     }
 
     public void Configure(IApplicationBuilder app, IHostEnvironment env)

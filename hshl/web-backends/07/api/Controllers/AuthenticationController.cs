@@ -1,6 +1,7 @@
+using Common.Models;
+using Common.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using ToDoService.Misc;
-using ToDoService.Models;
 
 namespace ToDoService.Controllers;
 
@@ -22,14 +23,14 @@ public class AuthenticationController : Controller
 
     [Route("/Login/")]
     [HttpPost]
-    public IActionResult Login([FromBody] LoginData login)
+    public IActionResult Login([FromBody] LoginViewModel login)
     {
         if (login is null || 
             string.IsNullOrEmpty(login.EMail) || 
             string.IsNullOrEmpty(login.Password))
             return BadRequest("Credentials are empty!");
 
-        var user = userRepository.FindByLogin(login);
+        var user = userRepository.FindByLogin(login.EMail, login.Password);
         if (user is null)
             return BadRequest("User not found!");
 

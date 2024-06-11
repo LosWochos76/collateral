@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace ToDoUI.Misc;
+namespace Common.Misc;
 
 public class PasswordHelper
 {

@@ -1,4 +1,4 @@
-namespace ToDoUI.Models;
+namespace Common.Models;
 
 public interface IToDoRepository
 {

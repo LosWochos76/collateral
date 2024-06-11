@@ -1,6 +1,6 @@
+using Common.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ToDoService.Models;
 
 namespace ToDoService.Controllers;
 
@@ -25,14 +25,7 @@ public class TodoController : Controller
     [Authorize(Policy = "AtLeast18")]
     public IActionResult GetAll([FromBody] ToDoFilter filter)
     {
-        var id = User.FindFirst("id").Value;
-        var guid = Guid.Parse(id);
-        var currentUser = userRepository.GetSingle(guid);
-
-        if (currentUser.IsAdmin)
-            return Ok(toDoRepository.GetAll(filter));
-        else
-            return Ok(toDoRepository.GetAllForUser(currentUser, filter));
+        return Ok(toDoRepository.GetAll(filter));
     }
 
     [Route("/ToDo/{id}")]
@@ -52,12 +45,6 @@ public class TodoController : Controller
     [Authorize]
     public IActionResult Update([FromBody] ToDo obj)
     {
-        var currentUser = GetCurrentUser();
-        var old = toDoRepository.GetSingle(obj.ID);
-
-        if (!old.Owner.ID.Equals(currentUser.ID) || !currentUser.IsAdmin)
-            return BadRequest("Not allowed!");
-
         toDoRepository.Update(obj);
         return Ok();
     }
@@ -67,7 +54,6 @@ public class TodoController : Controller
     [Authorize]
     public IActionResult Insert([FromBody] ToDo obj)
     {
-        obj.Owner = GetCurrentUser();
         obj = toDoRepository.Add(obj);
         return Ok(obj);
     }
@@ -77,24 +63,11 @@ public class TodoController : Controller
     [Authorize]
     public IActionResult Delete(Guid id)
     {
-        var currentUser = GetCurrentUser();
         var obj = toDoRepository.GetSingle(id);
-
         if (obj is null)
             return NotFound();
 
-        if (!obj.Owner.ID.Equals(currentUser.ID) || !currentUser.IsAdmin)
-            return BadRequest("Not allowed!");
-
         toDoRepository.Delete(id);
         return Ok();
-    }
-
-    private User GetCurrentUser()
-    { 
-        var id = User.FindFirst("id").Value;
-        var guid = Guid.Parse(id);
-        var user = userRepository.GetSingle(guid);
-        return user;
     }
 }

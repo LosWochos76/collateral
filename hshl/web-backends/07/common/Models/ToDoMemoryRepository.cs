@@ -1,8 +1,19 @@
-namespace ToDoService.Models;
+namespace Common.Models;
 
 public class ToDoMemoryRepository : IToDoRepository
 {
     protected Dictionary<Guid, ToDo> items = new Dictionary<Guid, ToDo>();
+
+    public ToDoMemoryRepository()
+    {
+        Add(new ToDo(){Title="Learn ASP.net Core"});
+        Add(new ToDo(){Title="Learn italian"});
+    }
+
+    public IEnumerable<ToDo> GetAll()
+    {
+        return items.Values;
+    }
 
     private IEnumerable<ToDo> Filter(IEnumerable<ToDo> input, ToDoFilter filter)
     {
@@ -32,41 +43,20 @@ public class ToDoMemoryRepository : IToDoRepository
         return input.OrderBy(x => prop.GetValue(x, null));
     }
 
-    private ToDoListResult Paginate(IEnumerable<ToDo> input, ToDoFilter filter)
+    private IEnumerable<ToDo> Paginate(IEnumerable<ToDo> input, ToDoFilter filter)
     {
-        var result = new ToDoListResult();
-
         if (filter is null || filter.StartPage == -1)
-        {
-            result.Items = input;
-            result.CurrentPage = 0;
-            return result;
-        }
+            return input;
 
-        result.PagesCount = input.Count() / filter.ItemsPerPage;
-        result.Items = input.Skip(filter.StartPage * filter.ItemsPerPage).Take(filter.ItemsPerPage);
-        return result;
+        return input.Skip((filter.StartPage - 1) * filter.ItemsPerPage).Take(filter.ItemsPerPage);
     }
 
-    public ToDoListResult GetAll(ToDoFilter filter)
+    public IEnumerable<ToDo> GetAll(ToDoFilter filter)
     {
         var objects = Filter(items.Values, filter);
         objects = Order(objects, filter);
         var result = Paginate(objects, filter);
         return result;
-    }
-
-    public ToDoListResult GetAllForUser(User user, ToDoFilter filter)
-    {
-        var objects = Filter(items.Values, filter);
-
-        var objects_with_owner = new List<ToDo>();
-        foreach (var item in objects)
-            if (item.Owner.ID.Equals(user.ID))
-                objects_with_owner.Add(item);
-
-        objects = Order(objects_with_owner, filter);
-        return Paginate(objects, filter);
     }
 
     private bool CompliesFilter(Object obj, FilterExpression expression)

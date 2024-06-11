@@ -1,19 +1,14 @@
-using System.Security.Cryptography;
-using System.Text;
-using ToDoUI.Misc;
-using ToDoUI.ViewModels;
+using Common.Misc;
 
-namespace ToDoUI.Models;
+namespace Common.Models;
 
 public class UserMemoryRepository : IUserRepository
 {
-    private IConfiguration configuration;
     private PasswordHelper passwordHelper;
     private Dictionary<Guid, User> items = new Dictionary<Guid, User>();
 
-    public UserMemoryRepository(IConfiguration configuration, PasswordHelper passwordHelper)
+    public UserMemoryRepository(PasswordHelper passwordHelper)
     {
-        this.configuration = configuration;
         this.passwordHelper = passwordHelper;
         Add(new User() { EMail="alexander.stuckenholz@hshl.de", PasswordHash=passwordHelper.ComputeSha256Hash("secret"), IsAdmin=true });
     }

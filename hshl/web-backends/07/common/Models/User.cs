@@ -1,6 +1,6 @@
 using System.Security.Claims;
 
-namespace ToDoUI.Models;
+namespace Common.Models;
 
 public class User : Entity
 {
