@@ -1,4 +1,4 @@
-from flask import request, render_template, abort, redirect, url_for, Response
+from flask import request, render_template, abort, redirect, url_for, send_file
 from shared import app
 import movie_repository
 
@@ -30,8 +30,8 @@ def delete_movie(movie_id):
 
 @app.route('/movies/by-year-chart.png')
 def movies_by_year():
-    figure_as_bytes = movie_repository.get_movies_by_year_as_png()
-    return Response(figure_as_bytes, mimetype='image/png')
+    figure = movie_repository.get_movies_by_year_as_png()
+    return send_file(figure, mimetype='image/png')
 
 @app.route('/movies/analyze-by-year')
 def analyze_by_year():
