@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using Common.Misc;
 using Common.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -8,21 +9,21 @@ namespace ToDoService.Misc;
 
 public class JwtTokenHelper
 {
-    private JwtInfo jwtInfo;
+    private GeneralSettings settings;
 
-    public JwtTokenHelper(IOptions<JwtInfo> jwtInfo)
+    public JwtTokenHelper(IOptions<GeneralSettings> settings)
     {
-        this.jwtInfo = jwtInfo.Value;
+        this.settings = settings.Value;
     }
 
     public string CreateToken(User user)
     {
-        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtInfo.Key));
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(settings.EncryptionKey));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
         var claims = user.ToClaims();
 
         var secToken = new JwtSecurityToken(
-            jwtInfo.Issuer,  jwtInfo.Issuer, claims,
+            "ToDoApi",  "ToDoApi", claims,
             expires: DateTime.Now.AddMinutes(120),
             signingCredentials: credentials);
 

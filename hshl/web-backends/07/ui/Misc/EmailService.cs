@@ -27,7 +27,10 @@ public class EmailService
         var message = new MimeMessage();
         message.To.Add(new MailboxAddress("", user.EMail));
         message.Subject = "ToDo - Reset Password";
-        message.Body = new TextPart("plain") { Text = $"Reset passwort: http://localhost:5162/Authentication/ResetPassword/{user.PasswordResetToken}"};
+        message.Body = new TextPart("plain") 
+        { 
+            Text = $"Reset passwort: http://localhost:5162/Authentication/ResetPassword/{user.PasswordResetToken}"
+        };
         emailQueue.Enqueue(message);
     }
 

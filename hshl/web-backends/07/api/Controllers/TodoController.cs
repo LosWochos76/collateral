@@ -22,8 +22,7 @@ public class TodoController : Controller
 
     [Route("/ToDo/")]
     [HttpGet]
-    [Authorize(Policy = "AtLeast18")]
-    public IActionResult GetAll([FromBody] ToDoFilter filter)
+    public IActionResult GetAll([FromBody] ToDoFilter? filter)
     {
         return Ok(toDoRepository.GetAll(filter));
     }
@@ -43,10 +42,15 @@ public class TodoController : Controller
     [Route("/ToDo/{id}")]
     [HttpPut]
     [Authorize]
-    public IActionResult Update([FromBody] ToDo obj)
+    public IActionResult Update([FromRoute] Guid id, [FromBody] ToDo newObj)
     {
-        toDoRepository.Update(obj);
-        return Ok();
+        var obj = toDoRepository.GetSingle(id);
+        if (obj is null)
+            return NotFound();
+
+        newObj.ID = id;
+        toDoRepository.Update(newObj);
+        return Ok(newObj);
     }
 
     [Route("/ToDo/")]

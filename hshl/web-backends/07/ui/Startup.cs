@@ -17,7 +17,9 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.Configure<MailSettings>(options => config.GetSection("MailSettings").Bind(options));
-        services.AddSingleton(new PasswordHelper(config.GetValue<string>("Salt")));
+        services.Configure<GeneralSettings>(options => config.GetSection("GeneralSettings").Bind(options));
+
+        services.AddSingleton<PasswordHelper>();
         services.AddSingleton<IToDoRepository, ToDoMemoryRepository>();
         services.AddSingleton<IUserRepository, UserMemoryRepository>();
         services.AddSingleton<EmailQueue>();

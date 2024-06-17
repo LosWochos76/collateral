@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json.Serialization;
+using Common.Misc;
 using Common.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -17,8 +18,9 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.Configure<JwtInfo>(options => config.GetSection("JWT").Bind(options));
+        services.Configure<GeneralSettings>(options => config.GetSection("GeneralSettings").Bind(options));
         services.AddSingleton<JwtTokenHelper>();
+        services.AddSingleton<PasswordHelper>();
         
         services.AddControllers().AddJsonOptions(options => {
             options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
@@ -28,8 +30,7 @@ public class Startup
         services.AddSingleton<IToDoRepository, ToDoMemoryRepository>();
         services.AddSingleton<IUserRepository, UserMemoryRepository>();
 
-        var jwtIssuer = config.GetSection("Jwt:Issuer").Get<string>();
-        var jwtKey = config.GetSection("Jwt:Key").Get<string>();
+        var settings = config.GetSection("GeneralSettings").Get<GeneralSettings>();
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
@@ -39,9 +40,9 @@ public class Startup
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = jwtIssuer,
-                    ValidAudience = jwtIssuer,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+                    ValidIssuer = "ToDoApi",
+                    ValidAudience = "ToDoApi",
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(settings.EncryptionKey))
                 };
             });
         

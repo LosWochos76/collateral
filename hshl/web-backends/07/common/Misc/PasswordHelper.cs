@@ -1,16 +1,17 @@
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.Extensions.Options;
 
 namespace Common.Misc;
 
 public class PasswordHelper
 {
     private Random random = new Random();
-    private string salt;
+    private GeneralSettings settings;
 
-    public PasswordHelper(string salt)
+    public PasswordHelper(IOptions<GeneralSettings> settings)
     {
-        this.salt = salt;
+        this.settings = settings.Value;
     }
 
     public string RandomString(int length)
@@ -29,7 +30,7 @@ public class PasswordHelper
     {
         using (SHA256 sha256Hash = SHA256.Create())
         {
-            var bytes = Encoding.UTF8.GetBytes(rawData + salt);
+            var bytes = Encoding.UTF8.GetBytes(rawData + settings.EncryptionSalt);
             bytes = sha256Hash.ComputeHash(bytes);
             return Convert.ToBase64String(bytes);
         }

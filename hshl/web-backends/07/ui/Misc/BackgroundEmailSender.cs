@@ -1,6 +1,7 @@
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Options;
+using MimeKit;
 
 namespace ToDoUI.Misc;
 
@@ -24,25 +25,32 @@ public class BackgroundEmailSender : BackgroundService
             if (mailQueue.HasMessages)
             {
                 var message = mailQueue.Dequeue();
-
-                try
-                {
-                    using (var client = new SmtpClient())
-                    {
-                        client.Connect(settings.Host, settings.Port, SecureSocketOptions.Auto, stoppingToken);
-                        client.Authenticate(settings.Username, settings.Password);
-                        client.Send(message);
-                        client.Disconnect(true);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, "Could not send mail!");
+                if (!SendMail(message, stoppingToken))
                     mailQueue.Enqueue(message);
-                }
             }
 
             await Task.Delay(1000, stoppingToken);
         }
+    }
+
+    private bool SendMail(MimeMessage message, CancellationToken stoppingToken)
+    {
+        try
+        {
+            using (var client = new SmtpClient())
+            {
+                client.Connect(settings.Host, settings.Port, SecureSocketOptions.Auto, stoppingToken);
+                client.Authenticate(settings.Username, settings.Password);
+                client.Send(message);
+                client.Disconnect(true);
+            }
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Could not send mail!");
+            return false;
+        }
+
+        return true;
     }
 }

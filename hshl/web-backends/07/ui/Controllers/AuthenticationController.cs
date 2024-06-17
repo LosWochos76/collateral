@@ -75,8 +75,11 @@ public class AuthenticationController : Controller
     [HttpGet("/Authentication/ResetPassword/{token}")]
     public IActionResult ResetPassword([FromRoute] string token)
     {
-        var pr = new PasswordResetViewModel() { Token = token};
-        return View(pr);
+        var user = userRepository.FindByPasswordResetToken(token);
+        if (user is null)
+            return NotFound();
+
+        return View(new PasswordResetViewModel() { Token = token});
     }
 
     [HttpPost("/Authentication/ResetPassword")]
