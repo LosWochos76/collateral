@@ -5,7 +5,7 @@
             "name": "C#: UI Debug",
             "type": "dotnet",
             "request": "launch",
-            "projectPath": "${workspaceFolder}/ui/ui.csproj"
+            "projectPath": "${workspaceFolder}/ToDo.WebUi/ToDo.WebUi.csproj"
         }
 
     ]
