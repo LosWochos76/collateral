@@ -31,15 +31,17 @@ public class Startup
         services.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
         services.AddSingleton<IToDoRepository, ToDoDapperRepository>();
         services.AddSingleton<IUserRepository, UserDapperRepository>();
-        */
+        // End using Dapper */
 
         // Using EF-Core:
         services.AddDbContext<ApplicationDbContext>((serviceProvider, options) => {
             var databaseSettings = serviceProvider.GetRequiredService<IOptions<DatabaseSettings>>().Value;
             options.UseNpgsql(databaseSettings.ConnectionString);
         });
+
         services.AddScoped<IToDoRepository, ToDoEfCoreRepository>();
         services.AddScoped<IUserRepository, UserEfCoreRepository>();
+        // end using EF-Core /
 
         services.AddSingleton<EmailQueue>();
         services.AddSingleton<EmailService>();

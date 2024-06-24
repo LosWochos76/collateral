@@ -1,4 +1,5 @@
 ﻿using ToDoManager.Common.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ToDoManager.Persistence.EfCore;
 
@@ -9,6 +10,7 @@ public class ToDoEfCoreRepository : IToDoRepository
     public ToDoEfCoreRepository(ApplicationDbContext context)
     {
         this.context = context;
+        context.Database.Migrate();
     }
 
     public PagedResult<ToDo> GetAll(ToDoFilter filter)
@@ -16,23 +18,28 @@ public class ToDoEfCoreRepository : IToDoRepository
         var query = context.ToDos.AsQueryable();
 
         var totalCount = query.Count();
-        var results = query
-            .Skip((filter.StartPage - 1) * filter.ItemsPerPage)
-            .Take(filter.ItemsPerPage)
-            .ToList();
+        IEnumerable<ToDo> result;
+
+        if (filter.StartPage >= 0)
+            result = query.AsNoTracking()
+                .Skip(filter.StartPage * filter.ItemsPerPage)
+                .Take(filter.ItemsPerPage)
+                .ToList();
+        else
+            result = query.AsNoTracking().ToList();
 
         return new PagedResult<ToDo>
         {
             TotalItems = totalCount,
             CurrentPage = filter.StartPage,
             TotalPages = totalCount / filter.ItemsPerPage + 1,
-            Items = results
+            Items = result
         };
     }
 
     public ToDo GetSingle(Guid id)
     {
-        return context.ToDos.Find(id);
+        return context.ToDos.AsNoTracking().Where(x => x.ID == id).FirstOrDefault();
     }
 
     public ToDo Add(ToDo entity)
@@ -56,7 +63,7 @@ public class ToDoEfCoreRepository : IToDoRepository
     {
         context.ToDos.Update(entity);
         context.SaveChanges();
+        context.Entry(entity).State = EntityState.Detached;
         return entity;
     }
 }
-

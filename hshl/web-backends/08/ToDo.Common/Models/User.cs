@@ -9,7 +9,7 @@ public class User : Entity
     public string EMail { get; set; }
     public string PasswordHash { get; set; }
     public bool IsAdmin { get; set; }
-    public string PasswordResetToken { get; set; }
+    public string? PasswordResetToken { get; set; }
 
     public List<Claim> ToClaims()
     {

@@ -1,4 +1,5 @@
-﻿using ToDoManager.Common.Misc;
+﻿using Microsoft.EntityFrameworkCore;
+using ToDoManager.Common.Misc;
 using ToDoManager.Common.Models;
 
 namespace ToDoManager.Persistence.EfCore;
@@ -12,16 +13,35 @@ public class UserEfCoreRepository : IUserRepository
     {
         this.context = context;
         this.passwordHelper = passwordHelper;
+
+        context.Database.Migrate();
+        
+        if (!context.Users.Any())
+        {
+            var user = new User() 
+            { 
+                Firstname = "Alexander", 
+                Lastname = "Stuckenholz", 
+                EMail = "alexander.stuckenholz@hshl.de",
+                PasswordHash = passwordHelper.ComputeSha256Hash("secret"),
+                IsAdmin = true
+            };
+
+            context.Users.Add(user);
+            context.SaveChanges();
+        }
     }
 
     public IEnumerable<User> GetAll()
     {
-        return context.Users.ToList();
+        return context.Users.AsNoTracking().ToList();
     }
 
     public User GetSingle(Guid id)
     {
-        return context.Users.Find(id);
+        return context.Users
+            .AsNoTracking()
+            .FirstOrDefault(p => p.ID == id);
     }
 
     public User Add(User entity)
@@ -34,11 +54,11 @@ public class UserEfCoreRepository : IUserRepository
     public void Delete(Guid id)
     {
         var entity = context.Users.Find(id);
-        if (entity != null)
-        {
-            context.Users.Remove(entity);
-            context.SaveChanges();
-        }
+        if (entity is null)
+            return;
+
+        context.Users.Remove(entity);
+        context.SaveChanges();
     }
 
     public User Update(User entity)
@@ -50,19 +70,28 @@ public class UserEfCoreRepository : IUserRepository
 
     public User FindByEmail(string email)
     {
-        return context.Users.FirstOrDefault(u => u.EMail.ToLower().Equals(email.ToLower()));
+        return context.Users
+            .AsNoTracking()
+            .FirstOrDefault(u => u.EMail.ToLower().Equals(email.ToLower()));
     }
 
     public User FindByLogin(string email, string password)
     {
+        var user = FindByEmail(email);
+        if (user is null)
+            return null;
+
         var passwordHash = passwordHelper.ComputeSha256Hash(password);
-        return context.Users.FirstOrDefault(u => u.EMail.ToLower().Equals(email.ToLower())
-            && u.PasswordHash.Equals(passwordHash));
+        if (user.PasswordHash.Equals(passwordHash))
+            return user;
+        
+        return null;
     }
 
     public User FindByPasswordResetToken(string token)
     {
-        return context.Users.FirstOrDefault(u => u.PasswordResetToken == token);
+        return context.Users
+            .FirstOrDefault(u => u.PasswordResetToken == token);
     }
 }
 
