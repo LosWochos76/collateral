@@ -3,7 +3,6 @@ using DapperQueryBuilder;
 using Microsoft.Extensions.Logging;
 using ToDoManager.Common.Misc;
 using ToDoManager.Common.Models;
-using ToDoManager.Persistence.Dapper.Misc;
 
 namespace ToDoManager.Persistence.Dapper.Repositories;
 
@@ -19,7 +18,7 @@ public class UserDapperRepository : IUserRepository
         this.factory = factory;
         this.passwordHelper = passwordHelper;
 
-        CreateTableIfNotExists();
+        /*CreateTableIfNotExists();
 
         if (GetAll().Count() == 0)
         {
@@ -31,7 +30,7 @@ public class UserDapperRepository : IUserRepository
                 IsAdmin = true,
                 PasswordHash = passwordHelper.ComputeSha256Hash("secret")
             });
-        }
+        }*/
     }
 
     public User Add(User entity)

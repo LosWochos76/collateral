@@ -1,9 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using ToDoManager.Common.Misc;
 using ToDoManager.Persistence;
-using ToDoManager.Persistence.Dapper.Misc;
 using ToDoManager.Persistence.Dapper.Repositories;
 using ToDoManager.Persistence.EfCore;
 using ToDoManager.WebUi.Misc;
@@ -24,21 +21,16 @@ public class Startup
         services.Configure<DatabaseSettings>(options => config.GetSection("DatabaseSettings").Bind(options));
         services.Configure<MailSettings>(options => config.GetSection("MailSettings").Bind(options));
         services.Configure<GeneralSettings>(options => config.GetSection("GeneralSettings").Bind(options));
-
         services.AddSingleton<PasswordHelper>();
-
-        /* Using Daper:
         services.AddSingleton<IDbConnectionFactory, DbConnectionFactory>();
-        services.AddSingleton<IToDoRepository, ToDoDapperRepository>();
-        services.AddSingleton<IUserRepository, UserDapperRepository>();
+
+        // Using Daper:
+        //services.AddSingleton<IToDoRepository, ToDoDapperRepository>();
+        //services.AddSingleton<IUserRepository, UserDapperRepository>();
         // End using Dapper */
 
         // Using EF-Core:
-        services.AddDbContext<ApplicationDbContext>((serviceProvider, options) => {
-            var databaseSettings = serviceProvider.GetRequiredService<IOptions<DatabaseSettings>>().Value;
-            options.UseNpgsql(databaseSettings.ConnectionString);
-        });
-
+        services.AddScoped<ApplicationDbContext>();
         services.AddScoped<IToDoRepository, ToDoEfCoreRepository>();
         services.AddScoped<IUserRepository, UserEfCoreRepository>();
         // end using EF-Core /

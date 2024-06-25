@@ -2,7 +2,6 @@ using Dapper;
 using DapperQueryBuilder;
 using Microsoft.Extensions.Logging;
 using ToDoManager.Common.Models;
-using ToDoManager.Persistence.Dapper.Misc;
 
 namespace ToDoManager.Persistence.Dapper.Repositories;
 
@@ -16,7 +15,7 @@ public class ToDoDapperRepository : IToDoRepository
         this.logger = logger;
         this.factory = factory;
 
-        CreateTableIfNotExists();
+        //CreateTableIfNotExists();
     }
 
     public ToDo Add(ToDo entity)

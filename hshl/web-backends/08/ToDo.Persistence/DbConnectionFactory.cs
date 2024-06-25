@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using Npgsql;
 
-namespace ToDoManager.Persistence.Dapper.Misc;
+namespace ToDoManager.Persistence;
 
 public interface IDbConnectionFactory
 {

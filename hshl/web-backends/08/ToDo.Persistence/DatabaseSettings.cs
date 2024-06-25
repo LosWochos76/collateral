@@ -1,4 +1,4 @@
-namespace ToDoManager.Persistence.Dapper.Misc;
+namespace ToDoManager.Persistence;
 
 public class DatabaseSettings
 {
