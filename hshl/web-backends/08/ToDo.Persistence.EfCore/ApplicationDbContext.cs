@@ -5,11 +5,11 @@ namespace ToDoManager.Persistence.EfCore;
 
 public class ApplicationDbContext : DbContext
 {
-    private IDbConnectionFactory dbConnectionFactory;
+    private DbConnectionFactory dbConnectionFactory;
     public DbSet<ToDo> ToDos { get; set; }
     public DbSet<User> Users { get; set; }
 
-    public ApplicationDbContext(IDbConnectionFactory connectionFactory)
+    public ApplicationDbContext(DbConnectionFactory connectionFactory)
     {
         this.dbConnectionFactory = connectionFactory;
     }
@@ -30,5 +30,10 @@ public class ApplicationDbContext : DbContext
             optionsBuilder.UseLowerCaseNamingConvention();
         }
     }
-}
 
+    public void Migrate()
+    {
+        if (Database.GetPendingMigrations().Any())
+            Database.Migrate();
+    }
+}

@@ -12,9 +12,9 @@ public class UserEfCoreRepository : IUserRepository
     public UserEfCoreRepository(ApplicationDbContext context, PasswordHelper passwordHelper)
     {
         this.context = context;
+        context.Migrate();
+        
         this.passwordHelper = passwordHelper;
-
-        context.Database.Migrate();
         
         if (!context.Users.Any())
         {

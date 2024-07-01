@@ -4,12 +4,7 @@ using Npgsql;
 
 namespace ToDoManager.Persistence;
 
-public interface IDbConnectionFactory
-{
-    NpgsqlConnection GetConnection();
-}
-
-public class DbConnectionFactory : IDbConnectionFactory
+public class DbConnectionFactory
 {
     private ILogger<DbConnectionFactory> logger;
     private DatabaseSettings settings;

@@ -10,7 +10,7 @@ public class ToDoEfCoreRepository : IToDoRepository
     public ToDoEfCoreRepository(ApplicationDbContext context)
     {
         this.context = context;
-        context.Database.Migrate();
+        context.Migrate();
     }
 
     public PagedResult<ToDo> GetAll(ToDoFilter filter)

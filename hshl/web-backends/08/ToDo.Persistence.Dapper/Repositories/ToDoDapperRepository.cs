@@ -8,65 +8,61 @@ namespace ToDoManager.Persistence.Dapper.Repositories;
 public class ToDoDapperRepository : IToDoRepository
 {
     private ILogger<ToDoDapperRepository> logger;
-    private IDbConnectionFactory factory;
+    private DbConnectionFactory factory;
 
-    public ToDoDapperRepository(ILogger<ToDoDapperRepository> logger, IDbConnectionFactory factory)
+    public ToDoDapperRepository(ILogger<ToDoDapperRepository> logger, DbConnectionFactory factory)
     {
         this.logger = logger;
         this.factory = factory;
 
-        //CreateTableIfNotExists();
+        CreateTableIfNotExists();
     }
 
     public ToDo Add(ToDo entity)
     {
         entity.ID = Guid.NewGuid();
+        var sql = "INSERT INTO ToDos (ID, Title, Completion, Description) VALUES (@ID, @Title, @Completion, @Description) RETURNING *";
+
         using (var connection = factory.GetConnection())
-        {
-            var sql = "INSERT INTO ToDos (ID, Title, Completion, Description) VALUES (@ID, @Title, @Completion, @Description) RETURNING *";
             return connection.QuerySingle<ToDo>(sql, entity);
-        }
     }
 
     public void Delete(Guid id)
     {
+        var sql = "DELETE FROM ToDos WHERE ID = @Id";
         using (var connection = factory.GetConnection())
-        {
-            var sql = "DELETE FROM ToDos WHERE ID = @Id";
             connection.Execute(sql, new { Id = id });
-        }
     }
 
     public PagedResult<ToDo> GetAll(ToDoFilter filter)
     {
+        var sql = "SELECT * FROM ToDos WHERE 1=1";
+        var countSql = "SELECT COUNT(*) FROM ToDos WHERE 1=1";
+        var parameters = new DynamicParameters();
+
+        // Dynamische Filterausdrücke hinzufügen
+        foreach (var expression in filter.FilterExpressions)
+        {
+            var clause = GetFilterClause(expression, parameters);
+            sql += clause;
+            countSql += clause;
+        }
+
+        // OrderBy-Klausel hinzufügen
+        if (!string.IsNullOrEmpty(filter.OrderBy))
+            sql += " ORDER BY " + filter.OrderBy;
+
+        // Paginierung hinzufügen
+        if (filter.StartPage >= 0 && filter.ItemsPerPage > 0)
+        {
+            sql += " OFFSET @Offset LIMIT @Limit";
+            parameters.Add("Offset", filter.StartPage * filter.ItemsPerPage);
+            parameters.Add("Limit", filter.ItemsPerPage);
+        }
+
         using (var connection = factory.GetConnection())
         {
-            var sql = "SELECT * FROM ToDos WHERE 1=1";
-            var countSql = "SELECT COUNT(*) FROM ToDos WHERE 1=1";
-            var parameters = new DynamicParameters();
-
-            // Dynamische Filterausdrücke hinzufügen
-            foreach (var expression in filter.FilterExpressions)
-            {
-                var clause = GetFilterClause(expression, parameters);
-                sql += clause;
-                countSql += clause;
-            }
-            
             var totalItems = connection.ExecuteScalar<int>(countSql, parameters);
-
-            // OrderBy-Klausel hinzufügen
-            if (!string.IsNullOrEmpty(filter.OrderBy))
-                sql += " ORDER BY " + filter.OrderBy;
-
-            // Paginierung hinzufügen
-            if (filter.StartPage >= 0 && filter.ItemsPerPage > 0)
-            {
-                sql += " OFFSET @Offset LIMIT @Limit";
-                parameters.Add("Offset", filter.StartPage * filter.ItemsPerPage);
-                parameters.Add("Limit", filter.ItemsPerPage);
-            }
-
             var items = connection.Query<ToDo>(sql, parameters).ToList();
             var totalPages = (int)Math.Ceiling((double)totalItems / filter.ItemsPerPage);
 
@@ -113,11 +109,9 @@ public class ToDoDapperRepository : IToDoRepository
 
     public ToDo GetSingle(Guid id)
     {
+        var sql = "SELECT * FROM ToDos WHERE ID = @Id";
         using (var connection = factory.GetConnection())
-        {
-            var sql = "SELECT * FROM ToDos WHERE ID = @Id";
             return connection.QuerySingleOrDefault<ToDo>(sql, new { Id = id });
-        }
     }
 
     public ToDo Update(ToDo entity)
@@ -139,8 +133,6 @@ public class ToDoDapperRepository : IToDoRepository
         );";
 
         using (var connection = factory.GetConnection())
-        {
             connection.Execute(sql);
-        }
     }
 }

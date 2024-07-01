@@ -9,16 +9,16 @@ namespace ToDoManager.Persistence.Dapper.Repositories;
 public class UserDapperRepository : IUserRepository
 {
     private ILogger<ToDoDapperRepository> logger;
-    private IDbConnectionFactory factory;
+    private DbConnectionFactory factory;
     private PasswordHelper passwordHelper;
 
-    public UserDapperRepository(ILogger<ToDoDapperRepository> logger, IDbConnectionFactory factory, PasswordHelper passwordHelper)
+    public UserDapperRepository(ILogger<ToDoDapperRepository> logger, DbConnectionFactory factory, PasswordHelper passwordHelper)
     {
         this.logger = logger;
         this.factory = factory;
         this.passwordHelper = passwordHelper;
 
-        /*CreateTableIfNotExists();
+        CreateTableIfNotExists();
 
         if (GetAll().Count() == 0)
         {
@@ -30,61 +30,53 @@ public class UserDapperRepository : IUserRepository
                 IsAdmin = true,
                 PasswordHash = passwordHelper.ComputeSha256Hash("secret")
             });
-        }*/
+        }
     }
 
     public User Add(User entity)
     {
+        var sql = @"INSERT INTO Users (ID, Firstname, Lastname, EMail, PasswordHash, IsAdmin, PasswordResetToken) 
+            VALUES (@ID, @Firstname, @Lastname, @EMail, @PasswordHash, @IsAdmin, @PasswordResetToken) RETURNING *";
+
         using (var connection = factory.GetConnection())
-        {
-            var sql = "INSERT INTO Users (ID, Firstname, Lastname, EMail, PasswordHash, IsAdmin, PasswordResetToken) VALUES (@ID, @Firstname, @Lastname, @EMail, @PasswordHash, @IsAdmin, @PasswordResetToken) RETURNING *";
             return connection.QuerySingle<User>(sql, entity);
-        }
     }
 
     public void Delete(Guid id)
     {
+        var sql = "DELETE FROM Users WHERE ID = @Id";
         using (var connection = factory.GetConnection())
-        {
-            var sql = "DELETE FROM Users WHERE ID = @Id";
             connection.Execute(sql, new { Id = id });
-        }
     }
 
     public IEnumerable<User> GetAll()
     {
+        var sql = "SELECT * FROM Users";
         using (var connection = factory.GetConnection())
-        {
-            var sql = "SELECT * FROM Users";
             return connection.Query<User>(sql).ToList();
-        }
     }
 
     public User GetSingle(Guid id)
     {
+        var sql = "SELECT * FROM Users WHERE ID = @Id";
         using (var connection = factory.GetConnection())
-        {
-            var sql = "SELECT * FROM Users WHERE ID = @Id";
             return connection.QuerySingleOrDefault<User>(sql, new { Id = id });
-        }
     }
 
     public User Update(User entity)
     {
+        var sql = @"UPDATE Users SET Firstname = @Firstname, Lastname = @Lastname, EMail = @EMail, PasswordHash = @PasswordHash, 
+            IsAdmin = @IsAdmin, PasswordResetToken = @PasswordResetToken WHERE ID = @ID RETURNING *";
+        
         using (var connection = factory.GetConnection())
-        {
-            var sql = "UPDATE Users SET Firstname = @Firstname, Lastname = @Lastname, EMail = @EMail, PasswordHash = @PasswordHash, IsAdmin = @IsAdmin, PasswordResetToken = @PasswordResetToken WHERE ID = @ID RETURNING *";
             return connection.QuerySingle<User>(sql, entity);
-        }
     }
 
     public User FindByEmail(string email)
     {
+        var sql = "SELECT * FROM Users WHERE EMail ilike @EMail";
         using (var connection = factory.GetConnection())
-        {
-            var sql = "SELECT * FROM Users WHERE EMail ilike @EMail";
             return connection.QuerySingleOrDefault<User>(sql, new { EMail = email });
-        }
     }
 
     public User FindByLogin(string email, string password)
@@ -101,28 +93,25 @@ public class UserDapperRepository : IUserRepository
 
     public User FindByPasswordResetToken(string token)
     {
+        var sql = "SELECT * FROM Users WHERE PasswordResetToken = @PasswordResetToken";
         using (var connection = factory.GetConnection())
-        {
-            var sql = "SELECT * FROM Users WHERE PasswordResetToken = @PasswordResetToken";
             return connection.QuerySingleOrDefault<User>(sql, new { PasswordResetToken = token });
-        }
     }
 
     private void CreateTableIfNotExists()
     {
+        var sql = @"
+            CREATE TABLE IF NOT EXISTS Users (
+                ID UUID PRIMARY KEY,
+                Firstname VARCHAR(255) NOT NULL,
+                Lastname VARCHAR(255) NOT NULL,
+                EMail VARCHAR(255) NOT NULL UNIQUE,
+                PasswordHash VARCHAR(255) NOT NULL,
+                IsAdmin BOOLEAN NOT NULL,
+                PasswordResetToken VARCHAR(255)
+            )";
+
         using (var connection = factory.GetConnection())
-        {
-            var sql = @"
-                CREATE TABLE IF NOT EXISTS Users (
-                    ID UUID PRIMARY KEY,
-                    Firstname VARCHAR(255) NOT NULL,
-                    Lastname VARCHAR(255) NOT NULL,
-                    EMail VARCHAR(255) NOT NULL UNIQUE,
-                    PasswordHash VARCHAR(255) NOT NULL,
-                    IsAdmin BOOLEAN NOT NULL,
-                    PasswordResetToken VARCHAR(255)
-                )";
             connection.Execute(sql);
-        }
     }
 }

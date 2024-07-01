@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
 using ToDoManager.Common.Misc;
 using ToDoManager.Persistence;
+using ToDoManager.Persistence.Dapper.Repositories;
 using ToDoManager.Persistence.EfCore;
 using ToDoManager.WebUi.Misc;
 
@@ -21,6 +22,7 @@ public class Startup
         services.Configure<DatabaseSettings>(options => config.GetSection("DatabaseSettings").Bind(options));
         services.Configure<MailSettings>(options => config.GetSection("MailSettings").Bind(options));
         services.Configure<GeneralSettings>(options => config.GetSection("GeneralSettings").Bind(options));
+        
         services.AddSingleton<PasswordHelper>();
         services.AddSingleton<DbConnectionFactory>();
 
@@ -66,8 +68,5 @@ public class Startup
         app.UseEndpoints(endpoints => {
             endpoints.MapControllers();
         });
-
-        var settings = app.ApplicationServices.GetRequiredService<IOptions<DatabaseSettings>>();
-        Console.WriteLine(settings.Value.Host);
     }
 }
