@@ -21,14 +21,14 @@ public class ApplicationDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        base.OnConfiguring(optionsBuilder);
-
         if (!optionsBuilder.IsConfigured)
         {
             var connection = dbConnectionFactory.GetConnection();
             optionsBuilder.UseNpgsql(connection);
             optionsBuilder.UseLowerCaseNamingConvention();
         }
+
+        base.OnConfiguring(optionsBuilder);
     }
 
     public void Migrate()
