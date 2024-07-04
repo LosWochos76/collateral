@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="MailKit" Version="4.6.0" />
+    <PackageReference Include="MediatR" Version="12.3.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.6">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -22,6 +23,7 @@
     <ProjectReference Include="..\ToDo.Persistence.Dapper\ToDo.Persistence.Dapper.csproj" />
     <ProjectReference Include="..\ToDo.Persistence\ToDo.Persistence.csproj" />
     <ProjectReference Include="..\ToDo.Persistence.EfCore\ToDo.Persistence.EfCore.csproj" />
+    <ProjectReference Include="..\ToDo.CQRS\ToDo.CQRS.csproj" />
   </ItemGroup>
 
 </Project>

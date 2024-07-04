@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
 using ToDoManager.Common.Misc;
+using ToDoManager.CQRS;
 using ToDoManager.Persistence;
 using ToDoManager.Persistence.Dapper.Repositories;
 using ToDoManager.Persistence.EfCore;
@@ -36,6 +37,9 @@ public class Startup
         services.AddScoped<IToDoRepository, ToDoEfCoreRepository>();
         services.AddScoped<IUserRepository, UserEfCoreRepository>();
         // end using EF-Core /
+
+        // Adding MediatR
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<GetSingleToDoByIdQuery>());
 
         services.AddSingleton<EmailQueue>();
         services.AddSingleton<EmailService>();

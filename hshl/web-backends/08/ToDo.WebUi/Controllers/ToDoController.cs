@@ -1,6 +1,8 @@
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ToDoManager.Common.Models;
+using ToDoManager.CQRS;
 using ToDoManager.Persistence;
 
 namespace ToDoService.Controllers;
@@ -9,11 +11,13 @@ public class ToDoController : Controller
 {
     private readonly ILogger<ToDoController> logger;
     private readonly IToDoRepository toDoRepository;
+    private readonly ISender sender;
 
-    public ToDoController(ILogger<ToDoController> logger, IToDoRepository toDoRepository)
+    public ToDoController(ILogger<ToDoController> logger, IToDoRepository toDoRepository, ISender sender)
     {
         this.logger = logger;
         this.toDoRepository = toDoRepository;
+        this.sender = sender;
     }
 
     [Authorize]
@@ -33,9 +37,10 @@ public class ToDoController : Controller
 
     [HttpGet("/ToDo/Edit/{id}")]
     [Authorize]
-    public IActionResult Edit([FromRoute] Guid id)
+    public async Task<IActionResult> Edit([FromRoute] Guid id)
     {
-        var obj = toDoRepository.GetSingle(id);
+        var query = new GetSingleToDoByIdQuery(id);
+        var obj = await sender.Send(query);
         if (obj == null)
             return NotFound();
 
@@ -51,7 +56,7 @@ public class ToDoController : Controller
 
     [HttpPost("/ToDo/Save/")]
     [Authorize]
-    public IActionResult Save([FromForm] ToDo obj)
+    public async Task<IActionResult> Save([FromForm] ToDo obj)
     {
         if (obj == null)
             return Redirect("/");
@@ -59,10 +64,8 @@ public class ToDoController : Controller
         if (!ModelState.IsValid)
             return View("Edit", obj);
 
-        if (obj.ID == Guid.Empty)
-            toDoRepository.Add(obj);
-        else
-            toDoRepository.Update(obj);
+        var command = new SaveSingleToDoCommand(obj);
+        await sender.Send(command);
     
         return Redirect("/");
     }
