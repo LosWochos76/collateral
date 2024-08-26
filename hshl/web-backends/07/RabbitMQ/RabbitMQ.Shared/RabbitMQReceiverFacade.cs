@@ -1,29 +1,20 @@
 using System.Text.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using RabbitMQ.Shared;
 
 public delegate void MessageReceivedEventHandler(object sender, SendEmailMessage message);
 
-public class RabbitMQReceiverFacade
+public class RabbitMQReceiverFacade : RabbitMQFacade
 {
-    private ConnectionFactory connectionFactory;
-    private IConnection connection;
-    private IModel channel;
-    private string queueNameAndRoutingKey = "email";
     private EventingBasicConsumer consumer;
-
     public event MessageReceivedEventHandler MessageReceived;
 
-    public RabbitMQReceiverFacade()
+    public RabbitMQReceiverFacade() : base()
     {
-        connectionFactory = new ConnectionFactory() { HostName = "localhost" };
-        connection = connectionFactory.CreateConnection();
-        channel = connection.CreateModel();
-        channel.QueueDeclare(queue: queueNameAndRoutingKey, durable: true, exclusive: false, autoDelete: false, arguments: null);
-        
         consumer = new EventingBasicConsumer(channel);
         consumer.Received += MessageReceivedHandler;
-        channel.BasicConsume(queue: queueNameAndRoutingKey, autoAck: true, consumer: consumer);
+        channel.BasicConsume(queue: queueName, autoAck: true, consumer: consumer);
     }
 
     private void MessageReceivedHandler(object sender, BasicDeliverEventArgs e)
