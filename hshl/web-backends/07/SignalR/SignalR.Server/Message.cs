@@ -1,6 +1,6 @@
 using System;
 
-namespace SignalR.Shared;
+namespace SignalR.Server;
 
 public class Message
 {

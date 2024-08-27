@@ -3,11 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalR.Shared", "SignalR.Shared\SignalR.Shared.csproj", "{3209A049-989A-49B3-B4EB-A984377F515A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalR.Server", "SignalR.Server\SignalR.Server.csproj", "{FA1292DF-2B16-4C76-9312-43F1B3259456}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalR.Service", "SignalR.Service\SignalR.Service.csproj", "{FA1292DF-2B16-4C76-9312-43F1B3259456}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalR.Client.MVC", "SignalR.Client.MVC\SignalR.Client.MVC.csproj", "{501A18E9-43E0-445D-B4BC-614457A9EED3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalR.Client", "SignalR.Client\SignalR.Client.csproj", "{501A18E9-43E0-445D-B4BC-614457A9EED3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +13,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3209A049-989A-49B3-B4EB-A984377F515A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3209A049-989A-49B3-B4EB-A984377F515A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3209A049-989A-49B3-B4EB-A984377F515A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3209A049-989A-49B3-B4EB-A984377F515A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FA1292DF-2B16-4C76-9312-43F1B3259456}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FA1292DF-2B16-4C76-9312-43F1B3259456}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA1292DF-2B16-4C76-9312-43F1B3259456}.Release|Any CPU.ActiveCfg = Release|Any CPU

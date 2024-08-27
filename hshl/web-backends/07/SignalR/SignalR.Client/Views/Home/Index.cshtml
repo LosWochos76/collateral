@@ -1,0 +1,24 @@
+﻿@{
+    ViewData["Title"] = "Chat Client";
+}
+
+<form>
+  <h2>Send Message:</h2>
+  <div class="form-group">
+    <label for="from">From:</label>
+    <input type="text" class="form-control" id="from">
+  </div>
+  <div class="form-group">
+    <label for="body">Body:</label>
+    <input type="text" class="form-control" id="body">
+  </div>
+  <button type="button" id="sendButton" class="btn btn-primary">Send</button>
+</form>
+
+<hr>
+
+<h2>Received Messages:</h2>
+<ul id="messages"></ul>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
+<script src="~/js/chat.js"></script>

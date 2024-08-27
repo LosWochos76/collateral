@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "name": "Server",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/SignalR.Server/SignalR.Server.csproj"
+        },
+        {
+            "name": "Client",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/SignalR.Client/SignalR.Client.csproj"
+        }
+    ]
+}

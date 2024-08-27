@@ -1,11 +1,18 @@
-using SignalR.Service;
+using SignalR.Server;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddCors(options => options.AddPolicy("CorsPolicy",
+    builder =>
+        {
+            builder.AllowAnyHeader()
+                   .AllowAnyMethod()
+                   .SetIsOriginAllowed((host) => true)
+                   .AllowCredentials();
+        }));
 builder.Services.AddSignalR();
-builder.Services.AddSingleton<ChatRepository>();
 
 var app = builder.Build();
 
@@ -23,6 +30,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseCors("CorsPolicy");
 
 app.MapHub<ChatHub>("/chat");
 
