@@ -2,16 +2,15 @@ using SignalR.Server;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
+{
+    builder.AllowAnyHeader()
+            .AllowAnyMethod()
+            .SetIsOriginAllowed((host) => true)
+            .AllowCredentials();
+}));
+
 builder.Services.AddControllersWithViews();
-builder.Services.AddCors(options => options.AddPolicy("CorsPolicy",
-    builder =>
-        {
-            builder.AllowAnyHeader()
-                   .AllowAnyMethod()
-                   .SetIsOriginAllowed((host) => true)
-                   .AllowCredentials();
-        }));
 builder.Services.AddSignalR();
 
 var app = builder.Build();
