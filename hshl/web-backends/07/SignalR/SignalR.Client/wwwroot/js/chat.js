@@ -1,5 +1,3 @@
-console.log("Funktioniert!");
-
 var connection = new signalR.HubConnectionBuilder()
     .withUrl("http://localhost:5131/chat").build();
 
