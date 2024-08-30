@@ -9,6 +9,7 @@ var queue = Console.ReadLine();
 
 services.AddMassTransit(x =>
 {
+    x.SetKebabCaseEndpointNameFormatter();
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host("localhost", "/", h =>

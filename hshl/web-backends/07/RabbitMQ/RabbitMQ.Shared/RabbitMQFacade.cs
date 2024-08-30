@@ -7,14 +7,15 @@ public abstract class RabbitMQFacade
 {
     protected ConnectionFactory connectionFactory;
     protected IConnection connection;
-    protected IModel channel;
-    protected string queueName = "email";
+    protected IModel model;
 
     public RabbitMQFacade()
     {
         connectionFactory = new ConnectionFactory() { HostName = "localhost" };
         connection = connectionFactory.CreateConnection();
-        channel = connection.CreateModel();
-        channel.QueueDeclare(queue: queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
+        model  = connection.CreateModel();
+        model.ExchangeDeclare("email_exchange", ExchangeType.Direct);
+        model.QueueDeclare("email_queue", true, false, false, null);
+        model.QueueBind("email_queue", "email_exchange", string.Empty);
     }
 }

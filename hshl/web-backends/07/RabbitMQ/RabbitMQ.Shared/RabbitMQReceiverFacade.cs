@@ -7,14 +7,13 @@ public delegate void MessageReceivedEventHandler(object sender, SendEmailMessage
 
 public class RabbitMQReceiverFacade : RabbitMQFacade
 {
-    private EventingBasicConsumer consumer;
     public event MessageReceivedEventHandler MessageReceived;
 
     public RabbitMQReceiverFacade() : base()
     {
-        consumer = new EventingBasicConsumer(channel);
+        var consumer = new EventingBasicConsumer(model);
         consumer.Received += MessageReceivedHandler;
-        channel.BasicConsume(queue: queueName, autoAck: true, consumer: consumer);
+        model.BasicConsume("email_queue", autoAck: true, consumer: consumer);
     }
 
     private void MessageReceivedHandler(object sender, BasicDeliverEventArgs e)
