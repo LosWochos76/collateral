@@ -12,7 +12,7 @@ services.AddMassTransit(x =>
             h.Password("guest");
         });
 
-        cfg.ReceiveEndpoint("login-request", e => { e.Consumer<FindUserConsumer>(); });
+        cfg.ReceiveEndpoint("user-request", e => { e.Consumer<FindUserConsumer>(); });
     });
 });
 

@@ -13,7 +13,7 @@ services.AddMassTransit(x =>
             h.Username("guest");
             h.Password("guest");
         });
-        x.AddRequestClient<FindUserQuery>(new Uri("exchange:login-request"));
+        x.AddRequestClient<FindUserQuery>(new Uri("exchange:user-request"));
     });
 });
 
