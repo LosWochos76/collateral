@@ -3,7 +3,7 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Shared;
 
-public delegate void MessageReceivedEventHandler(object sender, SendEmailMessage message);
+public delegate void MessageReceivedEventHandler(object sender, SendEmailCommand message);
 
 public class RabbitMQReceiverFacade : RabbitMQFacade
 {
@@ -19,7 +19,7 @@ public class RabbitMQReceiverFacade : RabbitMQFacade
     private void MessageReceivedHandler(object sender, BasicDeliverEventArgs e)
     {
         var bodyAsBytes = e.Body.ToArray();
-        var message = JsonSerializer.Deserialize<SendEmailMessage>(bodyAsBytes);
+        var message = JsonSerializer.Deserialize<SendEmailCommand>(bodyAsBytes);
 
         if (message is null)
             return;

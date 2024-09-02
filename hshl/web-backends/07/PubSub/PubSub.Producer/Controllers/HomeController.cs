@@ -23,7 +23,7 @@ public class HomeController : Controller
     [HttpPost]
     public IActionResult CreateOrder()
     {
-        var orderCreated = new OrderCreated(Guid.NewGuid());
+        var orderCreated = new OrderCreatedEvent(Guid.NewGuid());
         bus.Publish(orderCreated);
 
         return Redirect("/");

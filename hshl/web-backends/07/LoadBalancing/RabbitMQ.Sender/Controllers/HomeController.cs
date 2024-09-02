@@ -11,7 +11,7 @@ public class HomeController(ILogger<HomeController> logger, RabbitMQSenderFacade
 
     public IActionResult Send()
     {
-        sender.Send(new SendEmailMessage() {
+        sender.Send(new SendEmailCommand() {
             To = "alexander.stuckenholz@hshl.de",
             Subject = Guid.NewGuid().ToString(),
             Body = "This is a test-message"

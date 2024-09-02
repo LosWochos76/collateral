@@ -1,4 +1,4 @@
-public class SendEmailMessage
+public class SendEmailCommand
 {
     public string To { get; set; }
     public string Subject { get; set; }
