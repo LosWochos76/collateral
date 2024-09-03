@@ -4,12 +4,9 @@ using PubSub.Consumer;
 
 var services = new ServiceCollection();
 
-Console.WriteLine("Bitte Queue-Namen für den Konsumer eingeben: ");
-var queue = Console.ReadLine();
-
 services.AddMassTransit(x =>
 {
-    x.SetKebabCaseEndpointNameFormatter();
+    x.AddConsumer<OrderCreatedConsumer>();
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host("localhost", "/", h =>
@@ -17,10 +14,7 @@ services.AddMassTransit(x =>
             h.Username("guest");
             h.Password("guest");
         });
-
-        cfg.ReceiveEndpoint(queue, e => {
-            e.Consumer<OrderCreatedConsumer>();
-        });
+        cfg.ConfigureEndpoints(context);
     });
 });
 
@@ -30,3 +24,5 @@ await bus.StartAsync();
 
 Console.WriteLine("Waiting for messages...");
 Console.ReadLine();
+
+await bus.StopAsync();

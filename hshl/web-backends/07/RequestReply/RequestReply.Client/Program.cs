@@ -6,6 +6,7 @@ var services = new ServiceCollection();
 services.AddLogging();
 services.AddMassTransit(x => 
 {
+    x.AddRequestClient<FindUserQuery>();
     x.UsingRabbitMq((context, cfg) => 
     {
         cfg.Host("localhost", "/", h =>
@@ -13,7 +14,7 @@ services.AddMassTransit(x =>
             h.Username("guest");
             h.Password("guest");
         });
-        x.AddRequestClient<FindUserQuery>(new Uri("exchange:user-request"));
+         cfg.ConfigureEndpoints(context);
     });
 });
 

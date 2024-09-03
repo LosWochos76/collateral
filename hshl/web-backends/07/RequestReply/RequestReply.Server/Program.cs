@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 var services = new ServiceCollection();
 services.AddMassTransit(x => 
 {
+    x.AddConsumer<FindUserConsumer>();
     x.UsingRabbitMq((context, cfg) => 
     {
         cfg.Host("localhost", "/", h =>
@@ -11,8 +12,7 @@ services.AddMassTransit(x =>
             h.Username("guest");
             h.Password("guest");
         });
-
-        cfg.ReceiveEndpoint("user-request", e => { e.Consumer<FindUserConsumer>(); });
+        cfg.ConfigureEndpoints(context);
     });
 });
 

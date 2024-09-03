@@ -4,17 +4,8 @@ using PubSub.Shared;
 
 namespace PubSub.Producer.Controllers;
 
-public class HomeController : Controller
+public class HomeController(ILogger<HomeController> logger, IPublishEndpoint endpoint) : Controller
 {
-    private readonly ILogger<HomeController> logger;
-    private readonly IBus bus;
-
-    public HomeController(ILogger<HomeController> logger, IBus bus)
-    {
-        this.logger = logger;
-        this.bus = bus;
-    }
-
     public IActionResult Index()
     {
         return View();
@@ -24,8 +15,7 @@ public class HomeController : Controller
     public IActionResult CreateOrder()
     {
         var orderCreated = new OrderCreatedEvent(Guid.NewGuid());
-        bus.Publish(orderCreated);
-
+        endpoint.Publish(orderCreated);
         return Redirect("/");
     }
 }

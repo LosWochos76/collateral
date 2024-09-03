@@ -2,17 +2,8 @@ using MassTransit;
 using Microsoft.Extensions.Logging;
 using RequestReply.Shared;
 
-public class UserService
+public class UserService(ILogger<UserService> logger, IRequestClient<FindUserQuery> client)
 {
-    private ILogger<UserService> logger;
-    private IRequestClient<FindUserQuery> client;
-
-    public UserService(ILogger<UserService> logger, IRequestClient<FindUserQuery> client)
-    {
-        this.logger = logger;
-        this.client = client;
-    }
-
     public async Task<User> FindUserByEmailAsync(string email)
     {
         var request = new FindUserQuery(email);
