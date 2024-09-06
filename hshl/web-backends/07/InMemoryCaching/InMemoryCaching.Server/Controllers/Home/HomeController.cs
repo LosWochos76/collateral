@@ -1,6 +1,5 @@
 using Bogus;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace InMemoryCaching.Server;
@@ -14,7 +13,7 @@ public class HomeController(IMemoryCache cache, IHttpClientFactory httpClientFac
 
     public async Task<IActionResult> WithCaching()
     {
-        if (cache.TryGetValue("count", out long cached_sum))
+        if (cache.TryGetValue("goal_count", out long cached_sum))
             return View("Output", cached_sum);
 
         var client = httpClientFactory.CreateClient();
@@ -24,7 +23,7 @@ public class HomeController(IMemoryCache cache, IHttpClientFactory httpClientFac
         foreach (var match in matches)
             sum += match.MatchResults.Last().PointsTeam1 + match.MatchResults.Last().PointsTeam2;
 
-        cache.Set("count", sum, new MemoryCacheEntryOptions() { SlidingExpiration = TimeSpan.FromMinutes(10) });
+        cache.Set("goal_count", sum, new MemoryCacheEntryOptions() { SlidingExpiration = TimeSpan.FromMinutes(10) });
         return View("Output", sum);
     }
 

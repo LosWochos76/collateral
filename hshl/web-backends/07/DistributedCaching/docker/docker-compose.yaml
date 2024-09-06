@@ -1,0 +1,13 @@
+services:
+    redis:
+      image: redis:latest  # Use the official Redis image from Docker Hub
+      hostname: redis # Hostname of redis in the internal network
+      ports:
+          - "6379:6379"  # Map Redis default port to the host
+      volumes:
+          - redis-data:/data  # Persist Redis data using a named volume
+      restart: unless-stopped  # Automatically restart the container unless manually stopped
+
+volumes:
+    redis-data:
+      driver: local  # Use a local volume driver to persist data
