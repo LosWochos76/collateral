@@ -1,0 +1,1 @@
+public record OrderDTO(Guid Guid, double price, int amount);
