@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Bogus;
 using FluentResults;
 
-namespace VerticalSlicing.Features.Movies;
+namespace VerticalSlicing.Features.Movies.CreateRandomMovies;
 
 public record CreateRandomMoviesCommand() : IRequest;
 

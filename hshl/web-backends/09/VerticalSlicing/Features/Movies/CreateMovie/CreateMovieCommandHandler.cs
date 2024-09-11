@@ -1,8 +1,8 @@
 using FluentResults;
-using MediatR;
 using FluentValidation;
+using MediatR;
 
-namespace VerticalSlicing.Features.Movies;
+namespace VerticalSlicing.Features.Movies.CreateMovie;
 
 public record CreateMovieCommand(string Title) : IRequest<Result<Guid>>;
 

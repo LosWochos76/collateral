@@ -3,7 +3,7 @@ using MediatR;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
-namespace VerticalSlicing.Features.Movies;
+namespace VerticalSlicing.Features.Movies.DeleteMovie;
 
 public record DeleteMovieCommand(Guid Id) : IRequest<Result>;
 
