@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using FluentResults;
 
 namespace Repr.Features.Movies.DeleteMovie;
 

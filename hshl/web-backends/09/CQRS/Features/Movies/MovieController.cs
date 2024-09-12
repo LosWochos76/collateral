@@ -39,14 +39,14 @@ public class MovieController(IMediator mediator) : Controller
     }
 
     [HttpGet("/api/movie")]
-    public async Task<IActionResult> HandleAsync(CancellationToken cancellationToken = default)
+    public async Task<IActionResult> GetAllMovies(CancellationToken cancellationToken = default)
     {
         var result = await mediator.Send(new GetAllMoviesRequest(), cancellationToken);
         return Ok(result);
     }
 
     [HttpGet("/api/movie/{id:guid}")]
-    public async Task<IActionResult> HandleAsync([FromRoute] Guid id, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> GetSingleMovie([FromRoute] Guid id, CancellationToken cancellationToken = default)
     {
         var result = await mediator.Send(new GetSingleMovieCommand(id), cancellationToken);
         if (result.IsSuccess)
@@ -56,7 +56,7 @@ public class MovieController(IMediator mediator) : Controller
     }
 
     [HttpPut("/api/movie/{id:Guid}")]
-    public async Task<IActionResult> HandleAsync(UpdateMovieCommand command, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> UpdateMovie(UpdateMovieCommand command, CancellationToken cancellationToken = default)
     {
         var result = await mediator.Send(command, cancellationToken);
         if (result.IsSuccess)
