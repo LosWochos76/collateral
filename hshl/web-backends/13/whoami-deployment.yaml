@@ -23,25 +23,10 @@ kind: Service
 metadata:
   name: whoami-service
 spec:
+  type: NodePort
   selector:
-    app: third-app
+    app: first-app
   ports:
     - protocol: TCP
+      nodePort: 30000
       port: 80
-      targetPort: 80
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: whoami-ingress
-spec:
-  rules:
-    - http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: whoami-service
-                port:
-                  number: 80
