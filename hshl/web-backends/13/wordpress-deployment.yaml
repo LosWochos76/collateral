@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: wordpress
+  template:
+    metadata:
+      labels:
+        app: wordpress
+    spec:
+      containers:
+      - name: wordpress
+        image: wordpress:latest
+        env:
+        - name: WORDPRESS_DB_HOST
+          value: mariadb:3306
+        - name: WORDPRESS_DB_USER
+          value: wpuser
+        - name: WORDPRESS_DB_PASSWORD
+          value: wppassword
+        - name: WORDPRESS_DB_NAME
+          value: wordpress
+        - name: WORDPRESS_AUTH_KEY
+          value: 'ABC123'
+        - name: WORDPRESS_SECURE_AUTH_KEY
+          value: 'ABC123'
+        - name: WORDPRESS_LOGGED_IN_KEY
+          value: 'ABC123'
+        - name: WORDPRESS_NONCE_KEY
+          value: 'ABC123'
+        - name: WORDPRESS_AUTH_SALT
+          value: 'ABC123'
+        - name: WORDPRESS_SECURE_AUTH_SALT
+          value: 'ABC123'
+        - name: WORDPRESS_LOGGED_IN_SALT
+          value: 'ABC123'
+        - name: WORDPRESS_NONCE_SALT
+          value: 'ABC123'
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: wordpress-storage
+          mountPath: /var/www/html/wp-content
+      volumes:
+      - name: wordpress-storage
+        persistentVolumeClaim:
+          claimName: wordpress-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wordpress
+spec:
+  ports:
+    - port: 80
+  selector:
+    app: wordpress
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: wordpress-ingress
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: wordpress
+            port:
+              number: 80
