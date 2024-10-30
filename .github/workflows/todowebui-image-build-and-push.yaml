@@ -6,7 +6,7 @@ on:
       - 'hshl/web-backends/06/**'
 
 jobs:
-  example-job:
+  build-and-push-job:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,7 +27,7 @@ jobs:
       
       # Step 4: Build the Docker image
       - name: Build Docker image
-        run: docker build -f docker/Dockerfile -t stuckenholz/todowebui .
+        run: docker build -f hshl/web-backends/06/docker/Dockerfile -t stuckenholz/todowebui hshl/web-backends/06
 
       # Step 5: Push the Docker image to Docker Hub
       - name: Push Docker image
