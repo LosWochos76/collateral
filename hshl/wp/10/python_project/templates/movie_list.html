@@ -2,7 +2,6 @@
 {% block title %}Movie List{% endblock %}
 {% block content %}
 <h1>Movies</h1>
-{% include 'pagination.html' %}
 <table class="table table-bordered">
     <thead>
         <th>Film</th>
@@ -17,5 +16,6 @@
     </tr>
     {% endfor %}
 </table>
+{% include 'pagination.html' %}
 <a href="/movies/analyze-by-year" class="btn btn-info">Analyze by Year</a>
 {% endblock %}
