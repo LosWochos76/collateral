@@ -3,7 +3,7 @@ name: TodoWebUi Image Build And Push
 on:
   push:
     paths:
-      - 'hshl/web-backends/06/*'
+      - 'hshl/web-backends/06/**'
 
 jobs:
   example-job:
