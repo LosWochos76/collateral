@@ -4,7 +4,10 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>_06</RootNamespace>
+    <RootNamespace>ToDoManager.WebUi</RootNamespace>
+    <IsPublishable>true</IsPublishable>
+    <EnableSdkContainerSupport>true</EnableSdkContainerSupport>
+    <ContainerRepository>stuckenholz/ToDoWebUi</ContainerRepository>
   </PropertyGroup>
 
   <ItemGroup>
