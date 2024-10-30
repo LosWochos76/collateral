@@ -36,7 +36,7 @@ public class Startup
         services.AddScoped<ApplicationDbContext>();
         services.AddScoped<IToDoRepository, ToDoEfCoreRepository>();
         services.AddScoped<IUserRepository, UserEfCoreRepository>();
-        // end using EF-Core
+        // end using EF-Core 
 
         // Adding MediatR
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<GetSingleToDoByIdQuery>());
