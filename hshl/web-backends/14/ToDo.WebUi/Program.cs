@@ -1,5 +1,6 @@
 using Serilog;
 using Serilog.Formatting.Compact;
+using Serilog.Sinks.Grafana.Loki;
 
 namespace ToDoManager.WebUi;
 
@@ -11,17 +12,11 @@ public class Program
             .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
             .Enrich.FromLogContext()
             .WriteTo.Console()
+            .WriteTo.GrafanaLoki("http://localhost:3100")
             .CreateLogger();
 
         var builder = new HostBuilder();
         builder.UseContentRoot(Directory.GetCurrentDirectory());
-
-        builder.UseSerilog((ctx,cfg)=>
-        {
-            cfg.Enrich.WithProperty("Application", ctx.HostingEnvironment.ApplicationName)
-                .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName)
-                .WriteTo.Console(new RenderedCompactJsonFormatter());
-        });
 
         builder.ConfigureAppConfiguration((hostingContext, config) => {
             var env = hostingContext.HostingEnvironment;

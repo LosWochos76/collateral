@@ -3,11 +3,9 @@ using ToDoManager.Common.Misc;
 using ToDoManager.Persistence;
 using ToDoManager.Persistence.EfCore;
 using ToDoManager.WebUi.Misc;
-using OpenTelemetry.Trace;
-using OpenTelemetry.Resources;
-using OpenTelemetry.Logs;
-using OpenTelemetry.Metrics;
 using Serilog;
+using Serilog.Formatting.Compact;
+using Serilog.Sinks.Grafana.Loki;
 
 namespace ToDoManager.WebUi;
 
@@ -25,6 +23,14 @@ public class Startup
         services.Configure<DatabaseSettings>(options => config.GetSection("DatabaseSettings").Bind(options));
         services.Configure<MailSettings>(options => config.GetSection("MailSettings").Bind(options));
         services.Configure<GeneralSettings>(options => config.GetSection("GeneralSettings").Bind(options));
+
+        services.AddSerilog(options =>
+        {
+            options.Enrich.WithProperty("Application", "ProductAPI")
+                .Enrich.WithProperty("Environment", "Dev")
+                .WriteTo.Console(new RenderedCompactJsonFormatter())
+                .WriteTo.GrafanaLoki("http://localhost:3100");
+        });
         
         services.AddSingleton<PasswordHelper>();
         services.AddSingleton<DbConnectionFactory>();
