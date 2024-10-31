@@ -1,0 +1,32 @@
+services:
+  postgres:
+    image: postgres
+    hostname: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=secret
+    volumes:
+      - todo-data:/var/lib/postgresql/data/
+
+  todowebui:
+    image: stuckenholz/todowebui:latest
+    ports:
+      - 80:8080
+    environment:
+      - GeneralSettings__HomeUrl=http://localhost
+      - GeneralSettings__EncryptionKey=asupersecretkeyasupersecretkeyasupersecretkeyasupersecretkey
+      - DatabaseSettings__EncryptionSalt=asupersecretsaltasupersecretsaltasupersecretsaltasupersecretsalt
+      - DatabaseSettings__Host=postgres
+      - DatabaseSettings__Database=postgres
+      - DatabaseSettings__Port=5432
+      - DatabaseSettings__Username=postgres
+      - DatabaseSettings__Password=secret
+      - MailSettings__FromMailAddress=info@todo-service.com
+      - MailSettings__Host=smtp.gmail.com
+      - MailSettings__Port=587
+      - MailSettings__Username=someusername
+      - MailSettings__Password=somepassword
+
+volumes:
+  todo-data:
