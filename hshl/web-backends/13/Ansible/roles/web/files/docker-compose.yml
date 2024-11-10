@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  reverse:
+    image: nginx:latest
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /root/web/nginx:/etc/nginx/conf.d/
+      - /etc/letsencrypt:/etc/letsencrypt
+      - /root/web/backend:/var/http/backend
+      - /root/web/download:/var/http/download
+    depends_on:
+      - wordpress
+
+  db:
+    image: mariadb:latest
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: kalimeromitsombrero
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+
+  wordpress:
+    image: wordpress:latest
+    volumes:
+      - wordpress_data:/var/www/html
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+    depends_on:
+      - db
+
+volumes:
+  db_data: {}
+  wordpress_data: {}

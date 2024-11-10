@@ -1,0 +1,24 @@
+---
+- name: ensures directories exists
+  file: 
+    path: "{{ item }}"
+    state: directory
+  loop:
+    - /root/web
+    - /root/web/nginx
+
+- name: copy docker-compose.yml
+  copy: 
+    src: docker-compose.yml
+    dest: /root/web/docker-compose.yml
+
+- name: copy nginx.conf
+  copy: 
+    src: nginx.conf
+    dest: /root/web/nginx/nginx.conf
+
+- name: Create and start services
+  community.docker.docker_compose_v2:
+    project_src: /root/web
+    files:
+      - docker-compose.yml

@@ -1,0 +1,40 @@
+---
+- name: Install dependencies
+  ansible.builtin.apt:
+    name:
+      - openssl
+      - certbot
+    state: present
+    update_cache: true
+
+- name: Install hetzner extension for certbot
+  ansible.builtin.pip:
+    name: certbot-dns-hetzner
+
+- name: ensures certbot dir exists
+  file: 
+    path: /root/certbot
+    state: directory
+
+- name: Copy ini file
+  copy: 
+    src: hetzner.ini
+    dest: /root/certbot/hetzner.ini
+
+- name: Copy script
+  copy: 
+    src: renew_cert.sh
+    dest: /root/certbot/renew_cert.sh
+    mode: 0755
+
+- name: Aquire cert for the first time
+  ansible.builtin.shell: ./renew_cert.sh
+  args:
+    chdir: /root/certbot
+
+- name: Add the renewal of certificates to cron
+  ansible.builtin.cron:
+    name: "renew certs"
+    minute: "0"
+    hour: "2"
+    job: "/root/certbot/renew_cert.sh > /dev/null"

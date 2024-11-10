@@ -13,19 +13,6 @@ spec:
   storageClassName: ""
 ---
 apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: mariadb-pvc
-spec:
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 2Gi
-  volumeName: mariadb-pv
-  storageClassName: ""
----
-apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: wordpress-pv
@@ -37,6 +24,19 @@ spec:
   nfs:
     path: /srv/wordpress
     server: 192.168.178.190
+  storageClassName: ""
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mariadb-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 2Gi
+  volumeName: mariadb-pv
   storageClassName: ""
 ---
 apiVersion: v1

@@ -1,0 +1,27 @@
+---
+- name: ensures mail dir exists
+  file: 
+    path: /root/mail
+    state: directory
+
+- name: copy files
+  copy: 
+    src:  "{{ item }}"
+    dest: "/root/mail/{{ item }}"
+  loop:
+    - docker-compose.yml
+    - mailserver.env
+
+- name: Create and start services
+  community.docker.docker_compose_v2:
+    project_src: /root/mail/
+    files:
+      - docker-compose.yml
+
+- name: create mail accounts
+  ansible.builtin.shell: |
+    docker exec -it mailserver setup config dkim > /dev/null
+    docker exec -ti mailserver setup email add alex@stubwood.com luso76wake!S > /dev/null
+  args:
+    chdir: /root/mail
+  ignore_errors: true

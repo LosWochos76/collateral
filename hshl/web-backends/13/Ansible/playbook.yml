@@ -1,0 +1,10 @@
+---
+- name: Install ToDO App on Ubuntu
+  hosts: all
+  become: true
+  roles:
+    - config
+    - docker
+    - certbot
+    - mail
+    - web

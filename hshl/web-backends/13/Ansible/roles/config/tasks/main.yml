@@ -1,0 +1,44 @@
+---
+- name: Update and Upgrade
+  ansible.builtin.apt:
+    name: aptitude
+    state: present
+    update_cache: true
+
+- name: Install dependencies
+  ansible.builtin.apt:
+    name:
+      - net-tools
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - software-properties-common
+      - python3-pip
+      - virtualenv
+      - python3-setuptools
+      - gnupg-agent
+      - autoconf
+      - dpkg-dev
+      - file
+      - g++
+      - gcc
+      - libc-dev
+      - make
+      - pkg-config
+      - re2c
+      - wget
+      - git
+      - unzip
+    state: present
+    update_cache: true
+
+- name: Ignore PEP 668 because it's silly.
+  ansible.builtin.file:
+    path: /usr/lib/python3.12/EXTERNALLY-MANAGED
+    state: absent
+
+#- name: install docker packages for python
+#  ansible.builtin.pip:
+#    name: 
+#      - docker
+#      - docker-compose
