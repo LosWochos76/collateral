@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: imresamu/postgis-arm64
+    image: postgis/postgis
     hostname: postgres
     ports:
       - 5432:5432
@@ -8,6 +8,11 @@ services:
       - POSTGRES_PASSWORD=hshl
     volumes:
       - ti-postgres-data:/var/lib/postgresql/data/
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   pgadmin:
     image: dpage/pgadmin4
@@ -23,6 +28,9 @@ services:
   dataloader:
     image: stuckenholz/dataloader
     restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
     environment:
       - POSTGRES_HOST=postgres
       - POSTGRES_USER=postgres

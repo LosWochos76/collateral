@@ -8,6 +8,11 @@ services:
       - POSTGRES_PASSWORD=hshl
     volumes:
       - ti-postgres-data:/var/lib/postgresql/data/
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   pgadmin:
     image: dpage/pgadmin4
@@ -28,6 +33,9 @@ services:
       - POSTGRES_PASSWORD=hshl
     ports:
       - 8080:5000
+    depends_on:
+      postgres:
+        condition: service_healthy
 
 volumes:
   ti-postgres-data:
