@@ -1,0 +1,30 @@
+services:
+  postgres:
+    image: postgis/postgis
+    hostname: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=hshl
+    volumes:
+      - ti-postgres-data:/var/lib/postgresql/data/
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=user@hshl.de
+      - PGADMIN_DEFAULT_PASSWORD=hshl
+    volumes:
+      - ti-pgadmin-data:/var/lib/pgadmin/
+
+volumes:
+  ti-postgres-data:
+  ti-pgadmin-data:

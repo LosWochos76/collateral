@@ -60,6 +60,8 @@ def load_stationen():
                 cur.execute(sql)
 
 def load_stationen_from(url, only_if_exists=False):
+    bla = datetime.strptime('20110331', "%Y%m%d").date()
+
     url = f"https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/hourly/{url}"
     response = requests.get(url)
     lines = response.text.split("\r\n")
@@ -67,19 +69,50 @@ def load_stationen_from(url, only_if_exists=False):
 
     global stations
     for i in range(2, len(lines) - 1):
-        id = int(lines[i][0:5])
-        from_date = datetime.strptime(lines[i][21:29], "%Y%m%d").date()
-        to_date = datetime.strptime(lines[i][30:38], "%Y%m%d").date()
-        hoehe = float(lines[i][41:53])
-        geo_breite = float(lines[i][54:65])
-        geo_hoehe = float(lines[i][66:75])
-        name = lines[i][76:156].rstrip()
-        bundesland = lines[i][157:].rstrip()
+        try:
+            id = get_int_from_part(lines[i], 0,5)
+            from_date = get_date_from_part(lines[i], 6, 8)
+            to_date = get_date_from_part(lines[i], 15,8)
+            hoehe = get_float_from_part(lines[i], 24, 14)
+            geo_breite = get_float_from_part(lines[i], 41, 11)
+            geo_hoehe = get_float_from_part(lines[i], 51, 9)
+            name = get_part(lines[i], 63, 40)
+            bundesland = get_part(lines[i], 104,40)
 
-        if to_date >= last:
-            count = 0 if id not in stations.keys() else stations[id]['count'] + 1
-            stations[id] = {'name': name, 'from': from_date, 'to': to_date, 'hoehe': hoehe, 'geo_breite': geo_breite,
-                'geo_hoehe': geo_hoehe, 'bundesland': bundesland, 'count': count}
+            if to_date >= last:
+                count = 0 if id not in stations.keys() else stations[id]['count'] + 1
+                stations[id] = {'name': name, 'from': from_date, 'to': to_date, 'hoehe': hoehe, 'geo_breite': geo_breite,
+                    'geo_hoehe': geo_hoehe, 'bundesland': bundesland, 'count': count}
+        except:
+            print(f"Could not parse line {i}: {lines[i]}")
+
+def get_part(str, start, len):
+    result = str[start:(start+len)].rstrip()
+    return result
+
+def get_int_from_part(str, start, len):
+    part = get_part(str, start, len)
+    try:
+        return int(part)
+    except:
+        print(f"Could not parse '{part}' to int")
+        return 0
+
+def get_float_from_part(str, start, len):
+    part = get_part(str, start, len)
+    try:
+        return float(part)
+    except:
+        print(f"Could not parse '{part}' to float")
+        return 0
+
+def get_date_from_part(str, start, len):
+    part = get_part(str, start, len)
+    try:
+        return datetime.strptime(part, "%Y%m%d").date()
+    except:
+        print(f"Could not parse '{part}' to float")
+        return datetime().date()
 
 def load_messung(id):
     global measurements
