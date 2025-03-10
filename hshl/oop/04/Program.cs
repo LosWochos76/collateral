@@ -62,7 +62,7 @@ namespace _04
         static void Main(string[] args)
         {
             // UmgangMitRessourcen();
-            // VersucheBruchZuErzeugen();
+            VersucheBruchZuErzeugen();
             // Vergleichen();
         }
     }

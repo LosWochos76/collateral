@@ -1,16 +1,7 @@
 using System;
 
-class Bruch : IDisposable, IComparable
+class Bruch(int zaehler, int nenner) : IDisposable, IComparable
 {
-    private int zaehler;
-    private int nenner;
-
-    public Bruch(int zaehler, int nenner)
-    {
-        this.Zaehler = zaehler;
-        this.Nenner = nenner;
-    }
-
     public int Zaehler
     {
         get { return zaehler; }
