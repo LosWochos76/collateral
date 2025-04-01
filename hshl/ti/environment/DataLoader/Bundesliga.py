@@ -4,10 +4,11 @@ import requests
 import json
 
 host = os.getenv("POSTGRES_HOST", "localhost")
+port = os.getenv("POSTGRES_PORT", "5432")
 user = os.getenv("POSTGRES_USER", "postgres")
 database = os.getenv("POSTGRES_DATABASE", "postgres")
 password = os.getenv("POSTGRES_PASSWORD", "hshl")
-connection = psycopg2.connect(host=host, user=user, password=password, database=database)
+connection = psycopg2.connect(host=host, port=port, user=user, password=password, database=database)
 connection.autocommit = True
 
 def clear():

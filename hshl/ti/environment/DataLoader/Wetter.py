@@ -53,6 +53,7 @@ def load_stationen():
         for id in stations.keys():
             if stations[id]['count'] == 3:
                 measurements[id] = {}
+                print(stations[id]['name'])
                 sql = f"""insert into wetter.stationen (stations_id, name, hoehe, geo_breite, geo_hoehe, bundesland, location) values
                     ({id}, '{stations[id]['name']}', {stations[id]['hoehe']}, {stations[id]['geo_breite']}, 
                     {stations[id]['geo_hoehe']}, '{stations[id]['bundesland']}', 
@@ -76,8 +77,8 @@ def load_stationen_from(url, only_if_exists=False):
             hoehe = get_float_from_part(lines[i], 24, 14)
             geo_breite = get_float_from_part(lines[i], 41, 11)
             geo_hoehe = get_float_from_part(lines[i], 51, 9)
-            name = get_part(lines[i], 63, 40)
-            bundesland = get_part(lines[i], 104,40)
+            name = get_part(lines[i], 61, 40)
+            bundesland = get_part(lines[i], 102,40)
 
             if to_date >= last:
                 count = 0 if id not in stations.keys() else stations[id]['count'] + 1

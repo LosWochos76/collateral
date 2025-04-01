@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgis/postgis
+    image: imresamu/postgis-arm64
     hostname: postgres
     ports:
       - 5432:5432
