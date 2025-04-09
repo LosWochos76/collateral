@@ -21,6 +21,7 @@ def import_data():
 
 def correct_data():
     with connection.cursor() as cur:
+        cur.execute("SET search_path TO public, postgis, census;")
         cur.execute("ALTER TABLE census.nyc_census_blocks ADD COLUMN geom_wgs84 geometry(MultiPolygon, 4326);")
         cur.execute("UPDATE census.nyc_census_blocks SET geom_wgs84 = ST_Transform(geom, 4326);");
         cur.execute("ALTER TABLE census.nyc_homicides ADD COLUMN geom_wgs84 geometry(Point, 4326);");
