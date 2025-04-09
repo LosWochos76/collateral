@@ -35,6 +35,7 @@ def chinook():
 @app.route("/census")
 def census():
     Census.import_data()
+    Census.correct_data()
     return render_template("done.html")
 
 @app.route("/energy")
