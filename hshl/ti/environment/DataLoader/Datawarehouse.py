@@ -311,8 +311,7 @@ def lade_excel_datei(dateipfad):
             typ = row["Typ"]
             position = int(row["Position"])
             ansatz = int(row["Ansatz"])
-            wert_string = str(row["Wert"]).replace(".", "").replace(",", ".").replace("€", "").strip()
-            wert = float(wert_string)
+            wert = float(row["Wert"])
 
             if wert == 0:
                 continue
