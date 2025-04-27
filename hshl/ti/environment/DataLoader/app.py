@@ -4,6 +4,7 @@ import Wetter
 import Chinook
 import Census
 import Energy
+import Datawarehouse
 
 app = Flask(__name__)
 
@@ -43,6 +44,13 @@ def energy():
     Energy.clear()
     Energy.import_data()
     Energy.fix_data()
+    return render_template("done.html")
+
+@app.route("/dwh")
+def dwh():
+    Datawarehouse.clear()
+    Datawarehouse.create_dimensions()
+    Datawarehouse.load_fakten()
     return render_template("done.html")
 
 if __name__ == "__main__":
