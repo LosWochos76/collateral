@@ -25,7 +25,7 @@ def clear():
 def import_data():
     url = "https://data.open-power-system-data.org/renewable_power_plants/2020-08-25/renewable_power_plants_DE.csv"
     request = requests.get(url)
-    df = pd.read_csv(io.StringIO(request.text), sep=",")
+    df = pd.read_csv(io.StringIO(request.text), sep=",", dtype={14: str, 19: str})
     df['commissioning_date'] = pd.to_datetime(df['commissioning_date'])
     df['decommissioning_date'] = pd.to_datetime(df['decommissioning_date'])
     engine = create_engine(connection_string)

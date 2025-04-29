@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: imresamu/postgis-arm64
+    image: stuckenholz/postgis-pgvector-arm64:latest
     hostname: postgres
     ports:
       - 5432:5432
