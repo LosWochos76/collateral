@@ -11,4 +11,4 @@ hvm.FindSolutions();*/
 
 Console.WriteLine("BEST: {0}", maze.Solve());*/
 
-BruteForcePasswordCracker.CrackPassword("095fffbf92f0fcff322081a2c3bd09b56f91b8bc7cda7b73d23d86d102f7cf27");
+Console.WriteLine(BruteForcePasswordCracker.IsPasswordCorrect("HSHL"));
