@@ -11,11 +11,11 @@ HTML_TEMPLATE = """
 <title>Semantische Filmsuche</title>
 <h1>Filmsuche</h1>
 <form method=post>
-  <input type=text name=query placeholder="Suchbegriff" style="width: 300px">
+  <input type=text name=query placeholder="Suchbegriff" style="width: 300px" value="{{ query or '' }}">
   <input type=submit value=Suchen>
 </form>
 {% if results %}
-  <h2>Ergebnisse:</h2>
+  <h2>Ergebnisse für: "{{ query }}"</h2>
   <ul>
   {% for row in results %}
     <li><strong>{{ row.title }}</strong> (Genres: {{ row.genre }}, Distanz: {{ row.distance | round(4) }})</li>
@@ -24,7 +24,6 @@ HTML_TEMPLATE = """
 {% endif %}
 """
 
-# Verbindung zur Datenbank
 def get_connection():
     return psycopg2.connect(
         dbname="postgres",
@@ -37,9 +36,21 @@ def get_connection():
 @app.route('/', methods=['GET', 'POST'])
 def search():
     results = []
+    query = ""
     if request.method == 'POST':
         query = request.form['query']
         embedding = model.encode(query).astype(np.float32).tolist()
+
+        # SQL-Befehl für Debug-Zwecke aufbereiten
+        vector_str = str(embedding).replace('[', '[').replace(']', ']')
+        debug_sql = f"""
+        SELECT title, genre, embedding <#> '{vector_str}'::vector AS distance
+        FROM similarity.movies
+        ORDER BY distance ASC
+        LIMIT 5;
+        """
+        print("DEBUG: Auszuführender SQL-Befehl:")
+        print(debug_sql)
 
         conn = get_connection()
         with conn.cursor() as cursor:
@@ -53,7 +64,7 @@ def search():
             results = [{"title": r[0], "genre": r[1], "distance": r[2]} for r in rows]
         conn.close()
 
-    return render_template_string(HTML_TEMPLATE, results=results)
+    return render_template_string(HTML_TEMPLATE, results=results, query=query)
 
 if __name__ == '__main__':
     app.run(debug=True)
