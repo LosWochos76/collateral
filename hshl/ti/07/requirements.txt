@@ -1,0 +1,11 @@
+pandas>=1.3
+psycopg2-binary>=2.9
+sentence-transformers>=2.2
+numpy>=1.21
+Flask
+hf_xet
+torch>=2.0.0
+torchvision>=0.15.0
+transformers>=4.30.0
+Pillow>=9.5.0
+scipy>=1.10.0
