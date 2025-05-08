@@ -1,6 +1,4 @@
 import Database
-import psycopg2
-import os
 import requests
 from datetime import datetime, timedelta
 import zipfile
@@ -193,6 +191,7 @@ def load_produkt_from_zip(zip_url):
 
 def save_measurements():
     print("Saving measurements...")
+    connection = Database.get_connection()
     sql = []
     for id in measurements.keys():
         for zeit in measurements[id].keys():
