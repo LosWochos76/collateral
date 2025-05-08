@@ -1,0 +1,17 @@
+<!doctype html>
+<title>Semantische Filmsuche</title>
+<h1>Filmsuche</h1>
+<form method=post>
+  <input type=text name=query placeholder="Suchbegriff" style="width: 300px" value="{{ query or '' }}">
+  <input type=submit value=Suchen>
+</form>
+{% if results %}
+  <h2>Ergebnisse für: "{{ query }}"</h2>
+  <ul>
+  {% for row in results %}
+    <li><strong>{{ row.title }}</strong> (Genres: {{ row.genre }}, Distanz: {{ row.distance | round(4) }})</li>
+  {% endfor %}
+  </ul>
+{% endif %}
+<br>
+<a href="/">Zurück</a>

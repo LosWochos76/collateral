@@ -1,3 +1,4 @@
+import Database
 import psycopg2
 import os
 import requests
@@ -5,22 +6,11 @@ from datetime import datetime, timedelta
 import zipfile
 import io
 
-host = os.getenv("POSTGRES_HOST", "localhost")
-user = os.getenv("POSTGRES_USER", "postgres")
-database = os.getenv("POSTGRES_DATABASE", "postgres")
-password = os.getenv("POSTGRES_PASSWORD", "hshl")
-
-try:
-    connection = psycopg2.connect(host=host, user=user, password=password, database=database)
-    connection.autocommit = True
-except (Exception) as error:
-    print(error)
-
 stations = {}
 measurements = {}
 
 def clear():
-    global connection
+    connection = Database.get_connection()
     with connection.cursor() as cur:
         cur.execute("drop schema if exists wetter CASCADE;")
         cur.execute("create schema wetter;")
@@ -49,6 +39,7 @@ def load_stationen():
     load_stationen_from("pressure/recent/P0_Stundenwerte_Beschreibung_Stationen.txt")
     global measurements
 
+    connection = Database.get_connection()
     with connection.cursor() as cur:
         for id in stations.keys():
             if stations[id]['count'] == 3:

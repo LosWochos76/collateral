@@ -1,18 +1,12 @@
+from posix import confstr_names
 import psycopg2
 import os
 import requests
 import json
-
-host = os.getenv("POSTGRES_HOST", "localhost")
-port = os.getenv("POSTGRES_PORT", "5432")
-user = os.getenv("POSTGRES_USER", "postgres")
-database = os.getenv("POSTGRES_DATABASE", "postgres")
-password = os.getenv("POSTGRES_PASSWORD", "hshl")
-connection = psycopg2.connect(host=host, port=port, user=user, password=password, database=database)
-connection.autocommit = True
+import Database
 
 def clear():
-    global connection
+    connection = Database.get_connection()
     with connection.cursor() as cur:
         cur.execute("drop schema if exists bundesliga CASCADE;")
         cur.execute("create schema bundesliga;")
@@ -37,7 +31,7 @@ def get_current_season():
         return current_year
 
 def load_vereine(season, league):
-    global connection
+    connection = Database.get_connection()
     url = f"https://api.openligadb.de/getavailableteams/bl{league}/{season}"
     request = requests.get(url)
     vereine = json.loads(request.text)
@@ -48,7 +42,7 @@ def load_vereine(season, league):
             cur.execute(sql)
 
 def load_spiele(season, league):
-    global connection
+    connection = Database.get_connection()
     url = f"https://api.openligadb.de/getmatchdata/bl{league}/{season}"
     request = requests.get(url)
     spiele = json.loads(request.text)

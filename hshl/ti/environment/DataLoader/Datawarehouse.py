@@ -1,15 +1,8 @@
+import Database
 import psycopg2
 import os
 import pandas as pd
 import openpyxl
-
-host = os.getenv("POSTGRES_HOST", "localhost")
-port = os.getenv("POSTGRES_PORT", "5432")
-user = os.getenv("POSTGRES_USER", "postgres")
-database = os.getenv("POSTGRES_DATABASE", "postgres")
-password = os.getenv("POSTGRES_PASSWORD", "hshl")
-connection = psycopg2.connect(host=host, port=port, user=user, password=password, database=database)
-connection.autocommit = True
 
 positionen = [
     # Teilergebnisplan
@@ -184,14 +177,15 @@ produkte = [
 ]
 
 def clear():
-    global connection
+    connection = Database.get_connection()
     with connection.cursor() as cur:
         cur.execute("drop schema if exists haushalt CASCADE;")
         cur.execute("create schema haushalt;")
 
 def create_dimensions():
-    global connection, teilergebnisplan_positionen, teilfinanzplan_positionen
+    global teilergebnisplan_positionen, teilfinanzplan_positionen
 
+    connection = Database.get_connection()
     with connection.cursor() as cur:
         cur.execute("""
             DO $$
@@ -262,8 +256,7 @@ def get_position_id(nummer, art):
     return None
 
 def insert_fakt(erscheinungsjahr, ansatz, obergruppe, mittelgruppe, untergruppe, position, art, wert):
-    global connection
-
+    connection = Database.get_connection()
     produkt_id = get_produkt_id(obergruppe, mittelgruppe, untergruppe)
     position_id = get_position_id(position, art)
 
@@ -289,7 +282,7 @@ def load_fakten():
 
 
 def lade_excel_datei(dateipfad):
-    global connection
+    connection = Database.get_connection()
 
     print(f"Lese Datei: {dateipfad}")
 
