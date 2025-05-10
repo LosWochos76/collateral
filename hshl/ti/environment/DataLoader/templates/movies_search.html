@@ -15,3 +15,9 @@
 {% endif %}
 <br>
 <a href="/">Zurück</a>
+{% if query_embedding %}
+  <h3>Embedding der Suchanfrage:</h3>
+  <pre style="white-space: pre-wrap; word-break: break-word;">
+{{ query_embedding }}
+  </pre>
+{% endif %}

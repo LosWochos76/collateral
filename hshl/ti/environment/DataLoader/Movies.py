@@ -79,10 +79,12 @@ def movies_search():
     connection = Database.get_connection()
     results = []
     query = ""
+    query_embedding = None
 
     if request.method == 'POST':
         query = request.form['query']
         embedding = model.encode(query).astype(np.float32).tolist()
+        query_embedding = embedding  # <-- Speichern für Anzeige
 
         # SQL-Befehl für Debug-Zwecke aufbereiten
         vector_str = str(embedding).replace('[', '[').replace(']', ']')
@@ -106,4 +108,9 @@ def movies_search():
             rows = cursor.fetchall()
             results = [{"title": r[0], "genre": r[1], "distance": r[2]} for r in rows]
 
-    return render_template("movies_search.html", results=results, query=query)
+    return render_template(
+        "movies_search.html",
+        results=results,
+        query=query,
+        query_embedding=query_embedding  # <-- Übergabe an Template
+    )
