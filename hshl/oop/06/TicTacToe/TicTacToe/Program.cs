@@ -1,10 +1,10 @@
-﻿using System;
-
+﻿namespace TicTacToe;
+    
 class Program
 {
     static void Main(string[] args)
     {
-        TicTacToe ttt = new TicTacToe();
+        Spiel ttt = new Spiel();
         ttt.StarteSpiel();
     }
 }

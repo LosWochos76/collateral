@@ -1,3 +1,5 @@
+namespace TicTacToe;
+
 using System;
 
 class Spieler

@@ -1,6 +1,8 @@
+namespace TicTacToe;
+    
 using System;
 
-class TicTacToe
+public class Spiel
 {
     private Spielfeld feld;
     private Spieler spieler1 = new Spieler('X');

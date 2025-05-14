@@ -1,6 +1,8 @@
+namespace TicTacToe;
+    
 using System;
 
-class Spielfeld
+public class Spielfeld
 {
     private char[,] feld;
 
