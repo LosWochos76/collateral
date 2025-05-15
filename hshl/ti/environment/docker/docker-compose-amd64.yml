@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgis/postgis
+    image: stuckenholz/postgis-pgvector-amd64:latest 
     hostname: postgres
     ports:
       - 5432:5432
@@ -15,7 +15,7 @@ services:
       retries: 5
 
   pgadmin:
-    image: dpage/pgadmin4
+    image: dpage/pgadmin4:latest
     restart: always
     ports:
       - 80:80
@@ -26,7 +26,7 @@ services:
       - ti-pgadmin-data:/var/lib/pgadmin/
 
   dataloader:
-    image: stuckenholz/dataloader
+    image: stuckenholz/dataloader:latest
     restart: always
     environment:
       - POSTGRES_HOST=postgres
