@@ -89,7 +89,7 @@ def movies_search():
         # SQL-Befehl für Debug-Zwecke aufbereiten
         vector_str = str(embedding).replace('[', '[').replace(']', ']')
         debug_sql = f"""
-        SELECT title, genre, embedding <#> '{vector_str}'::vector AS distance
+        SELECT title, genre, embedding <=> '{vector_str}'::vector AS distance
         FROM similarity.movies
         ORDER BY distance ASC
         LIMIT 5;
@@ -99,12 +99,7 @@ def movies_search():
 
         conn = Database.get_connection()
         with conn.cursor() as cursor:
-            cursor.execute("""
-                SELECT title, genre, embedding <#> %s::vector AS distance
-                FROM similarity.movies
-                ORDER BY distance ASC
-                LIMIT 5;
-            """, (embedding,))
+            cursor.execute(debug_sql, (embedding,))
             rows = cursor.fetchall()
             results = [{"title": r[0], "genre": r[1], "distance": r[2]} for r in rows]
 
