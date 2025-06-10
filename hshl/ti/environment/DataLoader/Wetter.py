@@ -42,7 +42,6 @@ def load_stationen():
         for id in stations.keys():
             if stations[id]['count'] == 3:
                 measurements[id] = {}
-                print(stations[id]['name'])
                 sql = f"""insert into wetter.stationen (stations_id, name, hoehe, geo_breite, geo_hoehe, bundesland, location) values
                     ({id}, '{stations[id]['name']}', {stations[id]['hoehe']}, {stations[id]['geo_breite']}, 
                     {stations[id]['geo_hoehe']}, '{stations[id]['bundesland']}', 
@@ -50,8 +49,6 @@ def load_stationen():
                 cur.execute(sql)
 
 def load_stationen_from(url, only_if_exists=False):
-    bla = datetime.strptime('20110331', "%Y%m%d").date()
-
     url = f"https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/hourly/{url}"
     response = requests.get(url)
     lines = response.text.split("\r\n")

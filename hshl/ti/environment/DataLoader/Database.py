@@ -12,9 +12,11 @@ def get_connection_string():
 
 def get_connection():
     global connection
-    if connection is not None:
+
+    if connection is not None and connection.closed == 0:
         return connection
 
+    # Verbindung neu aufbauen
     host = os.getenv("POSTGRES_HOST", "localhost")
     user = os.getenv("POSTGRES_USER", "postgres")
     database = os.getenv("POSTGRES_DATABASE", "postgres")
@@ -23,8 +25,8 @@ def get_connection():
     try:
         connection = psycopg2.connect(host=host, user=user, password=password, database=database)
         connection.autocommit = True
-    except (Exception) as error:
-        print(error)
-        return None
+    except Exception as error:
+        print("Fehler beim Aufbau der DB-Verbindung:", error)
+        connection = None
 
     return connection

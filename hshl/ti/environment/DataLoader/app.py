@@ -1,5 +1,4 @@
 from flask import Flask, request, render_template_string, render_template
-import Database
 import Bundesliga
 import Wetter
 import Chinook
@@ -7,7 +6,6 @@ import Census
 import Energy
 import Datawarehouse
 import Movies
-from sentence_transformers import SentenceTransformer
 
 app = Flask(__name__)
 
