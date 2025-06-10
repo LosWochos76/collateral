@@ -2,7 +2,12 @@ import psycopg2
 import folium
 import numpy as np
 
-conn = psycopg2.connect(host="172.25.200.52", port=5432, dbname="postgres", user="postgres", password="hshl")
+conn = psycopg2.connect(
+    #host="172.25.200.52", port=5432, dbname="postgres", user="postgres", password="hshl"
+    host="localhost", port=5432, dbname="postgres", user="postgres", password="hshl"
+)
+
+
 with conn.cursor() as cur:
     cur.execute("SELECT stations_id, name,  ST_X(location::geometry) AS lon, ST_Y(location::geometry) AS lat  FROM wetter.stationen;")
     stationen = cur.fetchall()
