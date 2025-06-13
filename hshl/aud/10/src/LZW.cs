@@ -17,6 +17,19 @@ public class LZW
         return Compress(uncompressed, dictionary);
     }
 
+    public static List<int> Compress(string uncompressed, string dictionary)
+    {
+        var dict = new Dictionary<string, int>();
+        foreach (string element in dictionary.Split(';'))
+        {
+            var parts = element.Split('=');
+            var key = parts[0];
+            var value = Convert.ToInt32(parts[1]);
+            dict.Add(key, value);
+        }
+        return Compress(uncompressed, dict);
+    }
+
     public static List<int> Compress(string uncompressed, Dictionary<string, int> dictionary)
     {
         string last_word = uncompressed[0].ToString();
@@ -58,6 +71,19 @@ public class LZW
     {
         var dictionary = GetInitialDecompressionDictionary();
         return Decompress(compressed, dictionary);
+    }
+
+    public static string Decompress(List<int> compressed, string dictionary)
+    {
+        var dict = new Dictionary<int, string>();
+        foreach (string element in dictionary.Split(';'))
+        {
+            var parts = element.Split('=');
+            var key = Convert.ToInt32(parts[0]);
+            var value = parts[1];
+            dict.Add(key, value);
+        }
+        return Decompress(compressed, dict);
     }
     
     public static string Decompress(List<int> compressed, Dictionary<int, string> dictionary)
