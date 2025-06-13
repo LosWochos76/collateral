@@ -14,6 +14,11 @@ public class LZW
     public static List<int> Compress(string uncompressed)
     {
         var dictionary = GetInitialCompressionDictionary();
+        return Compress(uncompressed, dictionary);
+    }
+
+    public static List<int> Compress(string uncompressed, Dictionary<string, int> dictionary)
+    {
         string last_word = uncompressed[0].ToString();
         List<int> compressed = new List<int>();
         
@@ -45,14 +50,18 @@ public class LZW
         var dictionary = new Dictionary<int, string>();
         for (int i = 0; i < 256; i++)
             dictionary.Add(i, Convert.ToChar(i).ToString());
-    
-
+        
         return dictionary;
     }
 
     public static string Decompress(List<int> compressed)
     {
         var dictionary = GetInitialDecompressionDictionary();
+        return Decompress(compressed, dictionary);
+    }
+    
+    public static string Decompress(List<int> compressed, Dictionary<int, string> dictionary)
+    {
         string last_word = dictionary[compressed[0]];
         StringBuilder result = new StringBuilder(last_word);
 
