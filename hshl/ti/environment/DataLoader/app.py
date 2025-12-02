@@ -36,10 +36,19 @@ def census():
     Census.correct_data()
     return render_template("done.html")
 
-@app.route("/energy")
-def energy():
+@app.route("/energy_clear")
+def energy_clear():
     Energy.clear()
-    Energy.load()
+    return render_template("done.html")
+
+@app.route("/energy_prices")
+def energy_prices():
+    Energy.import_prices()
+    return render_template("done.html")
+
+@app.route("/energy_renewables")
+def energy_renewables():
+    Energy.import_renewables()
     return render_template("done.html")
 
 @app.route("/dwh")

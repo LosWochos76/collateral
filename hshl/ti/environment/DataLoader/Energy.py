@@ -23,8 +23,6 @@ def import_renewables():
     engine = create_engine(connection_string)
     print("Importiere renewables in Datenbank...")
     df.to_sql('renewable_power_plants', engine, index=False, if_exists='replace', schema='energy')
-
-def fix_locations_of_renewables():
     print("Korrigiere Standorte von renewables...")
     connection = Database.get_connection()
     with connection.cursor() as cur:
@@ -82,9 +80,9 @@ def import_prices():
     now = pd.Timestamp.now(tz='Europe/Berlin')
     start_date = now - pd.DateOffset(years=2)
     print(f"Starte automatischen Import (Letzte 2 Jahre)...")
-    import_day_ahead_prices("", start_date, now)
+    import_day_ahead_prices("890e0482-0107-4d54-a524-8fb52161f3f1", start_date, now)
 
 def load():
     import_prices()
-    import_renewables()
-    fix_locations_of_renewables()
+    #import_renewables()
+    #fix_locations_of_renewables()
