@@ -1,3 +1,4 @@
+import datetime
 from posix import confstr_names
 import psycopg2
 import os
@@ -56,3 +57,9 @@ def load_spiele(season, league):
                 {spiel['team1']['teamId']}, {spiel['team2']['teamId']}, 
                 {tore_heim}, {tore_gast})"""
             cur.execute(sql)
+
+def load():
+    jahr = get_current_season()
+    for liga in range(1, 3):
+        load_vereine(jahr, liga)
+        load_spiele(jahr, liga)

@@ -16,22 +16,18 @@ def index():
 @app.route("/bundesliga")
 def bundesliga():
     Bundesliga.clear()
-    Bundesliga.load_vereine("2024", 1)
-    Bundesliga.load_vereine("2024", 2)
-    Bundesliga.load_spiele("2024", 1)
-    Bundesliga.load_spiele("2024", 2)
+    Bundesliga.load()
     return render_template("done.html")
 
 @app.route("/wetter")
 def wetter():
     Wetter.clear()
-    Wetter.load_stationen()
-    Wetter.load_messungen()
+    Wetter.load()
     return render_template("done.html")
 
 @app.route("/chinook")
 def chinook():
-    Chinook.import_data()
+    Chinook.load()
     return render_template("done.html")
 
 @app.route("/census")
@@ -43,8 +39,7 @@ def census():
 @app.route("/energy")
 def energy():
     Energy.clear()
-    Energy.import_data()
-    Energy.fix_data()
+    Energy.load()
     return render_template("done.html")
 
 @app.route("/dwh")

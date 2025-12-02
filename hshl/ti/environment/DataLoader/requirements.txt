@@ -6,3 +6,4 @@ pandas
 sqlalchemy
 openpyxl
 sentence_transformers
+entsoe-py

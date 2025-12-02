@@ -1,7 +1,7 @@
 import os
 import Database
 
-def import_data():
+def load():
     f = open("databases/chinook.sql", "r")
     sql = f.read()
     f.close()

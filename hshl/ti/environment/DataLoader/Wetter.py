@@ -206,3 +206,6 @@ def save_measurements():
         windgeschwindigkeit, windrichtung, sonnenscheindauer, luftdruck) values """ + ",".join(sql) + ";"
         cur.execute(statement)
 
+def load():
+    load_stationen()
+    load_messungen()
