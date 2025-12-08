@@ -3,6 +3,8 @@ import requests
 from datetime import datetime, timedelta
 import zipfile
 import io
+from psycopg2.extras import execute_values
+from concurrent.futures import ThreadPoolExecutor
 
 stations = {}
 measurements = {}
@@ -38,15 +40,36 @@ def load_stationen():
     global measurements
 
     connection = Database.get_connection()
+    data = []
+
+    for station_id, s in stations.items():
+        if s['count'] == 3:
+            measurements[station_id] = {}
+            data.append((
+                station_id,
+                s['name'],
+                s['hoehe'],
+                s['geo_breite'],
+                s['geo_hoehe'],
+                s['bundesland'],
+                f"POINT({s['geo_hoehe']} {s['geo_breite']})"  # Punkt-Geometrie als WKT
+            ))
+
+    sql = """
+        INSERT INTO wetter.stationen
+        (stations_id, name, hoehe, geo_breite, geo_hoehe, bundesland, location)
+        VALUES %s
+    """
+
     with connection.cursor() as cur:
-        for id in stations.keys():
-            if stations[id]['count'] == 3:
-                measurements[id] = {}
-                sql = f"""insert into wetter.stationen (stations_id, name, hoehe, geo_breite, geo_hoehe, bundesland, location) values
-                    ({id}, '{stations[id]['name']}', {stations[id]['hoehe']}, {stations[id]['geo_breite']}, 
-                    {stations[id]['geo_hoehe']}, '{stations[id]['bundesland']}', 
-                    ST_GeogFromtext('POINT({stations[id]['geo_hoehe']} {stations[id]['geo_breite']})'))"""
-                cur.execute(sql)
+        execute_values(
+            cur,
+            sql,
+            data,
+            template="(%s, %s, %s, %s, %s, %s, ST_GeogFromText(%s))",
+            page_size=500
+        )
+        connection.commit()
 
 def load_stationen_from(url, only_if_exists=False):
     url = f"https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/hourly/{url}"
@@ -103,10 +126,16 @@ def get_date_from_part(str, start, len):
 
 def load_messung(id):
     global measurements
-    load_temperatures(id)
-    load_wind(id)
-    load_sunshine(id)
-    load_preasure(id)
+    print(f"Loading weather for {id}")
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        futures = [
+            executor.submit(load_temperatures, id),
+            executor.submit(load_wind, id),
+            executor.submit(load_sunshine, id),
+            executor.submit(load_preasure, id),
+        ]
+        for f in futures:
+            f.result()
 
 def load_messungen():
     for id in [id for id, data in stations.items() if data.get('count', 0) >= 3]:
@@ -115,16 +144,14 @@ def load_messungen():
 
 def update_measurements(dict):
     global measurements
-    last_year = datetime.now() - timedelta(days=366)
-    if dict['zeit'] > last_year:
+    last_year = datetime.now() - timedelta(days=365*2)
+    if dict['zeit'] >= last_year:
         if dict['zeit'] in measurements[dict['id']].keys():
             measurements[dict['id']][dict['zeit']].update(dict)
         else:
             measurements[dict['id']][dict['zeit']] = dict
 
 def load_temperatures(id):
-    print(f"Loading temperatures for {id}")
-    last = datetime.now() - timedelta(days=366)
     url = f"https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/hourly/air_temperature/recent/stundenwerte_TU_{id:05d}_akt.zip"
     content = load_produkt_from_zip(url)
     if content is not None:
@@ -135,9 +162,7 @@ def load_temperatures(id):
             update_measurements(data)
 
 def load_wind(id):
-    print(f"Loading wind for {id}")
     global measurements
-    last = datetime.now() - timedelta(days=366)
     url = f"https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/hourly/air_temperature/recent/stundenwerte_TU_{id:05d}_akt.zip"
     content = load_produkt_from_zip(url)
     if content is not None:
@@ -148,9 +173,7 @@ def load_wind(id):
             update_measurements(data)
 
 def load_sunshine(id):
-    print(f"Loading sunshine for {id}")
     global measurements
-    last = datetime.now() - timedelta(days=366)
     url = f"https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/hourly/sun/recent/stundenwerte_SD_{id:05d}_akt.zip"
     content = load_produkt_from_zip(url)
     if content is not None:
@@ -161,9 +184,7 @@ def load_sunshine(id):
             update_measurements(data)
 
 def load_preasure(id):
-    print(f"Loading presure for {id}")
     global measurements
-    last = datetime.now() - timedelta(days=366)
     url = f"https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/hourly/pressure/recent/stundenwerte_P0_{id:05d}_akt.zip"
     content = load_produkt_from_zip(url)
     if content is not None:

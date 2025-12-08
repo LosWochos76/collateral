@@ -82,7 +82,3 @@ def import_prices():
     print(f"Starte automatischen Import (Letzte 2 Jahre)...")
     import_day_ahead_prices("890e0482-0107-4d54-a524-8fb52161f3f1", start_date, now)
 
-def load():
-    import_prices()
-    #import_renewables()
-    #fix_locations_of_renewables()
