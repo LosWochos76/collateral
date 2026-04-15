@@ -6,7 +6,7 @@ from scipy.spatial.distance import cosine, euclidean
 import os
 
 # Bildpfade
-image_files = ["thomas-franz.jpg", "alexander-stuckenholz.jpg", "katze.jpg"]
+image_files = ["person3.jpg", "alexander-stuckenholz.jpg", "katze.jpg"]
 
 # Modell und Prozessor laden (CLIP von OpenAI)
 model_name = "openai/clip-vit-base-patch32"
@@ -19,7 +19,8 @@ def get_image_embedding(image_path):
     inputs = processor(images=image, return_tensors="pt")
     with torch.no_grad():
         outputs = model.get_image_features(**inputs)
-    return outputs[0] / outputs[0].norm()  # normalisiertes Embedding (für Cosinus)
+    normed = outputs[0] / outputs[0].norm()
+    return normed.detach().cpu().numpy().flatten()
 
 # Embeddings erzeugen
 embeddings = {}
