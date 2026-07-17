@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+.cache/
+.matplotlib-cache/
+*.pyc
+.DS_Store
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+build/
+dist/
+*.egg-info/
+results/
+.idea/workspace.xml
+.idea/tasks.xml

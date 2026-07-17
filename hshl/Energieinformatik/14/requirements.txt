@@ -1,0 +1,4 @@
+oemof.solph>=0.5
+highspy>=1.7
+pandas>=2.2
+numpy>=2.0

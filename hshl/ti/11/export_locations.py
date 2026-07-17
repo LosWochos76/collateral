@@ -3,8 +3,8 @@ import folium
 import numpy as np
 
 conn = psycopg2.connect(
-    #host="172.25.200.52", port=5432, dbname="postgres", user="postgres", password="hshl"
-    host="localhost", port=5432, dbname="postgres", user="postgres", password="hshl"
+    host="172.25.200.52", port=5432, dbname="postgres", user="postgres", password="hshl"
+    #host="localhost", port=5432, dbname="postgres", user="postgres", password="hshl"
 )
 
 
