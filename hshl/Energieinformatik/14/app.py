@@ -11,6 +11,8 @@ import numpy as np
 import pandas as pd
 from oemof import solph
 from pyomo.environ import SolverFactory
+from reportlab.lib.colors import HexColor, black, white
+from reportlab.pdfgen import canvas
 
 
 @dataclass(frozen=True)
@@ -375,6 +377,120 @@ def write_plot(timeseries: pd.DataFrame, output_dir: Path, week: int):
 </svg>
 """
     (output_dir / "dispatch_plot.svg").write_text(svg, encoding="utf-8")
+    write_plot_pdf(
+        output_dir / "dispatch_plot.pdf",
+        view,
+        stack_columns,
+        colors,
+        week,
+        width,
+        height,
+        left,
+        right,
+        top,
+        bottom,
+        max_y,
+    )
+
+
+def write_plot_pdf(
+    path: Path,
+    view: pd.DataFrame,
+    stack_columns: list[str],
+    colors: list[str],
+    week: int,
+    width: int,
+    height: int,
+    left: int,
+    right: int,
+    top: int,
+    bottom: int,
+    max_y: float,
+):
+    plot_w = width - left - right
+    plot_h = height - top - bottom
+
+    def x_pos(i: int) -> float:
+        return left + (i / max(len(view) - 1, 1)) * plot_w
+
+    def y_pos(value: float) -> float:
+        return top + plot_h - (value / max_y) * plot_h
+
+    def pdf_y(svg_y: float) -> float:
+        return height - svg_y
+
+    c = canvas.Canvas(str(path), pagesize=(width, height))
+    c.setFillColor(white)
+    c.rect(0, 0, width, height, stroke=0, fill=1)
+
+    c.setFillColor(black)
+    c.setFont("Helvetica", 22)
+    c.drawString(left, height - 32, f"Kraftwerkseinsatz in Kalenderwoche {week}")
+
+    c.saveState()
+    c.translate(22, pdf_y(top + plot_h / 2))
+    c.rotate(90)
+    c.setFont("Helvetica", 14)
+    c.drawCentredString(0, 0, "Leistung [GW]")
+    c.restoreState()
+
+    c.setStrokeColor(HexColor("#dddddd"))
+    c.setLineWidth(0.8)
+    c.setFillColor(black)
+    c.setFont("Helvetica", 12)
+    for value in np.linspace(0, max_y, 6):
+        y = y_pos(value)
+        c.line(left, pdf_y(y), width - right, pdf_y(y))
+        c.drawRightString(left - 10, pdf_y(y + 4), f"{value / 1000:.0f}")
+
+    c.setStrokeColor(HexColor("#eeeeee"))
+    for i, timestamp in enumerate(view.index):
+        if timestamp.hour == 0:
+            x = x_pos(i)
+            c.line(x, pdf_y(top), x, pdf_y(top + plot_h))
+            c.setFillColor(black)
+            c.drawCentredString(x, pdf_y(top + plot_h + 22), timestamp.strftime("%d.%m."))
+
+    cumulative = pd.Series(0.0, index=view.index)
+    for column, color in zip(stack_columns, colors):
+        lower = cumulative.copy()
+        upper = cumulative + view[column]
+        upper_points = [(x_pos(i), pdf_y(y_pos(v))) for i, v in enumerate(upper)]
+        lower_points = [(x_pos(i), pdf_y(y_pos(v))) for i, v in reversed(list(enumerate(lower)))]
+        points = upper_points + lower_points
+        area = c.beginPath()
+        area.moveTo(*points[0])
+        for point in points[1:]:
+            area.lineTo(*point)
+        area.close()
+        c.setFillColor(HexColor(color))
+        c.drawPath(area, stroke=0, fill=1)
+        cumulative = upper
+
+    c.setStrokeColor(black)
+    c.setLineWidth(1)
+    c.line(left, pdf_y(top + plot_h), width - right, pdf_y(top + plot_h))
+    c.line(left, pdf_y(top), left, pdf_y(top + plot_h))
+
+    load = c.beginPath()
+    load.moveTo(x_pos(0), pdf_y(y_pos(view["Last_MW"].iloc[0])))
+    for i, value in enumerate(view["Last_MW"].iloc[1:], start=1):
+        load.lineTo(x_pos(i), pdf_y(y_pos(value)))
+    c.setStrokeColor(black)
+    c.setLineWidth(2.4)
+    c.drawPath(load, stroke=1, fill=0)
+
+    c.setFont("Helvetica", 13)
+    for i, (column, color) in enumerate(zip(stack_columns + ["Last_MW"], colors + ["#000000"])):
+        x = left + (i % 4) * 230
+        y = height - 55 + (i // 4) * 22
+        c.setFillColor(HexColor(color))
+        c.rect(x, pdf_y(y - 1), 16, 10, stroke=0, fill=1)
+        c.setFillColor(black)
+        c.drawString(x + 24, pdf_y(y - 9), column)
+
+    c.showPage()
+    c.save()
 
 
 def main():

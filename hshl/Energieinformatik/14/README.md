@@ -47,7 +47,8 @@ Die Ergebnisse landen standardmaessig im Ordner `results/`:
 
 - `timeseries.csv`: Last, erneuerbare Einspeisung und thermischer Dispatch
 - `summary.csv`: Kosten, CO2 und Energiemengen je Kraftwerk
-- `dispatch_plot.svg`: Wochenansicht des Kraftwerkseinsatzes
+- `dispatch_plot.svg`: Wochenansicht des Kraftwerkseinsatzes als SVG
+- `dispatch_plot.pdf`: Wochenansicht des Kraftwerkseinsatzes als PDF
 
 Nuetzliche Optionen:
 
