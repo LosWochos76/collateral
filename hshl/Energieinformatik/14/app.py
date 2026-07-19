@@ -310,8 +310,8 @@ def write_plot(timeseries: pd.DataFrame, output_dir: Path, week: int):
     view = timeseries.loc[start:end]
     stack_columns = ["PV_MW", "Wind_MW", "Braunkohle_MW", "Steinkohle_MW", "Gas_MW", "Import_Lastabwurf_MW"]
     colors = ["#f5c542", "#5ca8d7", "#7f5a3a", "#4b4b4b", "#c95b40", "#d62728"]
-    width, height = 1200, 650
-    left, right, top, bottom = 80, 30, 60, 90
+    width, height = 1200, 720
+    left, right, top, bottom = 80, 30, 60, 145
     plot_w = width - left - right
     plot_h = height - top - bottom
     max_y = max(view["Last_MW"].max(), view[stack_columns].sum(axis=1).max()) * 1.08
@@ -345,7 +345,7 @@ def write_plot(timeseries: pd.DataFrame, output_dir: Path, week: int):
     legend_items = []
     for i, (column, color) in enumerate(zip(stack_columns + ["Last_MW"], colors + ["#000000"])):
         x = left + (i % 4) * 230
-        y = height - 55 + (i // 4) * 22
+        y = height - 70 + (i // 4) * 24
         legend_items.append(
             f'<rect x="{x}" y="{y - 11}" width="16" height="10" fill="{color}"/>'
             f'<text x="{x + 24}" y="{y - 2}" font-size="13">{column}</text>'
@@ -483,7 +483,7 @@ def write_plot_pdf(
     c.setFont("Helvetica", 13)
     for i, (column, color) in enumerate(zip(stack_columns + ["Last_MW"], colors + ["#000000"])):
         x = left + (i % 4) * 230
-        y = height - 55 + (i // 4) * 22
+        y = height - 70 + (i // 4) * 24
         c.setFillColor(HexColor(color))
         c.rect(x, pdf_y(y - 1), 16, 10, stroke=0, fill=1)
         c.setFillColor(black)
