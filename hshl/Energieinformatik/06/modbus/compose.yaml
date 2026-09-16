@@ -1,0 +1,12 @@
+services:
+  meter:
+    image: stuckenholz/modbus-server:latest
+    ports:
+      - "1502:1502"
+
+  client:
+    image: stuckenholz/modbus-server:latest
+    command: ["python3", "-m", "solution.client", "--host", "meter", "--interval", "1", "--count", "5"]
+    depends_on:
+      - meter
+    profiles: ["tools"]

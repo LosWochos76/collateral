@@ -1,0 +1,6 @@
+__pycache__/
+*.py[cod]
+.idea/workspace.xml
+.idea/shelf/
+.venv/
+messwerte.csv

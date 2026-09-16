@@ -1,0 +1,6 @@
+__pycache__/
+*.py[cod]
+.git/
+.idea/
+messwerte.csv
+build_and_push.sh
