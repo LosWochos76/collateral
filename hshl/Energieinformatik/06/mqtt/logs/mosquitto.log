@@ -1,0 +1,24 @@
+1790088773: mosquitto version 2.1.2 starting
+1790088773: Config loaded from /mosquitto/config/mosquitto.conf.
+1790088773: Bridge support available.
+1790088773: Persistence support available.
+1790088773: TLS support available.
+1790088773: TLS-PSK support available.
+1790088773: Websockets support available.
+1790088773: Opening ipv4 listen socket on port 1883.
+1790088773: Opening ipv6 listen socket on port 1883.
+1790088773: Opening ipv4 listen socket on port 9001.
+1790088773: Opening ipv6 listen socket on port 9001.
+1790088773: mosquitto version 2.1.2 running
+1790088964: New connection from 192.168.65.1:21318 on port 1883.
+1790088964: New client connected from 192.168.65.1:21318 as auto-FC44738B-6680-568C-7BA8-24F4E1E619EA (p4, c1, k60).
+1790088974: New connection from 192.168.65.1:54316 on port 1883.
+1790088974: New client connected from 192.168.65.1:54316 as auto-0D95FFF6-B5A0-1BA9-6D77-029175343C47 (p4, c1, k60).
+1790088974: Client auto-0D95FFF6-B5A0-1BA9-6D77-029175343C47 [192.168.65.1:54316] disconnected.
+1790088980: New connection from 192.168.65.1:62320 on port 1883.
+1790088980: New client connected from 192.168.65.1:62320 as auto-EF14C3AF-4E49-A8EA-D0F7-161A2754CA87 (p4, c1, k60).
+1790088980: Client auto-EF14C3AF-4E49-A8EA-D0F7-161A2754CA87 [192.168.65.1:62320] disconnected.
+1790088982: New connection from 192.168.65.1:36036 on port 1883.
+1790088982: New client connected from 192.168.65.1:36036 as auto-A47E3620-DBF1-E019-6B77-A46F4293A6B6 (p4, c1, k60).
+1790088982: Client auto-A47E3620-DBF1-E019-6B77-A46F4293A6B6 [192.168.65.1:36036] disconnected.
+1790089019: Client auto-FC44738B-6680-568C-7BA8-24F4E1E619EA [192.168.65.1:21318] disconnected: connection closed by client.
