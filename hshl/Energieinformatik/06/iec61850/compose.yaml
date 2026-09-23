@@ -1,17 +1,17 @@
 services:
   wind:
-    build: .
+    image: stuckenholz/iec61850:latest
     command: /opt/libiec61850/build/examples/server_example_61400_25/server_example_61400_25 8102
     ports:
       - "127.0.0.1:8102:8102"
+    networks:
+      - iec61850
   switch:
-    build: .
+    image: stuckenholz/iec61850:latest
     command: /opt/libiec61850/build/examples/server_example_basic_io/server_example_basic_io 8102
-  client:
-    build: .
-    command: sleep infinity
-    volumes:
-      - .:/exercise:ro
-    depends_on:
-      - wind
-      - switch
+    networks:
+      - iec61850
+
+networks:
+  iec61850:
+    name: iec61850-net

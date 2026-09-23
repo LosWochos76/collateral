@@ -4,11 +4,11 @@ Alle Messwerte liegen in **Input Registers** und werden mit Funktionscode
 `0x04` gelesen. Ein Register ist 16 Bit breit. Mehrwortwerte verwenden
 Big-Endian-Wortreihenfolge: zuerst das High Word, dann das Low Word.
 
-Die Spalte „PDU-Adresse“ ist die tatsaechlich im Telegramm uebertragene,
+Die Spalte „PDU-Adresse" ist die tatsächlich im Telegramm übertragene,
 nullbasierte Adresse. Die 3xxxx-Referenz ist nur die traditionelle
 Dokumentationsschreibweise.
 
-| 3xxxx-Referenz | PDU-Adresse | Laenge | Datentyp | Faktor | Einheit | Bedeutung |
+| 3xxxx-Referenz | PDU-Adresse | Länge | Datentyp | Faktor | Einheit | Bedeutung |
 |---:|---:|---:|---|---:|---|---|
 | 30001 | 0 | 1 | uint16 | 0,1 | V | Effektivspannung L1 |
 | 30002 | 1 | 1 | uint16 | 0,01 | A | Strom L1 |
@@ -27,15 +27,15 @@ Dokumentationsschreibweise.
 | 0 | `0x0001` | Netz vorhanden |
 | 1 | `0x0002` | Energiebezug |
 | 2 | `0x0004` | Energieeinspeisung |
-| 3 | `0x0008` | Ueberspannungswarnung |
+| 3 | `0x0008` | Überspannungswarnung |
 | 4 | `0x0010` | Kommunikations-Selbsttest aktiv |
 
-Nicht aufgefuehrte Bits sind reserviert und muessen beim Lesen ignoriert
+Nicht aufgeführte Bits sind reserviert und müssen beim Lesen ignoriert
 werden.
 
 ## Beispiel
 
-Antwortregister fuer die Wirkleistung:
+Antwortregister für die Wirkleistung:
 
 ```text
 FFFF F830
@@ -43,4 +43,4 @@ FFFF F830
 
 Als `int32` interpretiert ergibt das `-2000 W`, also eine Einspeisung von
 2 kW. Eine Interpretation als zwei getrennte positive Zahlen oder als
-`uint32` waere fachlich falsch.
+`uint32` wäre fachlich falsch.
