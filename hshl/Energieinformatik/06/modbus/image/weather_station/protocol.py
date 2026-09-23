@@ -1,6 +1,6 @@
 """Small, strict Modbus TCP codec used by the teaching project.
 
-Only function 0x04 (Read Input Registers) and exception responses are needed.
+Only function 0x03 (Read Holding Registers) and exception responses are needed.
 Keeping the codec small makes every byte inspectable in class.
 """
 
@@ -144,3 +144,15 @@ def int32_to_registers(value: int) -> tuple[int, int]:
     if not -(2**31) <= value < 2**31:
         raise ValueError("value must fit in int32")
     return uint32_to_registers(value & 0xFFFF_FFFF)
+
+
+def registers_to_float32(low_register: int, high_register: int) -> float:
+    """Combine two registers into an IEEE-754 float, high word at the larger address."""
+    raw = ((high_register & 0xFFFF) << 16) | (low_register & 0xFFFF)
+    return struct.unpack(">f", struct.pack(">I", raw))[0]
+
+
+def float32_to_registers(value: float) -> tuple[int, int]:
+    """Inverse of registers_to_float32: returns (low_register, high_register)."""
+    raw = struct.unpack(">I", struct.pack(">f", value))[0]
+    return raw & 0xFFFF, (raw >> 16) & 0xFFFF

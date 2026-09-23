@@ -9,8 +9,10 @@ if [[ ! "$TAG" =~ ^[A-Za-z0-9_][A-Za-z0-9_.-]{0,127}$ ]]; then
   exit 2
 fi
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 echo "Baue ${IMAGE_NAME}:${TAG}"
-docker build --pull --tag "${IMAGE_NAME}:${TAG}" .
+docker build --pull --tag "${IMAGE_NAME}:${TAG}" "${SCRIPT_DIR}"
 
 echo "Uebertrage ${IMAGE_NAME}:${TAG} nach Docker Hub"
 docker push "${IMAGE_NAME}:${TAG}"

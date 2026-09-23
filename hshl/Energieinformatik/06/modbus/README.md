@@ -1,83 +1,56 @@
-# Modbus-Smart-Meter
+# Modbus-Wetterstation
 
 Dieses Paket enthält die technische Infrastruktur für die Modbus-Übung der
 Veranstaltung Energieinformatik. Die Aufgabenstellung steht ausschließlich in
 den Vorlesungsfolien zu Kapitel 07.
 
-Ein simulierter Zweirichtungszähler liefert plausible Messwerte für Spannung,
-Strom, Leistung, Energie, Frequenz und Leistungsfaktor. Dazu gibt es einen
-unfertigen Lern-Client, eine Musterlösung, einen Rohtelegramm-Inspektor und
-automatisierte Tests.
+Simuliert wird das **echte Datenmodell der Wetterstation auf dem Dach der
+HSHL**: Strahlungswerte (GHI/DHI/DNI), Lufttemperatur, Luftfeuchte, Luftdruck,
+Wind, Niederschlag sowie Logger-Diagnosedaten.
 
-Für die Python-Clients ist Python 3.10 oder neuer erforderlich. Die Clients
-verwenden nur die Standardbibliothek und benötigen keine Installation weiterer
-Pakete.
+Der Client nutzt bewusst nur `pymodbus` (Standardpaket für Modbus in Python,
+siehe Kapitel 06) für die TCP-Verbindung und `struct` aus der
+Python-Standardbibliothek für die Interpretation der Werte -- keine eigene,
+vorgefertigte Abstraktionsschicht. Das Protokoll-Detailwissen (MBAP-Header,
+PDU) ist damit weder nötig noch Teil der Übung; im Vordergrund steht, Werte
+korrekt aus dem in REGISTERPLAN.md beschriebenen Registerplan zu extrahieren.
 
-## Smart Meter als Docker-Container starten
-
-Die Studierenden starten den Modbus-Server als bereitgestellten Container:
+## Wetterstation lokal starten
 
 ```bash
-docker pull stuckenholz/modbus-server:latest
-docker run --rm --name modbus-meter -p 1502:1502 stuckenholz/modbus-server:latest
+docker compose up -d
 ```
 
-Der Zähler ist danach unter `127.0.0.1:1502` mit Unit-ID `1` erreichbar. Port
+Die Station ist danach unter `127.0.0.1:1502` mit Unit-ID `1` erreichbar. Port
 1502 wird bewusst anstelle des privilegierten Modbus-Ports 502 verwendet.
+Alle Messwerte liegen in Holding Registers und werden mit Funktionscode `0x03`
+gelesen.
 
-Das bereitgestellte Image verwendet das Profil `pv` und eine beschleunigte
-Simulation. Zum Beenden genügt `Ctrl+C`.
+Die Simulation läuft beschleunigt (ein simulierter Tag dauert real nur wenige
+Minuten), damit sich auch der Tag-Nacht-Verlauf der Strahlungswerte im
+Unterricht beobachten lässt. Zum Beenden: `docker compose down`.
 
-## Client-Arbeitsvorlage
-
-Vom Verzeichnis `modbus` aus:
-
-```bash
-python3 -m student.client
-```
-
-Die fachliche Beschreibung der Register steht in
-[REGISTERPLAN.md](REGISTERPLAN.md). Die Aufgabenstellung und der vorgesehene
-Umfang stehen in den Folien.
-
-## Rohes Modbus-Telegramm untersuchen
+## Client-Beispiel
 
 ```bash
-python3 -m tools.raw_request --address 0 --count 13
+./create_environment.sh
+./client.sh
 ```
 
-Das Tool zeigt Anfrage und Antwort hexadezimal sowie die einzelnen Felder des
-MBAP-Headers. Mit `--function 3` oder `--address 100` lassen sich
-Exception-Responses auslösen.
-
-## Musterlösung
-
-Ein einzelner Snapshot:
-
-```bash
-python3 -m solution.client
-```
-
-Zehn Messungen im Abstand von zwei Sekunden mit CSV-Export:
-
-```bash
-python3 -m solution.client --interval 2 --count 10 --csv messwerte.csv
-```
-
-## Tests
-
-```bash
-python3 -m unittest discover -s tests -v
-```
-
-Die Integrationstests starten einen Zähler auf einem freien lokalen Port und
-prüfen auch Modbus-Exception-Responses.
+`client.py` zeigt vollständig und lauffähig, wie ein einzelner Messwert
+(Lufttemperatur) über `pymodbus` gelesen und mit `struct` interpretiert wird.
+Alle weiteren Messwerte aus [REGISTERPLAN.md](REGISTERPLAN.md) selbst zu lesen
+und zu interpretieren ist Teil der Übung; die Aufgabenstellung steht in den
+Folien.
 
 ## Docker-Image bauen und veröffentlichen
 
-Das Skript baut das Image und überträgt den angegebenen Tag nach Docker Hub:
+Das Skript baut das Image (Kontext: `image/`, dort liegt auch die
+Server-Implementierung `weather_station/`) und überträgt den angegebenen Tag
+nach Docker Hub:
 
 ```bash
+cd image
 ./build_and_push.sh 1.0.0
 ```
 
@@ -87,14 +60,16 @@ erfolgreiches `docker login` für den Docker-Hub-Account `stuckenholz`.
 ## Struktur
 
 ```text
-modbus_meter/          Protokoll, Clientbibliothek, Simulation und Server
-student/client.py      Arbeitsvorlage mit TODOs
-solution/client.py     lauffähige Musterlösung
-tools/raw_request.py   Telegramme byteweise sichtbar machen
-tests/                 Unit- und Integrationstests
+client.py                        Beispiel: liest einen einzelnen Messwert (pymodbus + struct)
+requirements.txt                 pymodbus
+create_environment.sh            legt .venv an und installiert requirements.txt
+client.sh                        startet client.py in .venv
+compose.yaml                     startet den Server aus stuckenholz/modbus-server
+image/Dockerfile                 baut das Server-Image
+image/build_and_push.sh          baut und veröffentlicht stuckenholz/modbus-server
+image/weather_station/           Protokoll, Simulation und Server -- nur im Image, kein Client-Code
 ```
 
-Das Projekt implementiert bewusst nur den für die Übung benötigten Teil von
-Modbus TCP. Modbus TCP bietet von sich aus weder Authentifizierung noch
-Verschlüsselung. Der Container sollte deshalb nur in einer kontrollierten
-Laborumgebung oder auf dem eigenen Rechner verwendet werden.
+Modbus TCP bietet von sich aus weder Authentifizierung noch Verschlüsselung.
+Der Container sollte deshalb nur in einer kontrollierten Laborumgebung oder
+auf dem eigenen Rechner verwendet werden.

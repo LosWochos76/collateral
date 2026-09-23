@@ -1,46 +1,59 @@
-# Registerplan des simulierten Smart Meters
+# Registerplan der Wetterstation
 
-Alle Messwerte liegen in **Input Registers** und werden mit Funktionscode
-`0x04` gelesen. Ein Register ist 16 Bit breit. Mehrwortwerte verwenden
-Big-Endian-Wortreihenfolge: zuerst das High Word, dann das Low Word.
+Dieses Datenmodell entspricht der **echten Wetterstation auf dem Dach der
+HSHL**. Der simulierte Server bildet exakt diese Register nach -- inklusive
+ihrer (etwas ungewöhnlichen) Wortreihenfolge.
+
+Alle Messwerte liegen in **Holding Registers** und werden mit Funktionscode
+`0x03` gelesen. Ein Register ist 16 Bit breit. Jeder Messwert belegt zwei
+aufeinanderfolgende Register und ist als **IEEE-754-Float (32 Bit)** kodiert.
+
+**Wortreihenfolge:** Die zwei höherwertigen Bytes eines Messwerts liegen im
+Register mit der **größeren** Adresse -- also *nicht* wie beim klassischen
+Big-Endian-Wort zuerst das High Word. Wer das nicht beachtet, erhält
+syntaktisch gültige, aber fachlich falsche Werte.
 
 Die Spalte „PDU-Adresse" ist die tatsächlich im Telegramm übertragene,
-nullbasierte Adresse. Die 3xxxx-Referenz ist nur die traditionelle
-Dokumentationsschreibweise.
+nullbasierte Adresse. Die 4xxxx-Referenz ist die beim Hersteller übliche
+Dokumentationsschreibweise (PDU-Adresse = Referenz − 40001).
 
-| 3xxxx-Referenz | PDU-Adresse | Länge | Datentyp | Faktor | Einheit | Bedeutung |
-|---:|---:|---:|---|---:|---|---|
-| 30001 | 0 | 1 | uint16 | 0,1 | V | Effektivspannung L1 |
-| 30002 | 1 | 1 | uint16 | 0,01 | A | Strom L1 |
-| 30003 | 2 | 2 | int32 | 1 | W | Wirkleistung; positiv Bezug, negativ Einspeisung |
-| 30005 | 4 | 2 | int32 | 1 | var | Blindleistung |
-| 30007 | 6 | 2 | uint32 | 1 | Wh | bezogene Energie, monoton steigend |
-| 30009 | 8 | 2 | uint32 | 1 | Wh | eingespeiste Energie, monoton steigend |
-| 30011 | 10 | 1 | uint16 | 0,01 | Hz | Netzfrequenz |
-| 30012 | 11 | 1 | int16 | 0,001 | - | Leistungsfaktor |
-| 30013 | 12 | 1 | uint16 | - | Bitfeld | Status |
+| 4xxxx-Referenz | PDU-Adresse (low/high) | Variable | Einheit | Bedeutung |
+|---:|---:|---|---|---|
+| 40001 | 0/1 | `ghi_final_min` | W/m² | GHI, Minutenmittel der Vorminute; minütlich aktualisiert |
+| 40003 | 2/3 | `dhi_final_min` | W/m² | DHI, Minutenmittel der Vorminute; minütlich aktualisiert |
+| 40005 | 4/5 | `dni_final_min` | W/m² | DNI, Minutenmittel der Vorminute; minütlich aktualisiert |
+| 40007 | 6/7 | `cmp_ghi` | W/m² | GHI des CMP10-Pyranometers; sekündlich aktualisiert |
+| 40009 | 8/9 | `sensor_temp` | °C | Gehäusetemperatur des RSP-Sensors; sekündlich aktualisiert |
+| 40011 | 10/11 | `tair` | °C | Lufttemperatur; alle 10 s aktualisiert |
+| 40013 | 12/13 | `rh` | % | relative Luftfeuchte; alle 10 s aktualisiert |
+| 40015 | 14/15 | `bp` | hPa | Luftdruck; alle 10 min aktualisiert |
+| 40017 | 16/17 | `ws` | m/s | Windgeschwindigkeit; sekündlich aktualisiert |
+| 40019 | 18/19 | `wsgust` | m/s | Windböe; sekündlich aktualisiert |
+| 40021 | 20/21 | `wd` | ° | Windrichtung; sekündlich aktualisiert |
+| 40023 | 22/23 | `rain_mm` | mm | Niederschlag; sekündlich aktualisiert |
+| 40025 | 24/25 | `logger_voltage` | V | Versorgungsspannung des Loggers; sekündlich aktualisiert |
+| 40027 | 26/27 | `logger_temp_c` | °C | Innentemperatur des Loggers; sekündlich aktualisiert |
+| 40029 | 28/29 | `ic` | Anzahl | Reinigungs-Ereigniszähler; minütlich aktualisiert |
 
-## Statusregister 30013
-
-| Bit | Maske | Bedeutung bei 1 |
-|---:|---:|---|
-| 0 | `0x0001` | Netz vorhanden |
-| 1 | `0x0002` | Energiebezug |
-| 2 | `0x0004` | Energieeinspeisung |
-| 3 | `0x0008` | Überspannungswarnung |
-| 4 | `0x0010` | Kommunikations-Selbsttest aktiv |
-
-Nicht aufgeführte Bits sind reserviert und müssen beim Lesen ignoriert
-werden.
+Insgesamt also 15 Messwerte in 30 Registern (PDU-Adressen 0 bis 29).
 
 ## Beispiel
 
-Antwortregister für die Wirkleistung:
+Antwortregister für `tair` (PDU-Adresse 10/11):
 
 ```text
-FFFF F830
+Adresse 10 (low):  00 00
+Adresse 11 (high): 41 60
 ```
 
-Als `int32` interpretiert ergibt das `-2000 W`, also eine Einspeisung von
-2 kW. Eine Interpretation als zwei getrennte positive Zahlen oder als
-`uint32` wäre fachlich falsch.
+Zusammengesetzt zum 32-Bit-Wort `0x41600000` (High Word aus Adresse 11 zuerst!)
+und als IEEE-754-Float interpretiert ergibt das `14.0 °C`. Würde man
+stattdessen Adresse 10 als High Word behandeln (die "übliche" Reihenfolge),
+käme ein unsinniger Wert heraus.
+
+## `ic` ist ein Zähler, kein Messwert
+
+`ic` ändert sich nur gelegentlich (ein Reinigungsereignis wird geloggt) und
+bleibt sonst über viele Abfragen hinweg konstant -- anders als alle übrigen,
+sich laufend ändernden Messgrößen. Das ist beabsichtigt und entspricht dem
+Verhalten des realen Geräts.
