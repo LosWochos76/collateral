@@ -1,0 +1,2 @@
+# Keine externen Abhaengigkeiten: server.py und client.py nutzen nur die
+# Python-Standardbibliothek (http.server, urllib.request, xml.etree).
