@@ -1,0 +1,189 @@
+{
+  "id": "lfwLfaSimulation1",
+  "name": "Lieferantenwechsel 3: Lieferant alt (Simulation)",
+  "active": false,
+  "nodes": [
+    {
+      "id": "8edbdc87-41ab-436a-bf9f-c8e2ab5e74d8",
+      "name": "Beendigung empfangen",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lfa",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "webhookId": "5b3c2a10-1f2e-4d3c-9a8b-000000000103"
+    },
+    {
+      "id": "55e5257d-e172-45b7-be2f-a23c98b67716",
+      "name": "LFA antwortet?",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        0
+      ],
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a876b112-6cd1-4f3e-ba25-391fc6d82b9e",
+              "name": "lfa_antwortet",
+              "value": true,
+              "type": "boolean"
+            },
+            {
+              "id": "74283a7e-c4e6-47c4-a4d7-0b7341d5b25d",
+              "name": "antwort_an",
+              "value": "={{ $json.body.antwort_an }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "3d82368c-08d2-42e4-9aa4-4897bd0ada9b",
+      "name": "Antworten?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        440,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "23675db9-48f8-4a5f-81f0-e9356a7cd5ae",
+              "leftValue": "={{ $json.lfa_antwortet }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      }
+    },
+    {
+      "id": "42293b79-c013-4683-b6a7-9be2ad8e4f39",
+      "name": "Bearbeitungszeit",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        660,
+        -100
+      ],
+      "parameters": {
+        "amount": 5,
+        "unit": "seconds"
+      },
+      "webhookId": "5b3c2a10-1f2e-4d3c-9a8b-000000000104"
+    },
+    {
+      "id": "3f0279ad-e683-4810-a48a-75661b8befd7",
+      "name": "Antwort an NB",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        880,
+        -100
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.antwort_an }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ ergebnis: 'bestaetigt' }) }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "39a46997-e821-4ecf-a92d-a727f9c7904a",
+      "name": "Schweigen",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        660,
+        100
+      ],
+      "parameters": {}
+    }
+  ],
+  "connections": {
+    "Beendigung empfangen": {
+      "main": [
+        [
+          {
+            "node": "LFA antwortet?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LFA antwortet?": {
+      "main": [
+        [
+          {
+            "node": "Antworten?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Antworten?": {
+      "main": [
+        [
+          {
+            "node": "Bearbeitungszeit",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Schweigen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bearbeitungszeit": {
+      "main": [
+        [
+          {
+            "node": "Antwort an NB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

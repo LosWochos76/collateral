@@ -1,0 +1,577 @@
+{
+  "id": "lfwNetzbetreiber01",
+  "name": "Lieferantenwechsel 2: Anmeldung beim Netzbetreiber",
+  "active": false,
+  "nodes": [
+    {
+      "id": "c4d30dc2-2da9-47db-bd3f-5ef8d7df901a",
+      "name": "Anmeldung",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "anmeldung",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "webhookId": "5b3c2a10-1f2e-4d3c-9a8b-000000000101"
+    },
+    {
+      "id": "4e0d5c76-b9c8-48d5-a160-d303844e3556",
+      "name": "Anmeldung lesen",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        200,
+        0
+      ],
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={{ $json.body }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "a4c72d92-54d9-41fd-ada4-04d7432314bd",
+      "name": "MaLo suchen",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        400,
+        0
+      ],
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "marktlokationen"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "malo_id",
+              "condition": "eq",
+              "keyValue": "={{ $json.malo_id }}"
+            }
+          ]
+        },
+        "returnAll": false,
+        "limit": 1,
+        "options": {}
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "id": "068b984d-a1ae-4e28-b7d5-916427e770fc",
+      "name": "Zuordnung suchen",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        600,
+        0
+      ],
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "zuordnungen"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "malo_id",
+              "condition": "eq",
+              "keyValue": "={{ $('Anmeldung lesen').item.json.malo_id }}"
+            },
+            {
+              "keyName": "ab",
+              "condition": "eq",
+              "keyValue": "={{ $('Anmeldung lesen').item.json.lieferbeginn }}"
+            }
+          ]
+        },
+        "returnAll": false,
+        "limit": 1,
+        "options": {}
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "id": "e2931799-6702-4752-9eb4-6c8eca28cea1",
+      "name": "Prüfdaten zusammenstellen",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        800,
+        0
+      ],
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={{ { ...$('Anmeldung lesen').item.json, malo_bekannt: $('MaLo suchen').item.json.id !== undefined, termin_belegt: $json.id !== undefined } }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "a472c6fc-d5b9-4864-877d-d971fe1ec558",
+      "name": "Anmeldung prüfen",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1000,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "pythonNative",
+        "pythonCode": "# Modus \"Run Once for Each Item\"\n# Prüfungen der Anmeldung der Reihe nach, wie in einem Entscheidungsbaum:\n# Die erste Prüfung, die fehlschlägt, bestimmt den Ablehnungsgrund.\nfrom datetime import date, timedelta\n\na = _item[\"json\"]\n\ndef ergebnis(ok, grund=\"\"):\n    return {\"json\": {**a, \"ok\": ok, \"grund\": grund}}\n\n# 1. Pflichtangaben vorhanden?\nfor feld in [\"nachricht_id\", \"malo_id\", \"lieferbeginn\", \"lfn\"]:\n    if not a.get(feld):\n        return ergebnis(False, \"Pflichtangabe fehlt: \" + feld)\n\n# 2. Liefertermin frühestens am nächsten Werktag? (Feiertage ignoriert)\ntry:\n    termin = date.fromisoformat(a[\"lieferbeginn\"])\nexcept ValueError:\n    return ergebnis(False, \"Liefertermin ungültig\")\nfrueh = date.today() + timedelta(days=1)\nwhile frueh.weekday() >= 5:  # 5 = Samstag, 6 = Sonntag\n    frueh += timedelta(days=1)\nif termin < frueh:\n    return ergebnis(False, \"Liefertermin zu früh\")\n\n# 3. Marktlokation bekannt?\nif not a[\"malo_bekannt\"]:\n    return ergebnis(False, \"MaLo-ID unbekannt\")\n\n# 4. Termin noch frei?\nif a[\"termin_belegt\"]:\n    return ergebnis(False, \"Konkurrierende Anmeldung\")\n\nreturn ergebnis(True)\n"
+      }
+    },
+    {
+      "id": "2d46570e-e230-4d6a-a1ee-1f24ed2c4ee8",
+      "name": "Anmeldung zulässig?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1200,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d705afd9-cb35-469d-9151-01e893cb3ff8",
+              "leftValue": "={{ $json.ok }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      }
+    },
+    {
+      "id": "0c58d179-289b-4d72-9111-0831d071caae",
+      "name": "Zuordnung speichern",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        200,
+        320
+      ],
+      "parameters": {
+        "resource": "row",
+        "operation": "insert",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "zuordnungen"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "malo_id": "={{ $json.malo_id }}",
+            "lieferant": "={{ $json.lfn }}",
+            "ab": "={{ $json.lieferbeginn }}",
+            "nachricht_id": "={{ $json.nachricht_id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "malo_id",
+              "displayName": "malo_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "lieferant",
+              "displayName": "lieferant",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ab",
+              "displayName": "ab",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "nachricht_id",
+              "displayName": "nachricht_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "24963ed4-f549-44fe-b567-7c509e247d80",
+      "name": "Bestätigung an LFN",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        400,
+        320
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ nachricht_id: $json.nachricht_id, ergebnis: 'bestaetigt' }) }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "1cd50c91-7b96-43f1-90b2-6352d2f4e346",
+      "name": "Beendigung an LFA",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        600,
+        320
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:5678/webhook/lfa",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ malo_id: $('Anmeldung prüfen').item.json.malo_id, ende: $('Anmeldung prüfen').item.json.lieferbeginn, antwort_an: $execution.resumeUrl }) }}",
+        "options": {}
+      },
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
+    },
+    {
+      "id": "da478984-df86-4c34-8692-184052ee6a82",
+      "name": "Auf Antwort des LFA warten",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        800,
+        320
+      ],
+      "parameters": {
+        "resume": "webhook",
+        "httpMethod": "POST",
+        "limitWaitTime": true,
+        "limitType": "afterTimeInterval",
+        "resumeAmount": 2,
+        "resumeUnit": "minutes",
+        "options": {}
+      },
+      "webhookId": "5b3c2a10-1f2e-4d3c-9a8b-000000000102"
+    },
+    {
+      "id": "0b25cb26-5b2b-4904-b0ef-3a705d2d308c",
+      "name": "Antwort erhalten?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1000,
+        320
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "2a7379a2-44c3-41e1-bad1-c7763045022e",
+              "leftValue": "={{ $json.body }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      }
+    },
+    {
+      "id": "c57b1250-42a8-4c4b-9a2c-83247d90e01d",
+      "name": "Fertig",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        240
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "2abe4be2-fdba-4bcc-9a66-692385c29b0a",
+      "name": "Klärfall anlegen",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1200,
+        400
+      ],
+      "parameters": {
+        "resource": "row",
+        "operation": "insert",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "klaerfaelle"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "nachricht_id": "={{ $('Anmeldung prüfen').item.json.nachricht_id }}",
+            "malo_id": "={{ $('Anmeldung prüfen').item.json.malo_id }}",
+            "grund": "Keine Antwort des LFA innerhalb der Frist"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "nachricht_id",
+              "displayName": "nachricht_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "malo_id",
+              "displayName": "malo_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "grund",
+              "displayName": "grund",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "bb89c9ea-3f8b-4cce-a55f-60031b942ce6",
+      "name": "Ablehnung an LFN",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1400,
+        100
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ nachricht_id: $json.nachricht_id, ergebnis: 'abgelehnt', grund: $json.grund }) }}",
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Anmeldung": {
+      "main": [
+        [
+          {
+            "node": "Anmeldung lesen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anmeldung lesen": {
+      "main": [
+        [
+          {
+            "node": "MaLo suchen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MaLo suchen": {
+      "main": [
+        [
+          {
+            "node": "Zuordnung suchen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Zuordnung suchen": {
+      "main": [
+        [
+          {
+            "node": "Prüfdaten zusammenstellen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prüfdaten zusammenstellen": {
+      "main": [
+        [
+          {
+            "node": "Anmeldung prüfen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anmeldung prüfen": {
+      "main": [
+        [
+          {
+            "node": "Anmeldung zulässig?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anmeldung zulässig?": {
+      "main": [
+        [
+          {
+            "node": "Zuordnung speichern",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ablehnung an LFN",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Zuordnung speichern": {
+      "main": [
+        [
+          {
+            "node": "Bestätigung an LFN",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bestätigung an LFN": {
+      "main": [
+        [
+          {
+            "node": "Beendigung an LFA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Beendigung an LFA": {
+      "main": [
+        [
+          {
+            "node": "Auf Antwort des LFA warten",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Auf Antwort des LFA warten": {
+      "main": [
+        [
+          {
+            "node": "Antwort erhalten?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Antwort erhalten?": {
+      "main": [
+        [
+          {
+            "node": "Fertig",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Klärfall anlegen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

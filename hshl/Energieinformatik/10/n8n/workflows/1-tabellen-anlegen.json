@@ -1,0 +1,241 @@
+{
+  "id": "lfwSetup000000001",
+  "name": "Lieferantenwechsel 1: Tabellen anlegen",
+  "active": false,
+  "nodes": [
+    {
+      "id": "7c64b653-ce77-4b8a-9c4f-b23f413b5dc7",
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "8d4638f3-ed04-4d46-85fb-be5dfe389f6f",
+      "name": "Tabelle marktlokationen",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        220,
+        0
+      ],
+      "parameters": {
+        "resource": "table",
+        "operation": "create",
+        "tableName": "marktlokationen",
+        "columns": {
+          "column": [
+            {
+              "name": "malo_id",
+              "type": "string"
+            },
+            {
+              "name": "adresse",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {
+          "createIfNotExists": true
+        }
+      }
+    },
+    {
+      "id": "d6d5fdc9-86a3-44d7-bea8-3cc0fee38b8f",
+      "name": "Tabelle zuordnungen",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        440,
+        0
+      ],
+      "parameters": {
+        "resource": "table",
+        "operation": "create",
+        "tableName": "zuordnungen",
+        "columns": {
+          "column": [
+            {
+              "name": "malo_id",
+              "type": "string"
+            },
+            {
+              "name": "lieferant",
+              "type": "string"
+            },
+            {
+              "name": "ab",
+              "type": "string"
+            },
+            {
+              "name": "nachricht_id",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {
+          "createIfNotExists": true
+        }
+      }
+    },
+    {
+      "id": "8c3333be-fdfa-44d5-a188-09feba641af4",
+      "name": "Tabelle klaerfaelle",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        660,
+        0
+      ],
+      "parameters": {
+        "resource": "table",
+        "operation": "create",
+        "tableName": "klaerfaelle",
+        "columns": {
+          "column": [
+            {
+              "name": "nachricht_id",
+              "type": "string"
+            },
+            {
+              "name": "malo_id",
+              "type": "string"
+            },
+            {
+              "name": "grund",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {
+          "createIfNotExists": true
+        }
+      }
+    },
+    {
+      "id": "ddc43dd9-d805-4520-a5d4-0a2b702517a0",
+      "name": "Beispiel-Marktlokationen",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        0
+      ],
+      "parameters": {
+        "jsCode": "// Fiktive Marktlokationen mit gültiger Prüfziffer\nreturn [\n  { json: { malo_id: \"51238696781\", adresse: \"Marker Allee 76, Hamm\" } },\n  { json: { malo_id: \"51000000011\", adresse: \"Lippestraße 1, Lippstadt\" } },\n  { json: { malo_id: \"51000000029\", adresse: \"Bahnhofstraße 2, Soest\" } },\n  { json: { malo_id: \"51000000037\", adresse: \"Markt 3, Unna\" } },\n];"
+      }
+    },
+    {
+      "id": "df2af171-91c4-4166-90f3-7b3cc35773ee",
+      "name": "Marktlokationen speichern",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1100,
+        0
+      ],
+      "parameters": {
+        "resource": "row",
+        "operation": "insert",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "marktlokationen"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "malo_id",
+              "displayName": "malo_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "adresse",
+              "displayName": "adresse",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ]
+        },
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Tabelle marktlokationen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tabelle marktlokationen": {
+      "main": [
+        [
+          {
+            "node": "Tabelle zuordnungen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tabelle zuordnungen": {
+      "main": [
+        [
+          {
+            "node": "Tabelle klaerfaelle",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tabelle klaerfaelle": {
+      "main": [
+        [
+          {
+            "node": "Beispiel-Marktlokationen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Beispiel-Marktlokationen": {
+      "main": [
+        [
+          {
+            "node": "Marktlokationen speichern",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

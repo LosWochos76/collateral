@@ -1,0 +1,35 @@
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:2.41.6
+    container_name: n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      - GENERIC_TIMEZONE=Europe/Berlin   # Zeitzone fuer Zeitplaene und Wait-Nodes
+      - TZ=Europe/Berlin                 # Zeitzone des Containers
+      - N8N_SECURE_COOKIE=false          # Login ueber http://localhost ohne TLS erlauben
+      - N8N_RUNNERS_MODE=external        # Code-Nodes laufen im Container "runners"
+      - N8N_RUNNERS_BROKER_LISTEN_ADDRESS=0.0.0.0
+      - N8N_RUNNERS_AUTH_TOKEN=lehre-n8n-runner   # nur fuer den lokalen Betrieb
+    extra_hosts:
+      - "host.docker.internal:host-gateway"  # eigenen Rechner auch unter Linux erreichbar machen
+    volumes:
+      - n8n_data:/home/node/.n8n         # Workflows, Credentials und Einstellungen
+
+  runners:
+    image: n8nio/runners:2.41.6          # gleiche Version wie n8n
+    container_name: n8n-runners
+    restart: unless-stopped
+    environment:
+      - N8N_RUNNERS_TASK_BROKER_URI=http://n8n:5679
+      - N8N_RUNNERS_AUTH_TOKEN=lehre-n8n-runner
+      - TZ=Europe/Berlin
+      - GENERIC_TIMEZONE=Europe/Berlin
+    volumes:
+      - ./n8n-task-runners.json:/etc/n8n-task-runners.json:ro  # erlaubt "import datetime" im Python-Code-Node
+    depends_on:
+      - n8n
+
+volumes:
+  n8n_data:
