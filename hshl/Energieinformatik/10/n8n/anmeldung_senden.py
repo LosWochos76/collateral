@@ -14,7 +14,7 @@ import requests
 # Die genaue URL steht im Webhook-Node von n8n:
 # Test-URL (".../webhook-test/...") nach "Execute workflow",
 # Production-URL (".../webhook/...") nach dem Veröffentlichen des Workflows.
-URL = "http://localhost:5678/webhook-test/anmeldung"
+URL = "http://localhost:5678/webhook/anmeldung"
 
 
 def naechster_werktag(tage: int) -> str:
