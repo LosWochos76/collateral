@@ -16,13 +16,13 @@ spec:
       - name: mariadb
         image: mariadb:latest
         env:
-        - name: MYSQL_ROOT_PASSWORD
+        - name: MARIADB_ROOT_PASSWORD
           value: "rootpassword"
-        - name: MYSQL_DATABASE
+        - name: MARIADB_DATABASE
           value: "wordpress"
-        - name: MYSQL_USER
+        - name: MARIADB_USER
           value: "wpuser"
-        - name: MYSQL_PASSWORD
+        - name: MARIADB_PASSWORD
           value: "wppassword"
         ports:
         - containerPort: 3306

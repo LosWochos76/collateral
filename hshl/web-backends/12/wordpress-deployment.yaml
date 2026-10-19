@@ -53,7 +53,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: wordpress-service
+  name: wordpress
 spec:
   ports:
     - port: 80
@@ -72,6 +72,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: wordpress-service
+            name: wordpress
             port:
               number: 80

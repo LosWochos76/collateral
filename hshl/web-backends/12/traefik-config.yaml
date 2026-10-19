@@ -1,0 +1,11 @@
+# Copy to /var/lib/rancher/k3s/server/manifests/ on a server node
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: traefik
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    providers:
+      kubernetesGateway:
+        enabled: true
