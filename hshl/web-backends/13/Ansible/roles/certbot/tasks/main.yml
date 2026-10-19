@@ -7,9 +7,10 @@
     state: present
     update_cache: true
 
+# Version 4 uses the Hetzner Cloud API, the old DNS API was shut down in May 2026
 - name: Install hetzner extension for certbot
   ansible.builtin.pip:
-    name: certbot-dns-hetzner
+    name: certbot-dns-hetzner>=4.0.0
 
 - name: ensures certbot dir exists
   file: 

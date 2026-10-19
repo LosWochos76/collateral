@@ -1,12 +1,14 @@
 ---
+# apt_key is deprecated, the key is stored in /etc/apt/keyrings instead
 - name: Add Docker GPG apt Key
-  ansible.builtin.apt_key:
+  ansible.builtin.get_url:
     url: https://download.docker.com/linux/ubuntu/gpg
-    state: present
+    dest: /etc/apt/keyrings/docker.asc
+    mode: '0644'
 
 - name: Add repository into sources list
   ansible.builtin.apt_repository:
-    repo: deb [arch=arm64] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable
+    repo: "deb [arch={{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable"
     state: present
     filename: docker
     update_cache: true

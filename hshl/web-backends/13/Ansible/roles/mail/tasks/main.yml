@@ -20,8 +20,8 @@
 
 - name: create mail accounts
   ansible.builtin.shell: |
-    docker exec -it mailserver setup config dkim > /dev/null
-    docker exec -ti mailserver setup email add alex@stubwood.com luso76wake!S > /dev/null
+    docker exec mailserver setup config dkim > /dev/null
+    docker exec mailserver setup email add alex@stubwood.com luso76wake!S > /dev/null
   args:
     chdir: /root/mail
   ignore_errors: true

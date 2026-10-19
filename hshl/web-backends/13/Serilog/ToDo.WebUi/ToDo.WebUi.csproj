@@ -1,33 +1,33 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>ToDoManager.WebUi</RootNamespace>
     <IsPublishable>true</IsPublishable>
     <EnableSdkContainerSupport>true</EnableSdkContainerSupport>
-    <ContainerRepository>stuckenholz/ToDoWebUi</ContainerRepository>
+    <ContainerRepository>stuckenholz/todowebui</ContainerRepository>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MailKit" Version="2.5.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.6" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.6">
+    <PackageReference Include="MailKit" Version="4.18.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.13">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="MimeKit" Version="2.5.2" />
-    <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
-    <PackageReference Include="Serilog.Sinks.Grafana.Loki" Version="8.3.0" />
+    <PackageReference Include="MimeKit" Version="4.18.1" />
+    <!-- Patched version of a transitive dependency of MimeKit -->
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
+    <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
+    <PackageReference Include="Serilog.Sinks.Grafana.Loki" Version="9.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ToDo.Common\ToDo.Common.csproj" />
-    <ProjectReference Include="..\ToDo.Persistence.Dapper\ToDo.Persistence.Dapper.csproj" />
     <ProjectReference Include="..\ToDo.Persistence\ToDo.Persistence.csproj" />
     <ProjectReference Include="..\ToDo.Persistence.EfCore\ToDo.Persistence.EfCore.csproj" />
-    <ProjectReference Include="..\ToDo.CQRS\ToDo.CQRS.csproj" />
   </ItemGroup>
 
 </Project>
