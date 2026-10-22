@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 using Asp.Versioning;
-using Microsoft.OpenApi.Models;
+using Scalar.AspNetCore;
 using ToDoService.Models;
 
 public class Startup
@@ -31,16 +31,14 @@ public class Startup
             options.ReportApiVersions = true;
             options.AssumeDefaultVersionWhenUnspecified = true;
             options.ApiVersionReader = new UrlSegmentApiVersionReader();
-        }).AddApiExplorer(options => {
+        }).AddMvc().AddApiExplorer(options => {
             options.GroupNameFormat = "'v'V";
             options.SubstituteApiVersionInUrl = true;
         });
 
-        services.AddSwaggerGen(c =>
-        {
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "ToDoService v1", Version = "v1" });
-            c.SwaggerDoc("v2", new OpenApiInfo { Title = "ToDoService v2", Version = "v2" });
-        });
+        // one OpenAPI-document per API-version (matches the group names "'v'V")
+        services.AddOpenApi("v1");
+        services.AddOpenApi("v2");
     }
 
     public void Configure(IApplicationBuilder app, IHostEnvironment env)
@@ -48,18 +46,18 @@ public class Startup
         app.UseExceptionHandler();
         app.UseRouting();
 
-        if (env.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ToDoService v1");
-                c.SwaggerEndpoint("/swagger/v2/swagger.json", "ToDoService v2");
-            });
-        }
-
         app.UseEndpoints(endpoints => {
             endpoints.MapControllers();
+
+            if (env.IsDevelopment())
+            {
+                endpoints.MapOpenApi(); // /openapi/v1.json and /openapi/v2.json
+                endpoints.MapScalarApiReference(options =>
+                {
+                    options.AddDocument("v1", "ToDoService v1");
+                    options.AddDocument("v2", "ToDoService v2");
+                }); // /scalar
+            }
         });
     }
 }

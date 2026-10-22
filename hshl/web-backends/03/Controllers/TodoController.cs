@@ -52,27 +52,29 @@ public class TodoController : Controller
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK, Type=typeof(ToDo))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult Update([FromBody] ToDo obj)
+    public IActionResult Update([FromRoute] Guid id, [FromBody] ToDo obj)
     {
-        var old = toDoRepository.GetSingle(obj.ID);
+        var old = toDoRepository.GetSingle(id);
         if (old is null)
             return NotFound();
 
+        obj.ID = id;
         return Ok(toDoRepository.Update(obj));
     }
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status200OK, Type=typeof(ToDo))]
+    [ProducesResponseType(StatusCodes.Status201Created, Type=typeof(ToDo))]
     public IActionResult Insert([FromBody] ToDo obj)
     {
-        return Ok(toDoRepository.Add(obj));
+        var created = toDoRepository.Add(obj);
+        return CreatedAtAction(nameof(GetSingle), new { id = created.ID }, created);
     }
 
     [Route("{id}")]
     [HttpDelete]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult Delete(Guid id)
+    public IActionResult Delete([FromRoute] Guid id)
     {
         var obj = toDoRepository.GetSingle(id);
         if (obj is null)
