@@ -2,6 +2,8 @@
 
 Dieses Paket macht das REST-Beispiel aus Kapitel 6 lauffähig: eine fiktive API für Ladevorgänge, die per HTTP `POST`, `PUT` und `GET` angesprochen wird. Der Server hält die Daten nur im Arbeitsspeicher -- ein Neustart löscht alle Ladevorgänge.
 
+**Windows:** Zu jedem Skript `name.sh` der Übung gibt es ein gleichnamiges `name.bat`. Rufen Sie in der Eingabeaufforderung `name.bat` bzw. in der PowerShell `.\name.bat` auf, z. B. `.\create_environment.bat` statt `./create_environment.sh`.
+
 ## Schnellstart
 
 In zwei Terminalfenstern, jeweils im Verzeichnis `rest`:

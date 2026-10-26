@@ -4,6 +4,8 @@ Dieses Paket simuliert den Anwendungsfall aus der ersten Vorlesungsfolie zu Kapi
 
 Beide Skripte nutzen nur die Python-Standardbibliothek, es müssen keine Pakete installiert werden -- `requirements.txt` ist bewusst leer.
 
+**Windows:** Zu jedem Skript `name.sh` der Übung gibt es ein gleichnamiges `name.bat`. Rufen Sie in der Eingabeaufforderung `name.bat` bzw. in der PowerShell `.\name.bat` auf, z. B. `.\create_environment.bat` statt `./create_environment.sh`.
+
 ## Schnellstart
 
 In zwei Terminalfenstern, jeweils im Verzeichnis `as4`:

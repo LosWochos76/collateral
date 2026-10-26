@@ -1,0 +1,210 @@
+{
+  "id": "ladenSetup0000001",
+  "name": "Laden 4: Tabellen anlegen",
+  "active": false,
+  "nodes": [
+    {
+      "id": "3f0d6a52-1a7e-4c3b-9d0e-6a1f2b3c4d01",
+      "name": "Start",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "3f0d6a52-1a7e-4c3b-9d0e-6a1f2b3c4d02",
+      "name": "Tabelle ladekarten",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        220,
+        0
+      ],
+      "parameters": {
+        "resource": "table",
+        "operation": "create",
+        "tableName": "ladekarten",
+        "columns": {
+          "column": [
+            {
+              "name": "karte",
+              "type": "string"
+            },
+            {
+              "name": "kunde",
+              "type": "string"
+            },
+            {
+              "name": "gesperrt",
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {
+          "createIfNotExists": true
+        }
+      }
+    },
+    {
+      "id": "3f0d6a52-1a7e-4c3b-9d0e-6a1f2b3c4d03",
+      "name": "Tabelle abrechnungen",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        440,
+        0
+      ],
+      "parameters": {
+        "resource": "table",
+        "operation": "create",
+        "tableName": "abrechnungen",
+        "columns": {
+          "column": [
+            {
+              "name": "ladevorgang_id",
+              "type": "number"
+            },
+            {
+              "name": "zaehlpunkt",
+              "type": "string"
+            },
+            {
+              "name": "kwh",
+              "type": "number"
+            },
+            {
+              "name": "kosten",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {
+          "createIfNotExists": true
+        }
+      }
+    },
+    {
+      "id": "3f0d6a52-1a7e-4c3b-9d0e-6a1f2b3c4d04",
+      "name": "Beispiel-Ladekarten",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        660,
+        0
+      ],
+      "parameters": {
+        "jsCode": "// Fiktive Ladekarten, eine davon gesperrt\nreturn [\n  { json: { karte: \"K-1001\", kunde: \"Erika Mustermann\", gesperrt: false } },\n  { json: { karte: \"K-1002\", kunde: \"Max Mustermann\", gesperrt: false } },\n  { json: { karte: \"K-1003\", kunde: \"Lisa Beispiel\", gesperrt: true } },\n];"
+      }
+    },
+    {
+      "id": "3f0d6a52-1a7e-4c3b-9d0e-6a1f2b3c4d05",
+      "name": "Ladekarten speichern",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        880,
+        0
+      ],
+      "parameters": {
+        "resource": "row",
+        "operation": "insert",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "ladekarten"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "karte",
+              "displayName": "karte",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "kunde",
+              "displayName": "kunde",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "gesperrt",
+              "displayName": "gesperrt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ]
+        },
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Tabelle ladekarten",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tabelle ladekarten": {
+      "main": [
+        [
+          {
+            "node": "Tabelle abrechnungen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tabelle abrechnungen": {
+      "main": [
+        [
+          {
+            "node": "Beispiel-Ladekarten",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Beispiel-Ladekarten": {
+      "main": [
+        [
+          {
+            "node": "Ladekarten speichern",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}

@@ -4,6 +4,8 @@ Dieses Paket enthält die Infrastruktur für die Praxisfolien der Veranstaltung
 Energieinformatik, Kapitel 10. Die Workflow-Plattform n8n läuft als
 Docker-Container.
 
+**Windows:** Zu jedem Skript `name.sh` der Übung gibt es ein gleichnamiges `name.bat`. Rufen Sie in der Eingabeaufforderung `name.bat` bzw. in der PowerShell `.\name.bat` auf, z. B. `.\create_environment.bat` statt `./create_environment.sh`.
+
 ## 1. n8n starten
 
 ```bash
@@ -68,6 +70,7 @@ Die genaue URL zeigt der Webhook-Node *Anmeldung*:
 ./anmeldung_senden.sh ohne_termin     # Pflichtangabe fehlt
 ./anmeldung_senden.sh termin_gestern  # Liefertermin zu früh
 ./anmeldung_senden.sh malo_unbekannt  # MaLo-ID unbekannt
+./anmeldung_senden.sh konkurrierend   # zweiter LFN, gleiche MaLo, gleicher Termin
 ```
 
 In PyCharm den Ordner `n8n` als Projekt öffnen, die angebotene virtuelle
@@ -87,7 +90,32 @@ Unter Windows ist curl ab Windows 10 enthalten. In der PowerShell muss es als
 Beispielanmeldung liegt in `anmeldung.json`; das Datum `lieferbeginn` muss
 mindestens einen Werktag in der Zukunft liegen.
 
-## 5. n8n beenden
+## 5. Übung: Ladevorgänge als Prozess
+
+In der Übung bauen Sie selbst einen Prozess, der die Ladevorgänge-API aus
+`06/rest` als Fachsystem nutzt.
+
+1. `workflows/4-laden-tabellen-anlegen.json` importieren und einmal
+   ausführen. Er legt die Data Tables `ladekarten` (drei fiktive Karten,
+   `K-1003` ist gesperrt) und `abrechnungen` an.
+2. Die Ladevorgänge-API starten (`06/rest/server.sh`). Aus n8n ist sie unter
+   `http://host.docker.internal:5050` erreichbar. Unter Linux muss der Server
+   dafür in `server.py` an `0.0.0.0` statt `127.0.0.1` gebunden werden.
+3. Die Ladesäule simuliert das Skript `ladesaeule.py`. Es ruft die Webhooks
+   `ladung-start` und `ladung-ende` auf, die Sie selbst anlegen:
+
+```bash
+./ladesaeule.sh start K-1001          # Ladekarte vorhalten
+./ladesaeule.sh start K-1001 DE0002   # an einem anderen Zählpunkt
+./ladesaeule.sh ende 1 12.5           # Ladevorgang 1 mit 12,5 kWh beenden
+./ladesaeule.sh --test start K-1001   # Test-URL statt Production-URL
+```
+
+Eine Musterlösung für die Basis-Aufgaben liegt in `workflows/loesung/`
+(`5-ladung-starten.json`, `6-ladung-beenden.json`). Schauen Sie erst hinein,
+wenn Sie die Workflows selbst gebaut haben.
+
+## 6. n8n beenden
 
 ```bash
 docker compose down

@@ -7,6 +7,8 @@ Dieses Paket stellt zwei offizielle libIEC61850-Beispielserver lokal per Docker 
 
 `wind` und `switch` nutzen dasselbe vorgefertigte Image `stuckenholz/iec61850` von Docker Hub, nur mit unterschiedlichem Startkommando, und laufen dauerhaft im Hintergrund. Ein lokaler Build ist für Studierende nicht nötig.
 
+**Windows:** Zu jedem Skript `name.sh` der Übung gibt es ein gleichnamiges `name.bat`. Rufen Sie in der Eingabeaufforderung `name.bat` bzw. in der PowerShell `.\name.bat` auf, z. B. `.\create_environment.bat` statt `./create_environment.sh`.
+
 ## Schnellstart
 
 ```sh

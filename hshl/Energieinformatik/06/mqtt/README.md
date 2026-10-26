@@ -11,6 +11,8 @@ Zeitstempel und Wert jeder empfangenen Nachricht an.
 
 Für die Python-Skripte ist Python 3.10 oder neuer erforderlich.
 
+**Windows:** Zu jedem Skript `name.sh` der Übung gibt es ein gleichnamiges `name.bat`. Rufen Sie in der Eingabeaufforderung `name.bat` bzw. in der PowerShell `.\name.bat` auf, z. B. `.\create_environment.bat` statt `./create_environment.sh`.
+
 ## 1. Broker starten
 
 ```bash

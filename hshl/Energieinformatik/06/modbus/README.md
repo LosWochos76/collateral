@@ -15,6 +15,8 @@ vorgefertigte Abstraktionsschicht. Das Protokoll-Detailwissen (MBAP-Header,
 PDU) ist damit weder nötig noch Teil der Übung; im Vordergrund steht, Werte
 korrekt aus dem in REGISTERPLAN.md beschriebenen Registerplan zu extrahieren.
 
+**Windows:** Zu jedem Skript `name.sh` der Übung gibt es ein gleichnamiges `name.bat`. Rufen Sie in der Eingabeaufforderung `name.bat` bzw. in der PowerShell `.\name.bat` auf, z. B. `.\create_environment.bat` statt `./create_environment.sh`.
+
 ## Wetterstation lokal starten
 
 ```bash

@@ -5,6 +5,7 @@ Aufruf:
     python anmeldung_senden.py ohne_termin     # Pflichtangabe fehlt
     python anmeldung_senden.py termin_gestern  # Liefertermin zu früh
     python anmeldung_senden.py malo_unbekannt  # MaLo-ID unbekannt
+    python anmeldung_senden.py konkurrierend   # zweiter LFN, gleiche MaLo, gleicher Termin
 """
 import sys
 from datetime import date, timedelta
@@ -39,6 +40,9 @@ elif fall == "termin_gestern":
     anmeldung["lieferbeginn"] = (date.today() - timedelta(days=1)).isoformat()
 elif fall == "malo_unbekannt":
     anmeldung["malo_id"] = "51000000045"
+elif fall == "konkurrierend":
+    anmeldung["nachricht_id"] = "A-0002"
+    anmeldung["lfn"] = "9900000000002"
 
 print("Sende:", anmeldung)
 antwort = requests.post(URL, json=anmeldung, timeout=10)

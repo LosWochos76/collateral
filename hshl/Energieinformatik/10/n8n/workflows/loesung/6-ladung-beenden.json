@@ -1,0 +1,189 @@
+{
+  "id": "ladenEnde00000001",
+  "name": "Laden 6: Ladung beenden (Lösung)",
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "nodes": [
+    {
+      "id": "36cbae80-8021-4c6b-8c6b-6ac1e0f10cf7",
+      "name": "Ladung beenden",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "f5c778d1-0820-415c-9d42-4ff93fb6eceb",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ladung-ende",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "4a973bf6-60f4-42a7-962e-6bb0ffde6b3a",
+      "name": "Ladevorgang abschließen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        0
+      ],
+      "parameters": {
+        "method": "PUT",
+        "url": "=http://host.docker.internal:5050/ladevorgaenge/{{ $json.body.id }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ kwh: $json.body.kwh }) }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "3656c44f-02b4-4055-bfee-d175c4e72a38",
+      "name": "Kosten berechnen",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "pythonNative",
+        "pythonCode": "# Modus \"Run Once for Each Item\"\nARBEITSPREIS = 0.49  # Euro je kWh\n\nv = _item[\"json\"]\nreturn {\"json\": {\n    \"ladevorgang_id\": v[\"id\"],\n    \"zaehlpunkt\": v[\"zaehlpunkt\"],\n    \"kwh\": v[\"kwh\"],\n    \"kosten\": round(v[\"kwh\"] * ARBEITSPREIS, 2),\n}}"
+      }
+    },
+    {
+      "id": "9f25d114-edd1-4044-9b92-764a9f4700b6",
+      "name": "Abrechnung speichern",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        660,
+        0
+      ],
+      "parameters": {
+        "resource": "row",
+        "operation": "insert",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "abrechnungen"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ladevorgang_id",
+              "displayName": "ladevorgang_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "zaehlpunkt",
+              "displayName": "zaehlpunkt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "kwh",
+              "displayName": "kwh",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "kosten",
+              "displayName": "kosten",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "03c3fc01-0c40-407f-a598-079844c9ab1f",
+      "name": "Beleg",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        880,
+        0
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ id: $json.ladevorgang_id, kwh: $json.kwh, kosten: $json.kosten }) }}",
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Ladung beenden": {
+      "main": [
+        [
+          {
+            "node": "Ladevorgang abschließen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ladevorgang abschließen": {
+      "main": [
+        [
+          {
+            "node": "Kosten berechnen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Kosten berechnen": {
+      "main": [
+        [
+          {
+            "node": "Abrechnung speichern",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Abrechnung speichern": {
+      "main": [
+        [
+          {
+            "node": "Beleg",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

@@ -1,0 +1,197 @@
+{
+  "id": "ladenStart0000001",
+  "name": "Laden 5: Ladung starten (Lösung)",
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "nodes": [
+    {
+      "id": "2b4e3d63-e91e-45cb-a2ef-9c753ede5725",
+      "name": "Ladung starten",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "a8b81ccb-b09d-428c-9f2c-25fb0c5472f7",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ladung-start",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "0e25051f-8132-4955-a77f-7d262af5b44a",
+      "name": "Ladekarte suchen",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        220,
+        0
+      ],
+      "alwaysOutputData": true,
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "ladekarten"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "karte",
+              "condition": "eq",
+              "keyValue": "={{ $json.body.ladekarte }}"
+            }
+          ]
+        },
+        "returnAll": false,
+        "limit": 1,
+        "options": {}
+      }
+    },
+    {
+      "id": "0cc8e8d8-ae77-482c-8b07-68980932a2c6",
+      "name": "Karte gültig?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        440,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "77058555-7bed-451a-8eb8-508e5e7857ac",
+              "leftValue": "={{ $json.id !== undefined && !$json.gesperrt }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      }
+    },
+    {
+      "id": "88fef14f-5719-4313-a476-3142194fc53e",
+      "name": "Ladevorgang anlegen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        660,
+        -100
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:5050/ladevorgaenge",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ zaehlpunkt: $('Ladung starten').item.json.body.zaehlpunkt }) }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "e37cf13c-d35e-434b-ac84-d7e6ef9c2bc6",
+      "name": "Freigabe",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        880,
+        -100
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ freigabe: true, id: $json.id }) }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "ef4b1d27-c092-4966-be29-601638b69b9e",
+      "name": "Ablehnung",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        660,
+        100
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ freigabe: false, grund: 'Ladekarte unbekannt oder gesperrt' }) }}",
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Ladung starten": {
+      "main": [
+        [
+          {
+            "node": "Ladekarte suchen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ladekarte suchen": {
+      "main": [
+        [
+          {
+            "node": "Karte gültig?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Karte gültig?": {
+      "main": [
+        [
+          {
+            "node": "Ladevorgang anlegen",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ablehnung",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ladevorgang anlegen": {
+      "main": [
+        [
+          {
+            "node": "Freigabe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
