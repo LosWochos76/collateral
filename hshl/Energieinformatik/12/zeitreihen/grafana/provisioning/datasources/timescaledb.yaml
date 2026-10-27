@@ -1,0 +1,16 @@
+# Datenquelle TimescaleDB, wird beim Start von Grafana automatisch angelegt
+apiVersion: 1
+datasources:
+  - name: TimescaleDB
+    uid: timescaledb
+    type: grafana-postgresql-datasource
+    url: timescaledb:5432          # Dienstname aus der docker-compose.yaml
+    user: postgres
+    secureJsonData:
+      password: geheim
+    jsonData:
+      database: energie
+      sslmode: disable
+      timescaledb: true
+      postgresVersion: 1700
+    isDefault: true

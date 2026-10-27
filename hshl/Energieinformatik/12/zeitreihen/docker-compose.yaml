@@ -1,0 +1,46 @@
+services:
+  timescaledb:
+    image: timescale/timescaledb:2.31.0-pg17
+    container_name: timescaledb
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=geheim          # nur fuer den lokalen Betrieb
+      - POSTGRES_DB=energie
+      - TZ=Europe/Berlin
+    volumes:
+      - timescale_data:/var/lib/postgresql/data          # Datenbank
+      - ./sql:/docker-entrypoint-initdb.d:ro             # Schema beim ersten Start anlegen
+
+  grafana:
+    image: grafana/grafana:13.2.4
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin  # nur fuer den lokalen Betrieb
+      - GF_DEFAULT_TIMEZONE=Europe/Berlin
+    extra_hosts:
+      - "host.docker.internal:host-gateway"  # eigenen Rechner auch unter Linux erreichbar machen
+    volumes:
+      - grafana_data:/var/lib/grafana                    # Einstellungen und eigene Dashboards
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro  # Datenquelle und Beispiel-Dashboard
+    depends_on:
+      - timescaledb
+
+  mosquitto:
+    image: eclipse-mosquitto:2.0.22
+    container_name: mosquitto-zeitreihen
+    restart: unless-stopped
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+
+volumes:
+  timescale_data:
+  grafana_data:

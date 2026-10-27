@@ -1,0 +1,9 @@
+# Dashboards aus diesem Ordner laden
+apiVersion: 1
+providers:
+  - name: zeitreihen
+    folder: Energieinformatik
+    type: file
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards
