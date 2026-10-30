@@ -58,7 +58,8 @@ public class ToDoController : Controller
         return Redirect("/");
     }
 
-    [Authorize]
+    [HttpPost("/ToDo/Delete/{id}")]
+    [Authorize(Roles = "Admin")]
     public IActionResult Delete([FromRoute] Guid id)
     {
         var obj = toDoRepository.GetSingle(id);

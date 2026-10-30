@@ -1,10 +1,14 @@
 @model LoginViewModel
+@inject Microsoft.AspNetCore.Authentication.IAuthenticationSchemeProvider SchemeProvider
 @{
     Layout = "_Layout";
     ViewData["Title"] = "ToDo - Login";
+    var externalSchemes = (await SchemeProvider.GetAllSchemesAsync())
+        .Where(s => s.Name is "Google" or "Facebook");
 }
 
-<form method="post" action="/Authentication/Authenticate">
+<form method="post" asp-controller="Authentication" asp-action="Authenticate" asp-route-returnUrl="@Context.Request.Query["ReturnUrl"]">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="mb-2">
         <label asp-for="EMail" class="form-label"></label>
         <input class="form-control" asp-for="EMail">
@@ -18,3 +22,10 @@
     <button type="submit" class="btn btn-primary">Login</button>
     <a class="btn btn-primary" href="/Authentication/PasswordForgotten" role="button">Password forgotten</a>
 </form>
+
+@foreach (var scheme in externalSchemes)
+{
+    <form method="post" asp-controller="Authentication" asp-action="External" asp-route-provider="@scheme.Name" class="mt-2">
+        <button type="submit" class="btn btn-outline-primary">Login with @scheme.DisplayName</button>
+    </form>
+}

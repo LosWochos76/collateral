@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Options;
 using MimeKit;
 
 namespace ToDoUI.Misc;
@@ -6,26 +5,21 @@ namespace ToDoUI.Misc;
 public class EmailQueue
 {
     private Queue<MimeMessage> messages = new Queue<MimeMessage>();
-    private MailSettings settings;
-
-    public EmailQueue(IOptions<MailSettings> settings)
-    {
-        this.settings = settings.Value;
-    }
     
     public void Enqueue(MimeMessage message)
     {
-        message.From.Add(new MailboxAddress("ToDo", settings.FromMailAddress));
-        messages.Enqueue(message);
+        lock (messages)
+            messages.Enqueue(message);
     }
 
     public MimeMessage Dequeue()
     {
-        return messages.Dequeue();
+        lock (messages)
+            return messages.Dequeue();
     }
 
     public bool HasMessages
     {
-        get { return messages.Count > 0; } 
+        get { lock (messages) return messages.Count > 0; } 
     }
 }

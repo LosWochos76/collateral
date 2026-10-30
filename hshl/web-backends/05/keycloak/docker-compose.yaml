@@ -1,0 +1,21 @@
+name: todo-auth
+
+services:
+  # identity and access management, realm "todo" is imported on startup
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.8.1
+    command: start-dev --import-realm
+    environment:
+      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
+    ports:
+      - 8080:8080
+    volumes:
+      - ./realm-todo.json:/opt/keycloak/data/import/realm-todo.json:ro
+
+  # test mail server: catches all mails, web interface on port 8025
+  mailpit:
+    image: axllent/mailpit:v1.32.0
+    ports:
+      - 8025:8025
+      - 1025:1025

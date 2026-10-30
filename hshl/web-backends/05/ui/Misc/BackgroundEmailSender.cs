@@ -1,5 +1,4 @@
 using MailKit.Net.Smtp;
-using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
 
@@ -25,7 +24,7 @@ public class BackgroundEmailSender : BackgroundService
             if (mailQueue.HasMessages)
             {
                 var message = mailQueue.Dequeue();
-                if (!SendMail(message, stoppingToken))
+                if (!await SendMailAsync(message, stoppingToken))
                     mailQueue.Enqueue(message);
             }
 
@@ -33,17 +32,16 @@ public class BackgroundEmailSender : BackgroundService
         }
     }
 
-    private bool SendMail(MimeMessage message, CancellationToken stoppingToken)
+    private async Task<bool> SendMailAsync(MimeMessage message, CancellationToken stoppingToken)
     {
         try
         {
-            using (var client = new SmtpClient())
-            {
-                client.Connect(settings.Host, settings.Port, SecureSocketOptions.Auto, stoppingToken);
-                client.Authenticate(settings.Username, settings.Password);
-                client.Send(message);
-                client.Disconnect(true);
-            }
+            using var client = new SmtpClient();
+            await client.ConnectAsync(settings.Host, settings.Port, settings.SecureSocketOptions, stoppingToken);
+            if (!string.IsNullOrEmpty(settings.Username))
+                await client.AuthenticateAsync(settings.Username, settings.Password ?? string.Empty, stoppingToken);
+            await client.SendAsync(message, stoppingToken);
+            await client.DisconnectAsync(true, stoppingToken);
         }
         catch (Exception ex)
         {

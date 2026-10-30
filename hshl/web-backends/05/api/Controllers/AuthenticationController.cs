@@ -1,40 +1,44 @@
 using Common.Models;
 using Common.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ToDoService.Misc;
 
 namespace ToDoService.Controllers;
 
-public class AuthenticationController : Controller
+[ApiController]
+public class AuthenticationController : ControllerBase
 {
     private readonly ILogger<AuthenticationController> logger;
     private readonly JwtTokenHelper jwtTokenHelper;
     private readonly IUserRepository userRepository;
+    private readonly IConfiguration config;
 
     public AuthenticationController(
         ILogger<AuthenticationController> logger,
         JwtTokenHelper jwtTokenHelper,
-        IUserRepository userRepository)
+        IUserRepository userRepository,
+        IConfiguration config)
     {
         this.logger = logger;
         this.jwtTokenHelper = jwtTokenHelper;
         this.userRepository = userRepository;
+        this.config = config;
     }
 
-    [Route("/Login/")]
-    [HttpPost]
+    [HttpPost("/Login")]
+    [AllowAnonymous]
     public IActionResult Login([FromBody] LoginViewModel login)
     {
-        if (login is null || 
-            string.IsNullOrEmpty(login.EMail) || 
-            string.IsNullOrEmpty(login.Password))
-            return BadRequest("Credentials are empty!");
+        // with Keycloak, tokens are issued by Keycloak and not by us
+        if (config["Authentication:Mode"] == "Keycloak")
+            return NotFound();
 
         var user = userRepository.FindByLogin(login.EMail, login.Password);
         if (user is null)
-            return BadRequest("User not found!");
+            return Unauthorized();  // do not tell, if e-mail or password was wrong
 
         var token = jwtTokenHelper.CreateToken(user);
-        return Ok(token);
+        return Ok(new { access_token = token, token_type = "Bearer", expires_in = 3600 });
     }
 }

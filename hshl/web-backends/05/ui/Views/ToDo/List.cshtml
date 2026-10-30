@@ -23,7 +23,12 @@
             <td>@index</td>
             <td>@obj.Title</td>
             <td>@obj.Completion</td>
-            <td><a href="/ToDo/edit/@obj.ID">Edit</a> | <a href="/ToDo/delete/@obj.ID">Delete</a></td>
+            <td>
+              <a href="/ToDo/edit/@obj.ID">Edit</a> |
+              <form method="post" asp-controller="ToDo" asp-action="Delete" asp-route-id="@obj.ID" class="d-inline">
+                <button type="submit" class="btn btn-link p-0 align-baseline">Delete</button>
+              </form>
+            </td>
         </tr>
         index++;
     }

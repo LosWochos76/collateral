@@ -1,20 +1,22 @@
 using Microsoft.AspNetCore.Authorization;
 
-public class MimimumAgeAuthorizationHandler : AuthorizationHandler<MinimumAgeRequirement>
+public class MinimumAgeAuthorizationHandler : AuthorizationHandler<MinimumAgeRequirement>
 {
     protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, MinimumAgeRequirement requirement)
     {
-        var ageClaim = context.User.Claims.FirstOrDefault(c => c.Type == "Age");
-        if (ageClaim is null)
-        {            
-            context.Fail();
+        // our users do not have a birthdate-claim yet, so the policy only succeeds once such a claim is added
+        var birthdateClaim = context.User.FindFirst("birthdate");
+        if (birthdateClaim is null || !DateOnly.TryParse(birthdateClaim.Value, out var birthdate))
             return Task.CompletedTask;
-        }
-        
-        var age = Convert.ToInt32(ageClaim.Value);
-        if (requirement.MinimumAge > age)
-            context.Fail();
-        
+
+        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+        var age = today.Year - birthdate.Year;
+        if (birthdate > today.AddYears(-age))
+            age--;
+
+        if (age >= requirement.MinimumAge)
+            context.Succeed(requirement);
+
         return Task.CompletedTask;
     }
 }

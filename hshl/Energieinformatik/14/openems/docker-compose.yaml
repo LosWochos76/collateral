@@ -1,0 +1,43 @@
+# OpenEMS Edge mit simulierten Geraeten und OpenEMS UI
+# Nur fuer den lokalen Betrieb in der Lehre gedacht.
+services:
+  openems-edge:
+    image: openems/edge:2026.10.0
+    container_name: openems_edge
+    hostname: openems-edge
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/Berlin
+    volumes:
+      # Startkonfiguration, beim ersten Start kopiert
+      - ./config:/var/lib/openems-default-config:ro
+      - openems-edge-conf:/var/opt/openems/config:rw
+      - openems-edge-data:/var/opt/openems/data:rw
+    ports:
+      - 8080:8080 # Apache Felix Web Console
+      - 8084:8084 # REST-Schnittstelle
+      - 8085:8085 # Websocket fuer die UI
+
+  openems-ui:
+    image: openems/ui-edge:2026.10.0
+    container_name: openems_ui
+    hostname: openems-ui
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/Berlin
+      - WEBSOCKET_HOST=openems-edge
+      - WEBSOCKET_PORT=8085
+      - REST_PORT=8084
+    volumes:
+      - openems-ui-conf:/etc/nginx:rw
+      - openems-ui-log:/var/log/nginx:rw
+    ports:
+      - 4200:80 # Weboberflaeche
+    depends_on:
+      - openems-edge
+
+volumes:
+  openems-edge-conf:
+  openems-edge-data:
+  openems-ui-conf:
+  openems-ui-log:

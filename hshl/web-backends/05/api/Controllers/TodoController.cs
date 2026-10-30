@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Common.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,8 +23,13 @@ public class TodoController : Controller
 
     [Route("/ToDo/")]
     [HttpGet]
-    public IActionResult GetAll([FromBody] ToDoFilter? filter)
+    public IActionResult GetAll([FromQuery] ToDoFilter filter)
     {
+        var userId = Guid.Parse(User.FindFirstValue("sub")!);
+        if (User.IsInRole("Admin"))
+            return Ok(toDoRepository.GetAll(filter));
+
+        // our ToDo-objects do not have an owner yet, otherwise: .Where(t => t.OwnerID == userId)
         return Ok(toDoRepository.GetAll(filter));
     }
 
@@ -64,7 +70,7 @@ public class TodoController : Controller
 
     [Route("/ToDo/{id}")]
     [HttpDelete]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public IActionResult Delete(Guid id)
     {
         var obj = toDoRepository.GetSingle(id);
@@ -72,6 +78,17 @@ public class TodoController : Controller
             return NotFound();
 
         toDoRepository.Delete(id);
+        return Ok();
+    }
+
+    [Route("/ToDo/")]
+    [HttpDelete]
+    [Authorize(Policy = "AdminWithEmail")]
+    public IActionResult DeleteAll()
+    {
+        foreach (var obj in toDoRepository.GetAll(new ToDoFilter()).ToList())
+            toDoRepository.Delete(obj.ID);
+
         return Ok();
     }
 }

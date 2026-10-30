@@ -1,16 +1,23 @@
-using Common.Misc;
+using Microsoft.AspNetCore.Identity;
 
 namespace Common.Models;
 
 public class UserMemoryRepository : IUserRepository
 {
-    private PasswordHelper passwordHelper;
+    private IPasswordHasher<User> passwordHasher;
     private Dictionary<Guid, User> items = new Dictionary<Guid, User>();
 
-    public UserMemoryRepository(PasswordHelper passwordHelper)
+    public UserMemoryRepository(IPasswordHasher<User> passwordHasher)
     {
-        this.passwordHelper = passwordHelper;
-        Add(new User() { EMail="alexander.stuckenholz@hshl.de", PasswordHash=passwordHelper.ComputeSha256Hash("secret"), IsAdmin=true });
+        this.passwordHasher = passwordHasher;
+        AddWithPassword(new User() { EMail="alexander.stuckenholz@hshl.de", IsAdmin=true }, "secret");
+        AddWithPassword(new User() { EMail="student@hshl.de", IsAdmin=false }, "secret");
+    }
+
+    private void AddWithPassword(User user, string password)
+    {
+        user.PasswordHash = passwordHasher.HashPassword(user, password);
+        Add(user);
     }
 
     public IEnumerable<User> GetAll()
@@ -18,7 +25,7 @@ public class UserMemoryRepository : IUserRepository
        return items.Values;
     }
 
-    public User GetSingle(Guid id)
+    public User? GetSingle(Guid id)
     {
         if (items.ContainsKey(id))
             return items[id];
@@ -44,34 +51,54 @@ public class UserMemoryRepository : IUserRepository
         items.Remove(id);
     }
 
-    public User FindByEmail(string email)
+    public User? FindByEmail(string email)
     {
         foreach (var user in items.Values)
-            if (user.EMail.ToLower().Equals(email))
+            if (string.Equals(user.EMail, email, StringComparison.OrdinalIgnoreCase))
                 return user;
         
         return null;
     }
 
-    public User FindByLogin(string email, string password)
+    public User? FindByLogin(string email, string password)
     {
         var user = FindByEmail(email);
-        if (user is null)
+        if (user is null || user.PasswordHash is null)
             return null;
 
-        var passwordHash = passwordHelper.ComputeSha256Hash(password);
-        if (user.PasswordHash.Equals(passwordHash))
-            return user;
+        var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password);
+        if (result == PasswordVerificationResult.Failed)
+            return null;
+
+        if (result == PasswordVerificationResult.SuccessRehashNeeded)
+            user.PasswordHash = passwordHasher.HashPassword(user, password);
+
+        return user;
+    }
+
+    public User? FindByPasswordResetToken(string token)
+    {
+        foreach (var user in items.Values)
+            if (user.PasswordResetToken == token && user.PasswordResetTokenExpires > DateTime.UtcNow)
+                return user;
+        
+        return null;
+    }
+
+    public User? FindByExternalLogin(string provider, string subject)
+    {
+        foreach (var user in items.Values)
+            if (user.ExternalLogins.Contains(new ExternalLogin(provider, subject)))
+                return user;
 
         return null;
     }
 
-    public User FindByPasswordResetToken(string token)
+    public User AddExternalUser(string provider, string subject, string? email)
     {
-        foreach (var user in items.Values)
-            if (user.PasswordResetToken.Equals(token))
-                return user;
-        
-        return null;
+        // no automatic linking via e-mail: not every provider guarantees a verified address
+        var user = new User() { EMail = email ?? string.Empty };
+        user.ExternalLogins.Add(new ExternalLogin(provider, subject));
+        return Add(user);
     }
 }

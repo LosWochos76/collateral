@@ -13,6 +13,13 @@
     <nav class="navbar navbar-light bg-primary">
       <div class="container-fluid">
         <span class="navbar-brand mb-0 h1">ToDos</span>
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+          <form method="post" asp-controller="Authentication" asp-action="Logout" class="d-flex align-items-center">
+            <span class="navbar-text me-2">@User.Identity.Name</span>
+            <button type="submit" class="btn btn-light btn-sm">Logout</button>
+          </form>
+        }
       </div>
     </nav>
     <div class="container">

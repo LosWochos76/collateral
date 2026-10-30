@@ -15,6 +15,8 @@ public class Program
             var env = hostingContext.HostingEnvironment;
             config.AddJsonFile("appsettings.json", optional: false);
             config.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional:true);
+            if (env.IsDevelopment())
+                config.AddUserSecrets<Program>(optional: true);  // dotnet user-secrets
             config.AddEnvironmentVariables();
             config.AddCommandLine(args);
         });

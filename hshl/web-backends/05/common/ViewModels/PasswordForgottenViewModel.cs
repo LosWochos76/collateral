@@ -6,5 +6,5 @@ public class PasswordForgottenViewModel
 {
     [Required]
     [EmailAddress]
-    public string EMail { get; set; }
+    public string EMail { get; set; } = string.Empty;
 }

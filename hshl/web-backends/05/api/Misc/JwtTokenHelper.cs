@@ -1,33 +1,32 @@
-using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
-using Common.Misc;
 using Common.Models;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ToDoService.Misc;
 
 public class JwtTokenHelper
 {
-    private GeneralSettings settings;
+    private JwtSettings settings;
 
-    public JwtTokenHelper(IOptions<GeneralSettings> settings)
+    public JwtTokenHelper(IOptions<JwtSettings> settings)
     {
         this.settings = settings.Value;
     }
 
     public string CreateToken(User user)
     {
-        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(settings.EncryptionKey));
-        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-        var claims = user.ToClaims();
-
-        var secToken = new JwtSecurityToken(
-            "ToDoApi",  "ToDoApi", claims,
-            expires: DateTime.Now.AddMinutes(120),
-            signingCredentials: credentials);
-
-        var token =  new JwtSecurityTokenHandler().WriteToken(secToken);
-        return token;
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(settings.Key));
+        var descriptor = new SecurityTokenDescriptor
+        {
+            Issuer = settings.Issuer,
+            Audience = settings.Audience,
+            Subject = new ClaimsIdentity(user.ToClaims()),
+            Expires = DateTime.UtcNow.AddMinutes(60),
+            SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
+        };
+        return new JsonWebTokenHandler().CreateToken(descriptor);
     }
 }

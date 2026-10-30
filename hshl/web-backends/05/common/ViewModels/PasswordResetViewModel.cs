@@ -4,15 +4,15 @@ namespace Common.ViewModels;
 
 public class PasswordResetViewModel : IValidatableObject
 {
-    public string Token { get; set; }
+    public string Token { get; set; } = string.Empty;
 
     [Required]
     [DataType(DataType.Password)]
-    public string Password { get; set; }
+    public string Password { get; set; } = string.Empty;
 
     [Required]
     [DataType(DataType.Password)]
-    public string PasswordRepeat { get; set; }
+    public string PasswordRepeat { get; set; } = string.Empty;
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {

@@ -1,8 +1,7 @@
-﻿namespace Common.Misc;
+namespace Common.Misc;
 
 public class GeneralSettings
 {
-    public string HomeUrl { get; set; }
-    public string EncryptionKey { get; set; }
-    public string EncryptionSalt { get; set; }
+    public string HomeUrl { get; set; } = string.Empty;
+    public int PasswordResetTokenLifetimeMinutes { get; set; } = 30;
 }
