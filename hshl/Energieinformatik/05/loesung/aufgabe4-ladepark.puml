@@ -1,0 +1,36 @@
+@startuml
+class Ladepark {
+    LadeparkId
+    Standort
+}
+
+class Ladesäule {
+    LadesäuleId
+}
+
+class Ladepunkt {
+    LadepunktId
+    Steckertyp
+    MaxLeistungKw
+}
+
+class Ladevorgang {
+    Start
+    EnergieKwh
+}
+
+class Betreiber {
+    BetreiberId
+}
+
+class Kunde {
+    KundeId
+}
+
+Ladepark "1" *-- "1..n" Ladesäule
+Ladesäule "1" *-- "1..n" Ladepunkt
+Betreiber "1" -- "0..n" Ladepark
+Ladepunkt "1" -- "0..n" Ladevorgang
+Kunde "1" -- "0..n" Ladevorgang
+
+@enduml

@@ -1,0 +1,42 @@
+@startuml
+class Erzeugungsanlage {
+    AnlagenId
+    InstallierteLeistungKw
+}
+
+class Windkraftanlage {
+    Nabenhöhe
+    Rotordurchmesser
+}
+
+class PVAnlage {
+    Modulfläche
+    Ausrichtung
+}
+
+class Windpark {
+    Name
+    Standort
+}
+
+class Unternehmen {
+    Name
+    Adresse
+}
+
+class Person {
+    Vorname
+    Nachname
+}
+
+Erzeugungsanlage <|-- Windkraftanlage
+Erzeugungsanlage <|-- PVAnlage
+Windpark "1" *-- "1..n" Windkraftanlage
+
+Unternehmen "1" -- "0..n" Erzeugungsanlage : Betreiber >
+Unternehmen "0..n" -- "0..n" Erzeugungsanlage : Wartungsdienstleister >
+
+Person "0..1" -- "0..n" Erzeugungsanlage : technischer Ansprechpartner >
+Person "0..1" -- "0..n" Erzeugungsanlage : kaufmännischer Ansprechpartner >
+
+@enduml
