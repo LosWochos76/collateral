@@ -56,8 +56,10 @@ def rechne(milp=False, datei="preise_2026-05-01.csv"):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--milp", action="store_true", help="pumpen ODER turbinieren (Binaervariable)")
+    parser.add_argument("--datei", default="preise_2026-05-01.csv",
+                        help="Preise eines Tages im Ordner daten (Vorgabe: preise_2026-05-01.csv)")
     args = parser.parse_args()
-    plan, gewinn = rechne(args.milp)
+    plan, gewinn = rechne(args.milp, args.datei)
     lokal = plan.copy()
     lokal.index = lokal.index.tz_convert("Europe/Berlin").strftime("%H:%M")
     print(lokal.round(1).to_string())

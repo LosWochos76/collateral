@@ -100,3 +100,23 @@ Weitere Preise laden Sie mit
 
 Das Skript fragt die Energy-Charts-API ab und braucht deshalb eine
 Internetverbindung.
+
+## 6. Übung
+
+```bash
+./haushalt.sh                                  # Daten des Haushalts zeigen, Referenz "sofort laden"
+./pumpspeicher.sh --datei preise_winter.csv    # Pumpspeicher mit anderen Preisen eines Tages
+```
+
+`haushalt.py` lädt die Woche vom 27. April bis 3. Mai 2026 aus
+`daten/haushalt.csv` in den DataFrame `d` und rechnet die Referenz. Das
+eigene Modell schreiben Sie an die Stellen `# Aufgabe 11` bis `# Aufgabe 13`.
+
+`daten/haushalt.csv`: 168 Stunden ab 27.04.2026 00:00 Ortszeit (Zeit in UTC),
+Day-Ahead-Preise DE-LU als Stundenmittel und die deutsche PV-Einspeisung
+derselben Woche, geteilt durch ihr Maximum (`pv_anteil`), beides von
+Energy-Charts (Bundesnetzagentur | SMARD.de, CC BY 4.0). Die Haushaltslast
+(`last_kw`, 3.300 kWh im Jahr) und die Fahrten (`zuhause`, `abfahrt`,
+`fahrt_kwh`) sind synthetisch.
+
+Die Musterlösungen liegen in `15/loesung`.
