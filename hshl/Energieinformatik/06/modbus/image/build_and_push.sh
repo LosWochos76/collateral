@@ -11,10 +11,12 @@ fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-echo "Baue ${IMAGE_NAME}:${TAG}"
-docker build --pull --tag "${IMAGE_NAME}:${TAG}" "${SCRIPT_DIR}"
+# Multi-Plattform-Build: amd64 fuer Windows/Intel-Rechner der Studierenden,
+# arm64 fuer Apple Silicon. buildx baut beide Varianten und uebertraegt sie
+# als ein gemeinsames Manifest direkt nach Docker Hub.
+PLATFORMS="${PLATFORMS:-linux/amd64,linux/arm64}"
 
-echo "Uebertrage ${IMAGE_NAME}:${TAG} nach Docker Hub"
-docker push "${IMAGE_NAME}:${TAG}"
+echo "Baue und uebertrage ${IMAGE_NAME}:${TAG} fuer ${PLATFORMS}"
+docker buildx build --pull --platform "${PLATFORMS}" --tag "${IMAGE_NAME}:${TAG}" --push "${SCRIPT_DIR}"
 
 echo "Fertig: ${IMAGE_NAME}:${TAG}"
